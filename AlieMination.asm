@@ -29,7 +29,7 @@ ramArea:    equ 0xe000                  ; inicio da área de variáveis
 startCode:
             call initEnv                ; inicializar ambiente msx
             call initVar                ; variaveis principais
-            call crazyPeople            ; chama a tela da empresa            
+            call crazyPeople            ; chama a tela da empresa
 
 gameLoop:
             jr gameLoop                 ; volta para o laço do jogo
@@ -37,7 +37,6 @@ gameLoop:
             include "library/turboMode.asm"
             include "library/initEnv.asm"
             include "library/initVar.asm"
-            include "library/cwLogo.asm"
             include "library/gplMensa.asm"
             include "library/waitASec.asm"
             include "TelaCrazyPeople.asm"
