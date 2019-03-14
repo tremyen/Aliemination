@@ -2,11 +2,13 @@
 
 Criar um Jogo basico de MSX que rode a partir de um cartucho.
 
-Para compilar: C:>pasmo <nome_cartucho>.asm <nome_cartucho>.rom
+Para compilar: C:\>pasmo <nome_cartucho>.asm <nome_cartucho>.rom
 
 Voce vai precisar de:
 
 Um editor de texto -> https://atom.io/
+
+Pacote do Atom para sintaxe do Z80 ASM -> https://atom.io/packages/language-z80asm
 
 Um montador ASM para MSX -> http://pasmo.speccy.org/
 
@@ -19,3 +21,5 @@ Um editor de sprites que exporte em formato Hexadecimal -> http://msx.jannone.or
 Para criar o cartucho efetivamente vc vai precisar de uma Megaflashrom -> https://www.msxcartridgeshop.com/
 
 Tabela ASCII -> http://www.asciitable.com/
+
+Codigos exemplo em ASM Z80 -> http://z80-heaven.wikidot.com/
