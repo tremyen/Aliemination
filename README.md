@@ -2,7 +2,7 @@
 
 Criar um Jogo basico de MSX que rode a partir de um cartucho.
 
-Para compilar: C:>pasmo <nome_cartucho>.asm <nome_cartucho>.rom
+Para compilar: C:\>pasmo <nome_cartucho>.asm <nome_cartucho>.rom
 
 Voce vai precisar de:
 
