@@ -2,57 +2,93 @@
 ;   Mostrar a tela da Crazy People
 ;  -==============================-
 
-telaCrazyPeople:
+crazyPeople:
             proc
-            local drawScreen
-            local waitPressFire
-            local changeToNextLine
-            local screenData
+            local cwLogoWait
+            local cwLogoData
+            local cwLogoLoop
+            local cwLogoPrt1
+            local cwLogoPrt2
 
-            ld bc,160                   ; a imagem com o logotipo do jogo
-            ld de,6144+4*32             ; na 4a linha da tela
-            ld hl,screenData
-            call LDIRVM                 ; copio para a VRAM
-            ld a,166                    ; insiro o "for MSX"
-            ld hl,6144+9*32+18          ; posicao na VRAM
+            cwLogoLoop: equ videoData
+            cwLogoPrt1: equ videoData+1
+            cwLogoPrt2: equ videoData+3
 
-drawScreen:
-            call WRTVRM
-            inc a                       ; incremento A
-            inc hl                      ; incremento a posicao
-            cp 173                      ; eh 173?
-            call z,changeToNextLine     ; mudo de linha
-            cp 177                      ; eh 177?
-            jr nz,drawScreen            ; se nao for volto ao lasso
-            ld bc,64                    ; o texto "APERTE ESPACO PARA INICIAR"
-            ld de,6144+11*32            ; na 11A linha da tela
-            ld hl,screenData+160
-            call LDIRVM                 ; copio para a VRAM
-            ld bc,128                   ; o texto "ORIGINAL ... WORKS"
-            ld de,6144+15*32            ; na 15a linha da tela
-            ld hl,screenData+160+64
-            call LDIRVM                 ; copio para a VRAM
-            call KILBUF                 ; limpo o buffer do teclado
-waitPressFire:
+            ld hl,0
+            ld (cwLogoPrt1),hl          ; a primeira linha na tela
+            ld (cwLogoPrt2),hl          ; a primeira linha na tela
+
+            xor a                       ; zero A
+            ld (cwLogoLoop),a           ; zero a posição do laço
+
+            ld bc,768                   ; 768 bytes
+            ld hl,6144                  ; começando em 6144
+            call FILVRM                 ; limpo a tela
+
+            ld hl,6144+2*32+9           ; início da parte de cima
+            ld (cwLogoPrt1),hl
+
+            ld hl,6144+21*32+9          ; início da parte de baixo
+            ld (cwLogoPrt2),hl
+
+            xor a                       ; zero A
+
+cwLogoWait:
             ld hl,JIFFY
-            ld (hl),0                   ; zero o temporizador
+            ld (hl),0                   ; zera o timer do VDP
+
+            ld (cwLogoLoop),a           ; salva o valor do contador
+
+            ld bc,14                    ; número de bytes a copiar
+            ld de,(cwLogoPrt1)          ; posição na VRAM
+            ld hl,cwLogoData            ; posição na RAM
+
+            call LDIRVM                 ; copia a parte superior
+
+            ld bc,14                    ; número de bytes a copiar
+            ld de,(cwLogoPrt2)          ; posição na VRAM
+            ld hl,cwLogoData+14         ; posição na RAM
+
+            call LDIRVM                 ; copia a parte inferior
+
+            ld de,32                    ; meu incremento/decremento
+
+            ld hl,(cwLogoPrt1)          ; recupera a posição atual
+            add hl,de                   ; uma linha abaixo + um caracter
+            ld (cwLogoPrt1),hl          ; armazena a nova posição
+
+            ld hl,(cwLogoPrt2)          ; recupera a posição atual
+            sbc hl,de                   ; uma linha acima - um caracter
+            ld (cwLogoPrt2),hl          ; armazena a nova posição
+
             ld hl,vdpCycle1
-            ld b,(hl)
-            call waitASec               ; aguardo 1/10s
-            xor a
-            call GTTRIG                 ; le a barra de espacos
-            ld h,a                      ; salva o valor em H
-            ld a,1
-            call GTTRIG                 ; le o botao 1 do joystick 0
-            or h                        ; junta as duas leituras
-            cp 255                      ; ainda e 255?
-            ret z                       ; sai da lasso
-            jr waitPressFire
+            ld b,(hl)                   ; pega intervalo de temporização
+            sra b                       ; divido por dois
+            call waitASec               ; espero um pouquinho
 
-changeToNextLine:
-            ld hl,6144+10*32+21
-            ret
+            ld a,(cwLogoLoop)           ; recupera o contador
+            inc a                       ; incrementa o contador
 
-screenData:
-            incbin "screen.inc"
+            cp 10
+            jr nz,cwLogoWait            ; se A<10, volta o laço
+
+            xor a                       ; apaga o rastro do logotipo
+            ld bc,288                   ; comprimento de 288 bytes
+            ld hl,6144+2*32             ; posição inicial
+            call FILVRM
+
+            xor a                       ; zera A
+            ld bc,288                   ; comprimeiro de 288 bytes
+            ld hl,6144+13*32            ; posição inicial
+            call FILVRM
+
+            jp gplMensaWait             ; economizo meu código :)
+
+cwLogoData:
+            db 01,02,00,00,00,00,03     ; primeira linha do logo
+            db 00,00,00,00,03,00,00
+
+            db 04,05,06,07,08,09,10     ; segunda linha do logo
+            db 11,12,13,14,15,16,17
+
             endp

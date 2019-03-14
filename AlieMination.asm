@@ -10,9 +10,6 @@ __RELEASE:  equ 0
             include "library/msx1bios.asm"
             include "library/msx1variables.asm"
             include "library/msx1hooks.asm"
-            include "library/initVar.asm"
-            include "library/waitASec.asm"            
-            include "TelaCrazyPeople.asm"
 
 PAL:        equ  5                      ; 1/10s em 50Hz (PAL-B/G/N)
 NTSC:       equ  6                      ; 1/10s em 60Hz (NTSC & PAL-M)
@@ -24,17 +21,26 @@ ramArea:    equ 0xe000                  ; inicio da área de variáveis
             org romArea
             db "AB"                     ; identifica como ROM
             dw startCode                ; endereço de execução
-            db "AM01"                   ; string de identificação
+            db "CW01"                   ; string de identificação
             db __VERSION+48
             db __RELEASE+65
             ds 6,0
 
 startCode:
+            call initEnv                ; inicializar ambiente msx
             call initVar                ; variaveis principais
-            call telaCrazyPeople        ; chama a tela da empresa
+            call crazyPeople            ; chama a tela da empresa            
 
 gameLoop:
             jr gameLoop                 ; volta para o laço do jogo
+
+            include "library/turboMode.asm"
+            include "library/initEnv.asm"
+            include "library/initVar.asm"
+            include "library/cwLogo.asm"
+            include "library/gplMensa.asm"
+            include "library/waitASec.asm"
+            include "TelaCrazyPeople.asm"
 
 romPad:
             ds romSize-(romPad-romArea),0
