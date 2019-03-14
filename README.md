@@ -21,3 +21,5 @@ Um editor de sprites que exporte em formato Hexadecimal -> http://msx.jannone.or
 Para criar o cartucho efetivamente vc vai precisar de uma Megaflashrom -> https://www.msxcartridgeshop.com/
 
 Tabela ASCII -> http://www.asciitable.com/
+
+Codigos exemplo em ASM Z80 -> http://z80-heaven.wikidot.com/
