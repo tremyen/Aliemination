@@ -8,6 +8,8 @@ Voce vai precisar de:
 
 Um editor de texto -> https://atom.io/
 
+Pacote do Atom para sintaxe do Z80 ASM -> https://atom.io/packages/language-z80asm
+
 Um montador ASM para MSX -> http://pasmo.speccy.org/
 
 Um emulador de MSX -> https://openmsx.org/
