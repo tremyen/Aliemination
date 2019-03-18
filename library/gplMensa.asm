@@ -1,10 +1,7 @@
-;
-;  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-;  *
-;  *  Mensagem da GPL
-;  *
-;  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-;
+;  -===============-
+;   Mensagem da GPL
+;  -===============-
+
 gplBuffer:  equ videoData
 
 gplMensa:
@@ -13,7 +10,6 @@ gplMensa:
             local gplMensaStart
             local gplMensaPrint
             local gplMensaNewLine
-
             ld de,gplMensaText-1        ; emdereço da mensagem, ou quase
 
 gplMensaStart:

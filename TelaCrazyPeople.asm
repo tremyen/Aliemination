@@ -4,91 +4,42 @@
 
 crazyPeople:
             proc
-            local logoWait
             local logoData
-            local logoLoop
-            local logoPrt1
-            local logoPrt2
+            local areaDeSprites
 
-            logoLoop: equ videoData
-            logoPrt1: equ videoData+1
-            logoPrt2: equ videoData+3
+            areaDeSprites: equ videoData+1
 
-            ld hl,0
-            ld (logoPrt1),hl          ; a primeira linha na tela
-            ld (logoPrt2),hl          ; a primeira linha na tela
+            ; Carrego o sprite na memoria de video
+            ld bc,64                    ; número de bytes a copiar
+            ld de,(areaDeSprites)       ; posição na VRAM
+            ld hl,logoData              ; posição na RAM
 
-            xor a                     ; zero A
-            ld (logoLoop),a           ; zero a posição do laço
+            ;Defino os paremetros do putSprite
+            ld b,3                      ; B — a camada do sprite;
+            ld hl,120                   ; HL — a coordenada X do sprite;
+            ld a,72                     ; A — a coordenada Y do sprite;
+            ld d,1                      ; D — a cor do sprite e
+            ld e,0                      ; E — o padrão do sprite.
 
-            ld bc,768                 ; 768 bytes
-            ld hl,6144                ; começando em 6144
-            call FILVRM               ; limpo a tela
+            ;Chamo o putSprite
+            call putSprite
 
-            ld hl,6144+2*32+9         ; início da parte de cima
-            ld (logoPrt1),hl
+            include "library/putSprite.asm"
 
-            ld hl,6144+21*32+9        ; início da parte de baixo
-            ld (logoPrt2),hl
-
-            xor a                     ; zero A
-
-logoWait:
-            ld hl,JIFFY
-            ld (hl),0                 ; zera o timer do VDP
-
-            ld (logoLoop),a           ; salva o valor do contador
-
-            ld bc,14                  ; número de bytes a copiar
-            ld de,(logoPrt1)          ; posição na VRAM
-            ld hl,logoData            ; posição na RAM
-
-            call LDIRVM               ; copia a parte superior
-
-            ld bc,14                  ; número de bytes a copiar
-            ld de,(logoPrt2)          ; posição na VRAM
-            ld hl,logoData+14         ; posição na RAM
-
-            call LDIRVM               ; copia a parte inferior
-
-            ld de,32                  ; meu incremento/decremento
-
-            ld hl,(logoPrt1)          ; recupera a posição atual
-            add hl,de                 ; uma linha abaixo + um caracter
-            ld (logoPrt1),hl          ; armazena a nova posição
-
-            ld hl,(logoPrt2)          ; recupera a posição atual
-            sbc hl,de                 ; uma linha acima - um caracter
-            ld (logoPrt2),hl          ; armazena a nova posição
-
-            ld hl,vdpCycle1
-            ld b,(hl)                   ; pega intervalo de temporização
-            sra b                       ; divido por dois
-            call waitASec               ; espero um pouquinho
-
-            ld a,(logoLoop)           ; recupera o contador
-            inc a                       ; incrementa o contador
-
-            cp 10
-            jr nz,logoWait            ; se A<10, volta o laço
-
-            xor a                       ; apaga o rastro do logotipo
-            ld bc,288                   ; comprimento de 288 bytes
-            ld hl,6144+2*32             ; posição inicial
-            call FILVRM
-
-            xor a                       ; zera A
-            ld bc,288                   ; comprimeiro de 288 bytes
-            ld hl,6144+13*32            ; posição inicial
-            call FILVRM
-
-            jp gplMensaWait            ; economizo meu código :)
+loop:
+            jr loop
 
 logoData:
-            db 01,02,00,00,00,00,03     ; primeira linha do logo
-            db 00,00,00,00,03,00,00
-
-            db 04,05,06,07,08,09,10     ; segunda linha do logo
-            db 11,12,13,14,15,16,17
+            ; --- Slot 0
+            ; color 1
+            DB $00,$00,$00,$00,$04,$0E,$04,$00
+            DB $00,$00,$00,$04,$0B,$01,$00,$00
+            DB $00,$00,$00,$00,$20,$70,$20,$00
+            DB $80,$00,$00,$90,$60,$20,$00,$00
+            ; color 11
+            DB $00,$0F,$1F,$1F,$3B,$31,$7B,$7F
+            DB $FF,$7F,$7F,$3B,$34,$1E,$1F,$0F
+            DB $00,$F0,$F8,$F8,$DC,$8C,$DE,$FE
+            DB $7F,$FE,$FE,$6C,$9C,$D8,$F8,$F0
 
             endp

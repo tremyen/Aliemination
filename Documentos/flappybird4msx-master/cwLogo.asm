@@ -41,17 +41,14 @@ cwLogoWait:
             ld (hl),0                   ; zera o timer do VDP
 
             ld (cwLogoLoop),a           ; salva o valor do contador
-
             ld bc,14                    ; número de bytes a copiar
             ld de,(cwLogoPrt1)          ; posição na VRAM
             ld hl,cwLogoData            ; posição na RAM
-
             call LDIRVM                 ; copia a parte superior
 
             ld bc,14                    ; número de bytes a copiar
             ld de,(cwLogoPrt2)          ; posição na VRAM
             ld hl,cwLogoData+14         ; posição na RAM
-
             call LDIRVM                 ; copia a parte inferior
 
             ld de,32                    ; meu incremento/decremento

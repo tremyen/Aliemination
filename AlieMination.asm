@@ -21,23 +21,21 @@ ramArea:    equ 0xe000                  ; inicio da área de variáveis
             org romArea
             db "AB"                     ; identifica como ROM
             dw startCode                ; endereço de execução
-            db "CW01"                   ; string de identificação
+            db "AM01"                   ; string de identificação
             db __VERSION+48
             db __RELEASE+65
             ds 6,0
 
 startCode:
             call initEnv                ; inicializar ambiente msx
-            call initVar                ; variaveis principais
+            call initVar                ; inicializar as variaveis do jogo
             call crazyPeople            ; chama a tela da empresa
 
 gameLoop:
             jr gameLoop                 ; volta para o laço do jogo
 
-            include "library/turboMode.asm"
             include "library/initEnv.asm"
-            include "library/initVar.asm"
-            include "library/gplMensa.asm"
+            include "library/initVar.asm"            
             include "library/waitASec.asm"
             include "TelaCrazyPeople.asm"
 

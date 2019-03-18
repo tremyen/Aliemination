@@ -1,6 +1,6 @@
-;===================================
-; Divide
-;===================================
+; -======-
+;  Divide
+; -======-
 ;
 ;Inputs:
 ;    A=divisor
@@ -8,11 +8,11 @@
 ;
 ;Outputs:
 ;    B=A/C
-;    A=A%C    (the remainder)
-;
+;    A=A%C    (the remainder);
 
 Divide:
- Ld B,0
+ Ld D,0
+
 DivLoop:
  sub A,C
  jr c,DivEnd
