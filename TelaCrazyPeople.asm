@@ -4,42 +4,102 @@
 
 crazyPeople:
             proc
-            local logoData
-            local areaDeSprites
+            local drawScreen
+            local waitPressFire
+            local screenData
 
-            areaDeSprites: equ videoData+1
+            ld bc,32768                 ; a imagem com o logotipo do jogo
+            ld de,6144+4*32             ; na 4ª linha da tela
+            ld hl,screenData
+            call LDIRVM                 ; copio para a VRAM
 
-            ; Carrego o sprite na memoria de video
-            ld bc,64                    ; número de bytes a copiar
-            ld de,(areaDeSprites)       ; posição na VRAM
-            ld hl,logoData              ; posição na RAM
+drawScreen:
+            call WRTVRM
+            call KILBUF                 ; limpo o buffer do teclado
 
-            ;Defino os paremetros do putSprite
-            ld b,3                      ; B — a camada do sprite;
-            ld hl,120                   ; HL — a coordenada X do sprite;
-            ld a,72                     ; A — a coordenada Y do sprite;
-            ld d,1                      ; D — a cor do sprite e
-            ld e,0                      ; E — o padrão do sprite.
+waitPressFire:
+            ld hl,JIFFY
+            ld (hl),0                   ; zero o temporizador
+            ld hl,vdpCycle1
+            ld b,(hl)
+            call waitASec               ; aguardo 1/10s
+            xor a
+            call GTTRIG                 ; lê a barra de espaços
+            ld h,a                      ; salva o valor em H
+            ld a,1
+            call GTTRIG                 ; lê o botão 1 do joystick 0
+            or h                        ; junta as duas leituras
+            cp 255                      ; ainda é 255?
+            ret z                       ; sai da laço
+            jr waitPressFire
 
-            ;Chamo o putSprite
-            call putSprite
-
-            include "library/putSprite.asm"
-
-loop:
-            jr loop
-
-logoData:
+screenData:
             ; --- Slot 0
             ; color 1
-            DB $00,$00,$00,$00,$04,$0E,$04,$00
-            DB $00,$00,$00,$04,$0B,$01,$00,$00
-            DB $00,$00,$00,$00,$20,$70,$20,$00
-            DB $80,$00,$00,$90,$60,$20,$00,$00
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000100b
+            DB 00001110b
+            DB 00000100b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000100b
+            DB 00001011b
+            DB 00000001b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00100000b
+            DB 01110000b
+            DB 00100000b
+            DB 00000000b
+            DB 10000000b
+            DB 00000000b
+            DB 00000000b
+            DB 10010000b
+            DB 01100000b
+            DB 00100000b
+            DB 00000000b
+            DB 00000000b
             ; color 11
-            DB $00,$0F,$1F,$1F,$3B,$31,$7B,$7F
-            DB $FF,$7F,$7F,$3B,$34,$1E,$1F,$0F
-            DB $00,$F0,$F8,$F8,$DC,$8C,$DE,$FE
-            DB $7F,$FE,$FE,$6C,$9C,$D8,$F8,$F0
+            DB 00000000b
+            DB 00001111b
+            DB 00011111b
+            DB 00011111b
+            DB 00111011b
+            DB 00110001b
+            DB 01111011b
+            DB 01111111b
+            DB 11111111b
+            DB 01111111b
+            DB 01111111b
+            DB 00111011b
+            DB 00110100b
+            DB 00011110b
+            DB 00011111b
+            DB 00001111b
+            DB 00000000b
+            DB 11110000b
+            DB 11111000b
+            DB 11111000b
+            DB 11011100b
+            DB 10001100b
+            DB 11011110b
+            DB 11111110b
+            DB 01111111b
+            DB 11111110b
+            DB 11111110b
+            DB 01101100b
+            DB 10011100b
+            DB 11011000b
+            DB 11111000b
+            DB 11110000b
 
             endp

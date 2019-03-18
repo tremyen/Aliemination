@@ -30,16 +30,16 @@ noPalAdjust:
             call ERAFNK             ; desligo as teclas de função
 
             ;Definicao das cores da tela
-            ld a,15                 ; BRANCO
+            ld a,15                 ;
             ld (FORCLR),a           ; cor da frente em branco
-            ld a,1                  ;
+            ld a,0                  ;
             ld (BAKCLR),a           ; Cor do fundo
-            ld a,14                 ;
+            ld a,0                  ;
             ld (BDRCLR),a           ; Cor da borda
             call CHGCLR             ; agora mudo as cores da tela
             ld a,32
             ld (LINL32),a           ; largura da tela em 32 colunas
-            call INIGRP             ; entro na SCREEN2
+            call INIT32             ; entro na SCREEN 
             call ENASCR             ; religo a tela
             ret                     ; sai da rotina
 
