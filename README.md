@@ -23,3 +23,5 @@ Para criar o cartucho efetivamente vc vai precisar de uma Megaflashrom -> https:
 Tabela ASCII -> http://www.asciitable.com/
 
 Codigos exemplo em ASM Z80 -> http://z80-heaven.wikidot.com/
+
+Ferramenta para converter imagens de PC para MSX -> http://marmsx.msxall.com/msxvw/msxvw5/download/index.php
