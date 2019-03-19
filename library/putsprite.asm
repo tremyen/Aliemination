@@ -57,7 +57,6 @@ putSpriteNoEclock:
             ld h,l                      ; armazeno 'coordenada X' em H
             ld l,c                      ; armazena 'coordenada Y' em L
             push hl                     ; armazeno HL (YX) na pilha
-
             ld h,0x1b                   ; Só 0x1b em H e não 0x1b00 em HL!
             xor a
 
