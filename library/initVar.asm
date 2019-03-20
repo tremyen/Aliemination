@@ -1,10 +1,14 @@
 ;  -==========================-
 ;   inicializacao de variáveis
 ;  -==========================-
-rndSeed:    equ ramArea
-vdpCycle1:  equ ramArea+1
-vdpCycle5:  equ ramArea+2
-videoData:  equ ramArea+3
+rndSeed:          equ ramArea
+vdpCycle1:        equ ramArea+1
+vdpCycle5:        equ ramArea+2
+score:            equ ramArea+3
+backgrn   :       equ 6144
+spriteArea:       equ 14336
+spriteNave:       equ spriteArea
+spriteCidade:     equ spriteArea+32
 
 initVar:
             proc

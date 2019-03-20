@@ -5,8 +5,8 @@
 ;  *  Timo Nyyrikki -- http://www.msx.org/wiki/R800_Programming#BIOS_routines
 ;  *
 ;  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-;
-turboMode:
+
+turboR:
             proc
             local CHGCPU
 

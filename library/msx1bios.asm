@@ -1,7 +1,8 @@
-;
+;-==================-
 ; MSX1-BIOS ROUTINES
 ; Version 0.1
-;
+;-==================-
+
 CHKRAM:		equ 0x0000			; Partida (boot)
 RDSLT:		equ 0x000C			; Lê dado de qualquer slot
 WRSLT:		equ 0x0014			; Escreve dado em qualquer slot
@@ -64,12 +65,12 @@ TAPOON:		equ 0x00EA			; Aciona saída de fita
 TAPOUT:		equ 0x00ED			; Escreve na saída de fita
 TAPOOF:		equ 0x00F0			; Desliga saída de fita
 STMOTR:		equ 0x00F3			; Controla motor da unidade de fita
-LFTQ:		equ 0x00F6			; Verifica espaço em fila musical
-PUTQ:		equ 0x00F9			; Coloca byte em fila musical
+LFTQ:		  equ 0x00F6			; Verifica espaço em fila musical
+PUTQ:		  equ 0x00F9			; Coloca byte em fila musical
 RIGHTC:		equ 0x00FC			; Move endereço de pixel à direita
 LEFTC:		equ 0x00FF			; Move endereço de pixel à esquerda
-UPC:		equ 0x0102			; Move endereço de pixel acima
-TUPC:		equ 0x0105			; Testa e move endereço de pixel acima
+UPC:		  equ 0x0102			; Move endereço de pixel acima
+TUPC:		  equ 0x0105			; Testa e move endereço de pixel acima
 DOWNC:		equ 0x0108			; Move endereço de pixel abaixo
 TDOWNC:		equ 0x010B			; Testa e Move endereço de pixel abaixo
 SCALXY:		equ 0x010E			; "Clipa" coordenadas gráficas
@@ -78,7 +79,7 @@ FETCHC:		equ 0x0114			; Obtém endereço físico do pixel atual
 STOREC:		equ 0x0117			; Armazena endereço físico do pixel atual
 SETATR:		equ 0x011A			; Muda cor de desenho
 READC:		equ 0x011D			; Lê atributo do pixel atual
-SETC:		equ 0x0120			; Muda atributo do pixel atual
+SETC:		  equ 0x0120			; Muda atributo do pixel atual
 NSETCX:		equ 0x0123			; Muda atributo de uma sequência de pixels
 CHGCAP:		equ 0x0132			; Altera LED do CAPS LOCK
 CHGSND:		equ 0x0135			; Altera o estado do click do teclado

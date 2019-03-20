@@ -1,16 +1,11 @@
 ; -===================================================================-
 ;  Aliemination 1.0
 ;  Meu primeiro jogo de MSX
-;  (C) 2019-2016 Manoel Neto - tremyen@gmail.com;
+;  (C) 2019 Manoel Neto - tremyen@gmail.com;
 ;  Mude, compartilhe e estude. Conhecimento é de graça.
 ; -===================================================================-
 __VERSION:  equ 1
 __RELEASE:  equ 0
-
-            include "library/msx1bios.asm"
-            include "library/msx1variables.asm"
-            include "library/msx1hooks.asm"
-
 PAL:        equ  5                      ; 1/10s em 50Hz (PAL-B/G/N)
 NTSC:       equ  6                      ; 1/10s em 60Hz (NTSC & PAL-M)
 
@@ -29,15 +24,25 @@ ramArea:    equ 0xe000                  ; inicio da área de variáveis
 startCode:
             call initEnv                ; inicializar ambiente msx
             call initVar                ; inicializar as variaveis do jogo
-            call crazyPeople            ; chama a tela da empresa
+            call crazyPeople            ; tela da empresa
 
 gameLoop:
+            ; inicio do jogo
+            ld hl,-5
+            ld (score),hl               ; "zero" a pontuação
+
             jr gameLoop                 ; volta para o laço do jogo
 
             include "library/initEnv.asm"
-            include "library/initVar.asm"            
+            include "library/initVar.asm"
             include "library/waitASec.asm"
-            include "TelaCrazyPeople.asm"
+            include "library/crazyPeople.asm"
+            include "library/spriteData.asm"
+            include "library/msx1bios.asm"
+            include "library/msx1variables.asm"
+            include "library/msx1hooks.asm"
+            include "library/turboMode.asm"
+            include "library/setScreen2.asm"
 
 romPad:
             ds romSize-(romPad-romArea),0
