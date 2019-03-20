@@ -19,6 +19,7 @@ BDRCLR:     equ 0xf3eb
 LINL32:     equ 0xF3AF
 RG1SAV:     equ 0xf3e0
 CHGCLR:     equ 0x0062
+CHGMOD:		  equ 0x005F			; Altera modo do VDP
 
             org romArea
             db "AB"                     ; ID
@@ -38,8 +39,8 @@ startProgram:
             ld (BAKCLR),a               ; cor de fundo
             LD a,1                      ; Preto (1)
             ld (BDRCLR),a               ; cor da borda
-            call CHGCLR                 ; => COLOR 15,14,1
-
+            call CHGCLR                 ; COLOR 15,14,1
+            call SetScreen2             ; entra no modo screen2
 
             ;Você pode colar até trinta e dois sprites
             ;só quatro podem estar presentes na mesma linha horizontal
@@ -63,8 +64,8 @@ startProgram:
             ; putsprite
             ; -===========================-
             ; B  — a camada do sprite;
-            ; HL — a coordenada X do sprite;
-            ; A  — a coordenada Y do sprite (0 até 191);
+            ; HL — a coordenada X do sprite; (0 ate 255)
+            ; A  — a coordenada Y do sprite (0 ate 191);
             ; D  — a cor do sprite
             ; E  — o padrão do sprite.
             ; -===========================-
@@ -81,40 +82,24 @@ loop:
             jr loop
             endp
 
-sprite:
-            DB 00000000b
-            DB 00000011b
-            DB 00000010b
-            DB 00000110b
-            DB 00111100b
-            DB 00101001b
-            DB 00100011b
-            DB 01100010b
-            DB 11000000b
-            DB 10000001b
-            DB 00000011b
-            DB 11100011b
-            DB 00110011b
-            DB 00010010b
-            DB 00011110b
-            DB 00000000b
-            DB 00000000b
-            DB 11000000b
-            DB 01000000b
-            DB 01100000b
-            DB 00111100b
-            DB 10010100b
-            DB 11000100b
-            DB 01000110b
-            DB 00000011b
-            DB 10000001b
-            DB 11000000b
-            DB 11000011b
-            DB 11001110b
-            DB 01001000b
-            DB 01111000b
-            DB 00000000b
+SetScreen2:
+            LD HL,0x0101
+          	LD (BAKCLR),HL
+          	LD A,2
+            call CHGMOD    ; CHGMOD troca o modo de tela
+          	LD A,(RG1SAV)
+          	OR 2
+          	LD B,A
+          	LD C,1
+            call 0x0047  ;;WRTVDP escreve dados nos registradores do VDP.
             ret
+
+sprite:
+            DB 000,000,000,028,031,031,028,227
+            DB 031,227,031,227,031,224,000,000
+            DB 000,000,000,127,255,255,127,255
+            DB 255,255,255,255,255,127,000,000
+
 romPad:
             ds romSize-(romPad-romArea),0
             end
