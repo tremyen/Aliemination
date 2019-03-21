@@ -16,7 +16,7 @@ drawScreen:
             ; DE - Start address of VRAM (6144)
             ; HL - start address
             ;-================================
-            ld bc,4096
+            ld bc,14336
             ld de,backgrn
             ld hl,screenData
             call LDIRVM
@@ -46,6 +46,6 @@ waitPressFire:
             jr waitPressFire
 
 screenData:
-            incbin "gfx/cplogo.scr"
+            incbin "gfx/CPLOGO.RAW"
 
             endp

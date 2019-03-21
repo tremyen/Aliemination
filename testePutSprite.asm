@@ -10,6 +10,8 @@ BDRCLR:     equ 0xf3eb
 FORCLR:     equ 0xf3e9
 LINL32:     equ 0xF3AF
 RG1SAV:     equ 0xf3e0
+LDIRVM:	  	equ 0x005C			; Copia bloco da RAM para a VRAM
+spAdress:   equ 14336
 
 macro	____put_sprite,Sprite_Layer,Sprite_Pos_X,Sprite_Pos_Y,Sprite_Color,Sprite_Pattern
             ld b,Sprite_Layer
@@ -58,19 +60,16 @@ startProgram:
             ld c,1                      ; registrador 1
             call WRTVDP                 ; altero o valor do registro 1
 
-            ; Preencher a Tabela de imagens dos Sprite
-            ; Block transfer to VRAM from memory
-            ;-===========================================-
-            ; BC - blocklength
-            ; DE - Start address of VRAM
-            ; HL - start address (entre 14336 e 16385)
-            ; Ou seja, dependendo do tamanho utilizado
-            ; você pode ter 256 ou 64 sprites
-            ;-===========================================-
-            ld bc,257
-            ld de,14336
-            ld hl,sprite
-            call LDIRVM
+            ld de,0
+Loop:
+            ld a,sprite
+            ld bc,1
+            ld hl,14336
+            call FILVRM
+            dec de
+            ld a,d
+            or e
+            jp nz,Loop
 
 sprites:
             ld b,3
@@ -87,47 +86,16 @@ sprites:
             ld e,1
             call putSprite
 
-
 loop:
             jr loop                     ; trava a execução neste ponto
             endp
 
+            include "library/putSprite.asm"
+
 sprite:
             ; Nave - Cada Bloco tem 32 bytes
-            ; color 11 - 0
-            DB 00000000b
-            DB 00000000b
-            DB 00000001b
-            DB 00000001b
-            DB 00000011b
-            DB 00010110b
-            DB 00011100b
-            DB 00011101b
-            DB 00111111b
-            DB 01111110b
-            DB 11111100b
-            DB 00011100b
-            DB 00001100b
-            DB 00001100b
-            DB 00000000b
-            DB 00000000b
-            DB 00000000b
-            DB 00000000b
-            DB 10000000b
-            DB 10000000b
-            DB 11000000b
-            DB 01101000b
-            DB 00111000b
-            DB 10111000b
-            DB 11111100b
-            DB 01111110b
-            DB 00111111b
-            DB 00111100b
-            DB 00110000b
-            DB 00110000b
-            DB 00000000b
-            DB 00000000b
-            ; color 1 - 1
+            ; --- Slot 0
+            ; color 1
             DB 00000000b
             DB 00000011b
             DB 00000010b
@@ -138,7 +106,7 @@ sprite:
             DB 01100010b
             DB 11000000b
             DB 10000001b
-            DB 00000011b
+            DB 10000011b
             DB 11100011b
             DB 00110011b
             DB 00010010b
@@ -154,11 +122,44 @@ sprite:
             DB 01000110b
             DB 00000011b
             DB 10000001b
-            DB 11000000b
-            DB 11000011b
-            DB 11001110b
+            DB 11000001b
+            DB 11000111b
+            DB 11001100b
             DB 01001000b
             DB 01111000b
+            DB 00000000b
+            ; color 11
+            DB 00000000b
+            DB 00000000b
+            DB 00000001b
+            DB 00000001b
+            DB 00000011b
+            DB 00010110b
+            DB 00011100b
+            DB 00011101b
+            DB 00111111b
+            DB 01111110b
+            DB 01111100b
+            DB 00011100b
+            DB 00001100b
+            DB 00001100b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 00000000b
+            DB 10000000b
+            DB 10000000b
+            DB 11000000b
+            DB 01101000b
+            DB 00111000b
+            DB 10111000b
+            DB 11111100b
+            DB 01111110b
+            DB 00111110b
+            DB 00111000b
+            DB 00110000b
+            DB 00110000b
+            DB 00000000b
             DB 00000000b
             ; Cidade
             ; color 1 - 2

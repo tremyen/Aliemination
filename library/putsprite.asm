@@ -63,7 +63,7 @@ putSpriteNoEclock:
 putSpriteLayerLoop:
             add a,4                     ; A=A+4
             djnz putSpriteLayerLoop
-            ld l,a                      ; são apenas 128 bytes, não preciso de 16-bit
+            ld l,a                      ; são apenas 128 bytes,
             ld b,2                      ; repito o laço 2 vezes
 
 putSpriteToVram:
@@ -75,6 +75,5 @@ putSpriteToVram:
             call WRTVRM
             inc hl
             djnz putSpriteToVram
-
             ret
             endp

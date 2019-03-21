@@ -57,7 +57,7 @@ noPalAdjust:
 
             ;Entro no modo screen
             ;-=========================-
-            call INIGRP             ; modo grafico
+            call setScreen2         ; modo grafico
             call ENASCR             ; religo a tela
             ret                     ; sai da rotina
 
