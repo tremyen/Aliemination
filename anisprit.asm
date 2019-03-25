@@ -1,29 +1,33 @@
-; -=============================================-
+; ==============================
 ;  Teste de animacao de sprite
 ;  Manoel Neto (C) 2019-03-24
 ;
 ;  Animacao basica de um sprite
-; -=============================================-
+; ==============================
 spriteArea: equ 14336
+kRight:  equ $01
+kLeft:   equ $02
+kUp:	   equ $03
+kDown:	 equ $04
 
 include "library/msx1bios.asm"
 include "library/msx1variables.asm"
 include "library/msxRom.asm"
 
 ident:
-            dw startCode                ; endereço de execução
+            dw startCode
             db "AS01"
             db __VERSION+48
             db __RELEASE+65
             ds 6,0
+
 startCode:
             call INIT32
             call setSprites32
             call loadSprites
-
-            ;-=========================
+            ;===========================
             ; Sprite na posicao Inicial
-            ;-=========================
+            ;===========================
             ld b,0
             ld hl,125
             ld a, 80
@@ -31,38 +35,56 @@ startCode:
             ld e,0
             call putSprite
             call waitASec
-            jp animate
+loop:
+            call CHGET
+            cp kRight
+            jp z,moveRight
+            jr loop
+
+            ; cp kRight
+            ; jp z,moveRight
+            ; cp kLeft
+            ; jp z,moveLeft
+            ; jp loop
 
             include "library/putSprite.asm"
             include "library/waitASec.asm"
 
-
-animate:
 moveRight:
-            call clearSprite
-            inc b
-            inc hl
-            cp 250
-            jp moveLeft
-            ld a, 80
-            ld d,11
-            ld e,1
-            call putSprite
-            call waitASec
-            jp moveRight
+            ld hl, entrei
+            call print
+            ret
+            ; call clearSprite
+            ; inc hl
+            ; ; Comparacao
+            ; ; ==========
+            ; ; If A == N, then Z flag is set.
+            ; ; If A != N, then Z flag is reset.
+            ; ; If A < N, then C flag is set.
+            ; ; If A >= N, then C flag is reset.
+            ; cp 250
+            ; jp z, loop
+            ; ld a, 80
+            ; ld d,11
+            ; ld e,1
+            ; call putSprite
+            ; call waitASec
+            ; ret
 
 moveLeft:
-            call clearSprite
-            inc b
-            inc hl
-            cp 1
-            jp moveRight
-            ld a, 80
-            ld d,11
-            ld e,1
-            call putSprite
-            call waitASec
-            jp moveLeft
+            ld hl, entrei
+            call print
+            ret
+            ; call clearSprite
+            ; dec hl
+            ; cp 1
+            ; jp z, loop
+            ; ld a, 80
+            ; ld d,11
+            ; ld e,2
+            ; call putSprite
+            ; call waitASec
+            ; ret
 
 setSprites32:
             LD A,(RG1SAV)
@@ -85,6 +107,14 @@ clearSprite:
             ld hl,6912                  ; início da tabela de sprites
             call FILVRM                 ; preenche com zero!
             ret                         ; sai da rotina
+
+print:
+            ld a,(hl)                   ; coloca em A o endereço indicado em HL
+            cp 0                        ; compara com 0
+            ret z                       ; se é zero, fim da string
+            call CHPUT                  ; chama CHPUT
+            inc hl                      ; HL=HL+1
+            jr print                    ; vai para print
 
 data:
 shipFront:
@@ -195,3 +225,6 @@ shipRight:
             DB 00000000b
             DB 00000000b
             DB 00000000b
+
+entrei:
+            DB "Entrei", 0
