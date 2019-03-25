@@ -1,15 +1,9 @@
 ; ==============================
 ;  Teste de animacao de sprite
-;  Manoel Neto (C) 2019-03-24
-;
+;  Manoel Neto (C) 2019-03-24;
 ;  Animacao basica de um sprite
 ; ==============================
 spriteArea: equ 14336
-kRight:  equ $01
-kLeft:   equ $02
-kUp:	   equ $03
-kDown:	 equ $04
-
 include "library/msx1bios.asm"
 include "library/msx1variables.asm"
 include "library/msxRom.asm"
@@ -30,61 +24,44 @@ startCode:
             ;===========================
             ld b,0
             ld hl,125
-            ld a, 80
+            ld a,80
             ld d,11
             ld e,0
             call putSprite
             call waitASec
 loop:
+            xor a
             call CHGET
-            cp kRight
+            cp 97
             jp z,moveRight
-            jr loop
-
-            ; cp kRight
-            ; jp z,moveRight
-            ; cp kLeft
-            ; jp z,moveLeft
-            ; jp loop
+            cp 115
+            jp z,moveLeft
+            jp loop
 
             include "library/putSprite.asm"
             include "library/waitASec.asm"
 
 moveRight:
-            ld hl, entrei
-            call print
+            ld de, 250                      ; Move 250 para DE
+            call DCOMPR                     ; Compara HL com DE
+            jr z,loop
+            inc hl                          ; incrementa HL
+            ld a,80
+            ld d,11
+            ld e,1
+            call putSprite
             ret
-            ; call clearSprite
-            ; inc hl
-            ; ; Comparacao
-            ; ; ==========
-            ; ; If A == N, then Z flag is set.
-            ; ; If A != N, then Z flag is reset.
-            ; ; If A < N, then C flag is set.
-            ; ; If A >= N, then C flag is reset.
-            ; cp 250
-            ; jp z, loop
-            ; ld a, 80
-            ; ld d,11
-            ; ld e,1
-            ; call putSprite
-            ; call waitASec
-            ; ret
 
 moveLeft:
-            ld hl, entrei
-            call print
+            ld de, 1                        ; Move 1 para DE
+            call DCOMPR                     ; Compara HL com DE
+            jp z, loop
+            dec hl             
+            ld a, 80
+            ld d,11
+            ld e,2
+            call putSprite
             ret
-            ; call clearSprite
-            ; dec hl
-            ; cp 1
-            ; jp z, loop
-            ; ld a, 80
-            ; ld d,11
-            ; ld e,2
-            ; call putSprite
-            ; call waitASec
-            ; ret
 
 setSprites32:
             LD A,(RG1SAV)
