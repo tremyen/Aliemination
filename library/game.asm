@@ -58,14 +58,10 @@ gameStart:
 
             xor a
             call GTTRIG                 ; lê a barra de espaços
-
             ld h,a                      ; salva o valor em H
-
             ld a,1
             call GTTRIG                 ; lê o botão 1 do joystick 0
-
             or h                        ; junta as duas leituras
-
             cp 255                      ; é 255?
             jr nz,gameUpBird            ; faz o pássaro subir!
 

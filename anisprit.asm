@@ -19,6 +19,14 @@ startCode:
             call INIT32
             call setSprites32
             call loadSprites
+
+            ;======================================
+            ; desabilito a atualização da tela por
+            ; interrupção com 'ret' no hook
+            ;======================================
+            ; ld a,0xc9
+            ; ld (HTIMI),a
+
             ;===========================
             ; Sprite na posicao Inicial
             ;===========================
@@ -29,38 +37,44 @@ startCode:
             ld e,0
             call putSprite
             call waitASec
-loop:
+loop:            
             xor a
             call CHGET
             cp 97
-            jp z,moveRight
-            cp 115
             jp z,moveLeft
+            cp 115
+            jp z,moveRight
             jp loop
 
             include "library/putSprite.asm"
             include "library/waitASec.asm"
 
 moveRight:
-            ld de, 250                      ; Move 250 para DE
-            call DCOMPR                     ; Compara HL com DE
-            jr z,loop
-            inc hl                          ; incrementa HL
+            inc hl
+            ld b,1
             ld a,80
             ld d,11
             ld e,1
             call putSprite
+            call waitASec
+            ld b,0
+            ld e,0
+            call putSprite
+            call waitASec
             ret
 
 moveLeft:
-            ld de, 1                        ; Move 1 para DE
-            call DCOMPR                     ; Compara HL com DE
-            jp z, loop
-            dec hl             
-            ld a, 80
+            dec hl
+            ld b,2
+            ld a,80
             ld d,11
             ld e,2
             call putSprite
+            call waitASec
+            ld b,0
+            ld e,0
+            call putSprite
+            call waitASec
             ret
 
 setSprites32:
@@ -205,3 +219,7 @@ shipRight:
 
 entrei:
             DB "Entrei", 0
+
+romPad:
+            ds romSize-(romPad-romArea),0
+            end
