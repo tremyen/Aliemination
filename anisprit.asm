@@ -4,9 +4,18 @@
 ;  Animacao basica de um sprite
 ; ==============================
 spriteArea: equ 14336
-include "library/msx1bios.asm"
-include "library/msx1variables.asm"
-include "library/msxRom.asm"
+ramArea:    equ 0xe000                  ; inicio da área de variáveis
+shipY:      equ ramArea
+shipFrame:  equ ramArea+1
+shipLeft:   equ ramArea+2
+shipRight:  equ ramArea+3
+vdpCycle1:  equ ramArea+4
+vdpCycle5:  equ ramArea+5
+shipBuffer: equ ramArea+6              ; coordenadas da nave
+framebuff3: equ shipBuffer+32           ; o 3º framebuffer (64 bytes)
+framebuff2: equ framebuff3+64           ; o 2º framebuffer (140 bytes)
+framebuff1: equ framebuff2+140          ; o 1º framebuffer (640 bytes)
+videoData:  equ framebuff3
 
 ident:
             dw startCode
@@ -19,33 +28,31 @@ startCode:
             call INIT32
             call setSprites32
             call loadSprites
+            ld bc,640                   ; quantidade de bytes para copiar
+            ld de,6144+64               ; endereço iniciual da VRAM
+            ld hl,framebuff1            ; endereço do framebuffer
+            call LDIRVM
+            ld a,0xc9                   ; desabilito a atualização da tela por
+            ld (HTIMI),a                ; interrupção com 'ret' no hook          
 
-            ;======================================
-            ; desabilito a atualização da tela por
-            ; interrupção com 'ret' no hook
-            ;======================================
-            ; ld a,0xc9
-            ; ld (HTIMI),a
+loop:
+            ld hl,JIFFY
+            ld (hl),0                   ; zero o temporizador
+            call drawShip
 
-            ;===========================
-            ; Sprite na posicao Inicial
-            ;===========================
-            ld b,0
-            ld hl,125
-            ld a,80
-            ld d,11
-            ld e,0
-            call putSprite
-            call waitASec
-loop:            
             xor a
             call CHGET
+            ld h,a                     ; salva o valor em H
             cp 97
-            jp z,moveLeft
+            jr nz,moveLeft
+            ld a,h
             cp 115
-            jp z,moveRight
+            jp nz,moveRight
             jp loop
 
+            include "library/msx1bios.asm"
+            include "library/msx1variables.asm"
+            include "library/msxRom.asm"
             include "library/putSprite.asm"
             include "library/waitASec.asm"
 
@@ -57,22 +64,14 @@ moveRight:
             ld e,1
             call putSprite
             call waitASec
-            ld b,0
-            ld e,0
-            call putSprite
-            call waitASec
             ret
 
 moveLeft:
             dec hl
-            ld b,2
+            ld b,1
             ld a,80
             ld d,11
             ld e,2
-            call putSprite
-            call waitASec
-            ld b,0
-            ld e,0
             call putSprite
             call waitASec
             ret
@@ -91,21 +90,6 @@ loadSprites:
             ld hl,data
             call LDIRVM
             ret
-
-clearSprite:
-            ld a,192                    ; Um valor que não atrapalha ninguém
-            ld bc,8                     ; 16/4 = 4, quatro sprites
-            ld hl,6912                  ; início da tabela de sprites
-            call FILVRM                 ; preenche com zero!
-            ret                         ; sai da rotina
-
-print:
-            ld a,(hl)                   ; coloca em A o endereço indicado em HL
-            cp 0                        ; compara com 0
-            ret z                       ; se é zero, fim da string
-            call CHPUT                  ; chama CHPUT
-            inc hl                      ; HL=HL+1
-            jr print                    ; vai para print
 
 data:
 shipFront:
@@ -216,9 +200,6 @@ shipRight:
             DB 00000000b
             DB 00000000b
             DB 00000000b
-
-entrei:
-            DB "Entrei", 0
 
 romPad:
             ds romSize-(romPad-romArea),0
