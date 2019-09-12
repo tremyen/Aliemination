@@ -22,27 +22,23 @@ ramArea:    equ 0xe000                  ; inicio da área de variáveis
             ds 6,0
 
 startCode:
-            call initEnv                ; inicializar ambiente msx
-            call initVar                ; inicializar as variaveis do jogo
-            call crazyPeople            ; tela da empresa
+  call initEnv                ; inicializar ambiente msx
+  call initVar                ; inicializar as variaveis do jogo
+  call crazyPeople            ; tela da empresa
 
 gameLoop:
-            ; inicio do jogo
-            ld hl,-5
-            ld (score),hl               ; "zero" a pontuação
+jr gameLoop
 
-            jr gameLoop                 ; volta para o laço do jogo
-
-            include "library/initEnv.asm"
-            include "library/initVar.asm"
-            include "library/waitASec.asm"
-            include "library/crazyPeople.asm"
-            include "library/spriteData.asm"
-            include "library/msx1bios.asm"
-            include "library/msx1variables.asm"
-            include "library/msx1hooks.asm"
-            include "library/turboMode.asm"
-            include "library/setScreen2.asm"
+include "library/initEnv.asm"
+include "library/initVar.asm"
+include "library/waitASec.asm"
+include "library/crazyPeople.asm"
+include "library/spriteData.asm"
+include "library/msx1bios.asm"
+include "library/msx1variables.asm"
+include "library/msx1hooks.asm"
+include "library/turboMode.asm"
+include "library/setScreen2.asm"
 
 romPad:
             ds romSize-(romPad-romArea),0
