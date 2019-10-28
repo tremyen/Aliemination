@@ -3,13 +3,14 @@
 ; -===================================================================-
 TelaCrazy:
   call DISSCR
-  ld b,1
-  ld c,1
-  call GetBMPScreenPos
-  ld d,h
-  ld e,l
+   ld b,1
+   ld c,0
+   call GetBMPScreenPos
+   ld d,h
+   ld e,l
+  ; ld de,0
   ld hl,CPLogo
-  ld bc,15360
+  ld bc,14000
   call LDIRVM
   call ENASCR
 TelaCrazyLoop:
@@ -21,4 +22,4 @@ SairTelaCrazy:
 ret
 
 CPLogo:
-  incbin "Assets\CPLogo.SC2"
+  incbin "Assets\CRAZYPEO.SC2"

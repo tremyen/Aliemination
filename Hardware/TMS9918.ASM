@@ -116,7 +116,6 @@ ret
 ; ret
 ; =============================================================================
 
-
 ; =============================================================================
 ; Carrega a Tabela de sprites
 ; =============================================================================
@@ -143,6 +142,7 @@ GetBMPScreenPos:
 		rr h
 		rr a
 		or b
+		sub 8
 		ld l,a
 		ld (ScreenLinePos_Plus2-2),hl
 		call VDP_SetWriteAddress
@@ -178,16 +178,16 @@ VDP_SetAddress:
   srl     h
   srl     h
   di
-  out     (VDPCONTROL),a
-  ld      a,128+14
-  out     (VDPCONTROL),a
-  ld      a,l
-  nop
-  out     (VDPCONTROL),a
-  ld      a,h
-  or      C
+  	out (VDPCONTROL),a
+  	ld  a,128+14
+  	out (VDPCONTROL),a
+  	ld  a,l
+  	nop
+  	out (VDPCONTROL),a
+  	ld a,h
+  	or C
   ei
-  out     (VDPCONTROL),a
+  out (VDPCONTROL),a
   ld c,VDPDATA
 ret
 
