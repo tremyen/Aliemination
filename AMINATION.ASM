@@ -1,45 +1,52 @@
 ; -===================================================================-
 ;  Aliemination 1.0
-;  Meu primeiro jogo de MSX
+; -===================================================================-
 ;  (C) 2019 Manoel Neto - tremyen@gmail.com;
 ;  Mude, compartilhe e estude. Conhecimento é de graça.
 ; -===================================================================-
 __VERSION:  equ 1
 __RELEASE:  equ 0
-PAL:        equ  5                      ; 1/10s em 50Hz (PAL-B/G/N)
-NTSC:       equ  6                      ; 1/10s em 60Hz (NTSC & PAL-M)
+include "Hardware\BiosMSX.asm"
+include "Assets\Constantes.asm"
+include "Assets\Variaveis.asm"
 
-makeROM:
-romSize:    equ 16384                   ; o tamanho que a ROM deve ter
-romArea:    equ 0x4000                  ; minha ROM começa aqui
-ramArea:    equ 0xe000                  ; inicio da área de variáveis
-            org romArea
-            db "AB"                     ; identifica como ROM
-            dw startCode                ; endereço de execução
-            db "AM01"                   ; string de identificação
-            db __VERSION+48
-            db __RELEASE+65
-            ds 6,0
+org romArea
+	db "AB"                     ; identifica como ROM
+ 	dw startCode                ; endereço de execução
+ 	db "CW01"                   ; string de identificação
+ 	ds 6,0
 
+; =============================================================================
+; INICIO PROGRAMA
+; =============================================================================
 startCode:
   call initEnv                ; inicializar ambiente msx
   call initVar                ; inicializar as variaveis do jogo
   call crazyPeople            ; tela da empresa
 
 gameLoop:
+
 jr gameLoop
 
-include "library/initEnv.asm"
-include "library/initVar.asm"
-include "library/waitASec.asm"
-include "library/crazyPeople.asm"
-include "library/spriteData.asm"
-include "library/msx1bios.asm"
-include "library/msx1variables.asm"
-include "library/msx1hooks.asm"
-include "library/turboMode.asm"
-include "library/setScreen2.asm"
+include "TelaIntroducao.asm"
+include "DesenharTela.asm"
+include "PegarFrase.asm"
+include "Sortear.asm"
+include "Embaralhar.asm"
+include "PegarChutes.asm"
 
+; =============================================================================
+; FIM PROGRAMA
+; =============================================================================
+include "Hardware\AY38910.ASM"
+include "Hardware\TMS9918.ASM"
+include "Library\Library.asm"
+include "Assets\Strings.asm"
+include "Assets\Sprites.asm"
+
+; =============================================================================
+; Padding
+; =============================================================================
 romPad:
-            ds romSize-(romPad-romArea),0
-            end
+ ds romSize-(romPad-romArea),0
+end
