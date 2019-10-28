@@ -1,5 +1,0 @@
-10 X=0
-20 Y=0
-30 P=(Y\8)*256+(Y MOD 8)+(X\8)*8
-40 A=2^(7-X MOD 8)
-50 PRINT "ENDEREÇO NA VRAM=";P,"VALOR=";A
