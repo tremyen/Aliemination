@@ -4,14 +4,65 @@
 ; Manoel Neto 2019-10-04
 ; Biblioteca para uso do VDP do MSX 1
 ; =============================================================================
+
+; =============================================================================
 ; VDP MODO GRAFICO I (SCREEN 1)
 ; =============================================================================
-;	Padrões de azulejos	=> 00000 ate 06143 (&H0000..&H07FF) => 6143 Bytes
+;	Padrões de azulejos	=> 00000 ate 06143 (&H0000..&17FFH) => 6143 Bytes
 ; Mapa dos ajulejos		=> 06144 ate 06911 (&H1800..&H1AFF)	=> 0767 Bytes
 ; Tabela de atributos => 06912 ate 07039 (&H1B00..&H1B7F)	=> 0127 Bytes
 ; Paleta							=> 07040 ate 07087 (&H1B80..&H1BAF)	=> 0047 Bytes
 ; Tabela de Cores 		=> 08192 ate 14335 (&H2000..&H37FF)	=> 6143 Bytes
 ; Tabela de Sprites 	=> 14336 ate 16384 (&H3800..&H3FFF) => 2048 Bytes
+; =============================================================================
+
+; =============================================================================
+; VDP MODO GRAFICO II (SCREEN 2)
+; =============================================================================
+;	Padrões de azulejos	=> 00000 ate 06143 (&H0000..&17FFH) => 6143 Bytes
+; Mapa dos ajulejos		=> 06144 ate 06911 (&H1800..&H1AFF)	=> 0767 Bytes
+; Tabela de atributos => 06912 ate 07039 (&H1B00..&H1B7F)	=> 0127 Bytes
+; Paleta							=> 07040 ate 07087 (&H1B80..&H1BAF)	=> 0047 Bytes
+; Tabela de Cores 		=> 08192 ate 14335 (&H2000..&H37FF)	=> 6143 Bytes
+; Tabela de Sprites 	=> 14336 ate 16384 (&H3800..&H3FFF) => 2048 Bytes
+; =============================================================================
+
+; =============================================================================
+; CORES
+; =============================================================================
+; 00	0000 transparent		06	0110 dark red						12	1100 dark green
+; 01	0001 black					07	0111 cyan								13	1101 magenta
+; 02	0010 medium green		08	1000 medium red					14	1110 gray
+; 03	0011 light green 		09	1001 light red					15	1111 white
+; 04	0100 dark blue			10	1010 dark yellow
+; 05	0101 light blue			11	1011 light yellow
+; =============================================================================
+
+; =============================================================================
+; SPRITE ATTRIBUTES (4 BYTES)
+; =============================================================================
+;	Você pode colar até trinta e dois sprites
+;	só quatro podem estar presentes na mesma linha horizontal
+;	o processador sempre irá desenhá-los uma linha abaixo de onde
+;	você realmente mandou
+; =============================================================================
+; VVVVVVVV					=> POSICAO VERTICAL
+; HHHHHHHH					=> POSICAO HORIZONTAL
+;	PPPPPPPP					=> NUMERO DO PADRAO (TABELA DE PADROES)
+;	E000CCCC					=> EARLY / 000 / COR DO SPRITE
+; =============================================================================
+
+; =============================================================================
+; SPRITE PATTERNS (256 (0-255) 8X8 PADROES DE PIXELS)
+; =============================================================================
+; SE O BIT DE TAMANHO DE SPRITE = 1 NO REGISTRADOR DO VDP #1 ENTAO OS SPRITES
+; SERAO 16X16 SEGUINTO O ESQUEMA ABAIXO
+; =============================================================================
+; BLOCO A => PRIMEIROS 8 BYTES
+; BLOCO B => PROXIMOS 8 BYTES
+; BLOCO C => PROXIMOS 8 BYTES
+; BLOCO D => PROXIMOS 8 BYTES
+; SPRITE FINAL => A,C,B,D
 ; =============================================================================
 VDPDATA:              equ &98
 VDPCONTROL:           equ &99
@@ -34,16 +85,6 @@ ScreenInit:
 	out (VDPCONTROL),a				; Parametros do Modo de video
 	ld a,128+1								; Registrador 1
 	out (VDPCONTROL),a
-	; ===========================================================================
-	; Seta a paleta de cores
-	; ===========================================================================
-	; 00	0000 transparent		06	0110 dark red						12	1100 dark green
-	; 01	0001 black					07	0111 cyan								13	1101 magenta
-	; 02	0010 medium green		08	1000 medium red					14	1110 gray
-	; 03	0011 light green 		09	1001 light red					15	1111 white
-	; 04	0100 dark blue			10	1010 dark yellow
-	; 05	0101 light blue			11	1011 light yellow
-	; ===========================================================================
 	ld a,%11010001;          	; [T][T][T][T][B][B][B][B]
 	out (VDPCONTROL),a				; Cor dos bits no modo texto / Cor do Backdrop
 	ld a,128+7								; Registrador 7

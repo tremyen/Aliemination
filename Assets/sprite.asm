@@ -43,10 +43,7 @@ startProgram:
             ld (BDRCLR),a               ; cor da borda
             call CHGCLR                 ;
 
-            ;Você pode colar até trinta e dois sprites
-            ;só quatro podem estar presentes na mesma linha horizontal
-            ;o processador sempre irá desenhá-los uma linha abaixo de onde
-            ;você realmente mandou
+
 
             ; Preencher a Tabela de imagens dos Sprite
             ; Block transfer to VRAM from memory

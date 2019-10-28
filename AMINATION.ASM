@@ -20,20 +20,13 @@ org romArea
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
-  call initEnv                ; inicializar ambiente msx
-  call initVar                ; inicializar as variaveis do jogo
-  call crazyPeople            ; tela da empresa
+  call TelaCrazyPeople            ; tela da empresa
 
 gameLoop:
 
 jr gameLoop
 
-include "TelaIntroducao.asm"
-include "DesenharTela.asm"
-include "PegarFrase.asm"
-include "Sortear.asm"
-include "Embaralhar.asm"
-include "PegarChutes.asm"
+include "TelaCrazy.asm"
 
 ; =============================================================================
 ; FIM PROGRAMA
