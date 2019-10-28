@@ -53,10 +53,10 @@
 ; =============================================================================
 
 ; =============================================================================
-; SPRITE PATTERNS (256 (0-255) 8X8 PADROES DE PIXELS)
+; SPRITE PATTERNS => 256(8X8) OU 64 (16X16) PADROES DE PIXELS
 ; =============================================================================
-; SE O BIT DE TAMANHO DE SPRITE = 1 NO REGISTRADOR DO VDP #1 ENTAO OS SPRITES
-; SERAO 16X16 SEGUINTO O ESQUEMA ABAIXO
+; SE O BIT DE TAMANHO DE SPRITE = 1 NO REGISTRADOR DO VDP #1, ENTAO OS SPRITES
+; SERAO 16X16 SEGUINDO O ESQUEMA ABAIXO,OU SEJA,VOCE PODE TER 256 OU 64 SPRITES
 ; =============================================================================
 ; BLOCO A => PRIMEIROS 8 BYTES
 ; BLOCO B => PROXIMOS 8 BYTES
@@ -66,6 +66,8 @@
 ; =============================================================================
 VDPDATA:              equ &98
 VDPCONTROL:           equ &99
+VDPPALLET:						equ &9A
+VDPINDIRECT:					equ &9B
 ADRPATTERNTBL:				equ 0000
 ADRNAMESTBL:					equ 6144
 ADRATRIBUTETBL:				equ 6912
@@ -95,23 +97,23 @@ ret
 ; =============================================================================
 ; Carrega a Tabela de padroes
 ; =============================================================================
-LoadPatternTable:
-	ld bc,216            		; bytes a copiar
-  ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
-  ld hl,CriptoFont 				; localização na RAM
-  call LDIRVM             ; copio a tabela de padrões
-ret
+; LoadPatternTable:
+; 	ld bc,216            		; bytes a copiar
+;   ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
+;   ld hl,CriptoFont 				; localização na RAM
+;   call LDIRVM             ; copio a tabela de padrões
+; ret
 ; =============================================================================
 
 ; =============================================================================
 ; Carrega a Tabela de Atributos
 ; =============================================================================
-LoadAtributteTable:
-	ld bc,32            		; bytes a copiar
-  ld de,ADRATRIBUTETBL    ; tabela de padrões na VRAM
-  ld hl,AttributePattern  ; localização na RAM
-  call LDIRVM             ; copio a tabela de padrões
-ret
+; LoadAtributteTable:
+; 	ld bc,32            		; bytes a copiar
+;   ld de,ADRATRIBUTETBL    ; tabela de padrões na VRAM
+;   ld hl,AttributePattern  ; localização na RAM
+;   call LDIRVM             ; copio a tabela de padrões
+; ret
 ; =============================================================================
 
 
@@ -119,12 +121,75 @@ ret
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,216              	; bytes a copiar
+	ld bc,257              	; bytes a copiar
   ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
-  ld hl,CriptoFont		    ; localização na RAM
+  ld hl,AlieSprites		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites
 ret
 ; =============================================================================
+
+; =============================================================================
+; Pegar a posicao na tela para um grafico BMP
+; =============================================================================
+; B	=> posicao X
+; C => posicao Y
+; =============================================================================
+; Altera => HL (endereco de memoria da coordenada xy),A
+; =============================================================================
+GetBMPScreenPos:
+	push bc
+		xor a
+		ld h,c
+		rr h
+		rr a
+		or b
+		ld l,a
+		ld (ScreenLinePos_Plus2-2),hl
+		call VDP_SetWriteAddress
+	pop bc
+ret
+
+GetNextLine:
+	push hl
+	push bc
+	push af
+		ld hl,&0000
+ScreenLinePos_Plus2:
+		ld bc,&0080
+		add hl,bc
+		ld (ScreenLinePos_Plus2-2),hl
+		xor a
+		call VDP_SetWriteAddress
+	pop af
+	pop bc
+	pop hl
+	ret
+
+VDP_SetReadAddress:
+	ld C,0
+	jr VDP_SetAddress
+VDP_SetWriteAddress:
+	ld C,64
+VDP_SetAddress:
+	rlc     h
+  rla
+  rlc     h
+  rla
+  srl     h
+  srl     h
+  di
+  out     (VDPCONTROL),a
+  ld      a,128+14
+  out     (VDPCONTROL),a
+  ld      a,l
+  nop
+  out     (VDPCONTROL),a
+  ld      a,h
+  or      C
+  ei
+  out     (VDPCONTROL),a
+  ld c,VDPDATA
+ret
 
 ; =============================================================================
 ; Pegar a posicao de memoria de uma coordenada XY

@@ -27,32 +27,7 @@ ret
 ; Altera => A,HL, Todas as variaveis
 ; =============================================================================
 LimpaMem:
-	; ========== Zera Numericos ==========
-	xor a
-	ld (NumTamFrase),a
-	ld (NumAleatorio),a
-	ld (NumSorteios),a
-	ld (NumDivIdeal),a
-	ld (NumPosSort),a
-	ld (NumContEmb),a
-	ld (NumCentenas),a
-	ld (NumDezenas),a
-	ld (NumUnidades),a
-	ld (NumContTeste),a
-	ld (NumContErros),a
-	; ========== Zera Caracteres ==========
-	ld a,' '
-	ld (ChaLetraAtual),a
-	ld (ChaTestar),a
-	; ========== Zera Strings ==========
-	ld a,14
-	ld hl,StrFrase
-	call CleanBytes
-	ld hl,StrEmbaralhada
-	call CleanBytes
-	; ========== Zera Matrizes ==========
-	ld hl,MatSorteados
-	call ZerarMatriz
+
 ret
 
 ; =============================================================================
