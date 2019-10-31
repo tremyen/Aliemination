@@ -6,6 +6,22 @@
 ; =============================================================================
 
 ; =============================================================================
+; MODOS DE OPERACAO DO VDP
+; =============================================================================
+;	M1	M2	M3	M4	M5	Mode	 			MSX Version	BASIC Screen
+;	0		0		0		0		0	 	32x24	Text	1 2 2+ tR	 	1
+;	1		0		0		0		0		40x24 Text	1 2 2+ tR		0
+;	1		0		0		1		0		80x24 Text	  2 2+ tR		0
+;	0		1		0		0		0		Multicolour	1 2 2+ tR		3
+;	0		0		1		0		0		Graphics 1	1 2 2+ tR		2
+;	0		0		0		1		0		Graphics 2	  2 2+ tR		4
+;	0		0		1		1		0		Graphics 4	  2 2+ tR		5
+;	0		0		0		0		1		Graphics 5	  2 2+ tR		6
+;	0		0		1		0		1		Graphics 6	  2 2+ tR		7
+;	0		0		1		1		1		Graphics 7	  2 2+ tR		8
+; =============================================================================
+
+; =============================================================================
 ; VDP MODO GRAFICO I (SCREEN 1)
 ; =============================================================================
 ;	Padrões de azulejos	=> 00000 ate 06143 (&H0000..&17FFH) => 6143 Bytes
@@ -39,20 +55,6 @@
 ; =============================================================================
 
 ; =============================================================================
-; SPRITE ATTRIBUTES (4 BYTES)
-; =============================================================================
-;	Você pode colar até trinta e dois sprites
-;	só quatro podem estar presentes na mesma linha horizontal
-;	o processador sempre irá desenhá-los uma linha abaixo de onde
-;	você realmente mandou
-; =============================================================================
-; VVVVVVVV					=> POSICAO VERTICAL
-; HHHHHHHH					=> POSICAO HORIZONTAL
-;	PPPPPPPP					=> NUMERO DO PADRAO (TABELA DE PADROES)
-;	E000CCCC					=> EARLY / 000 / COR DO SPRITE
-; =============================================================================
-
-; =============================================================================
 ; SPRITE PATTERNS => 256(8X8) OU 64 (16X16) PADROES DE PIXELS
 ; =============================================================================
 ; SE O BIT DE TAMANHO DE SPRITE = 1 NO REGISTRADOR DO VDP #1, ENTAO OS SPRITES
@@ -75,19 +77,72 @@ ADRPALLETTBL:					equ 7040
 ADRCOLORTBL:					equ 8192
 ADRSPRITETBL:					equ 14336
 ; =============================================================================
-; ScreenInit - Inicializa os registradores do VDP
+; SPRITE ATTRIBUTES (4 BYTES)
 ; =============================================================================
-ScreenInit:
-	ld a,%00000000		       	; [0][0][0][0][0][0][M3][EV]
-	out (VDPCONTROL),a				; Controla Modo de video
-	ld a,128+0								; Registrador 0
-	out (VDPCONTROL),a
+;	Você pode colar até trinta e dois sprites
+;	só quatro podem estar presentes na mesma linha horizontal
+;	o processador sempre irá desenhá-los uma linha abaixo de onde
+;	você realmente mandou
+; =============================================================================
+; VVVVVVVV					=> POSICAO VERTICAL
+; HHHHHHHH					=> POSICAO HORIZONTAL
+;	PPPPPPPP					=> NUMERO DO PADRAO (TABELA DE PADROES)
+;	E000CCCC					=> EARLY / 000 / COR DO SPRITE
+; =============================================================================
+; D => posicao Y
+; E => posicao X
+; B => Numero do sprite
+; C => Early / Cor
+; =============================================================================
+PutSprite:
+	ld a,b
+	call CALATR
+	di
+		call SETWRT
+SpriteAdress:
+		ld a,d
+		call WRTVRM
+		inc hl
+		call SETWRT
+		ld a,e
+		call WRTVRM
+		inc hl
+		call SETWRT
+		ld a,b
+		call WRTVRM
+		inc hl
+		call SETWRT
+		ld a,c
+		call WRTVRM
+	ei
+ret
+; =============================================================================
 
-	ld a,%10000010           	; [16K][BLK][IE][M1][M2][0][SPR][MAG]
-	out (VDPCONTROL),a				; Parametros do Modo de video
-	ld a,128+1								; Registrador 1
+; =============================================================================
+; SetScreenMode - Inicializa os registradores #0 e #1 do VDP
+; =============================================================================
+; D => Byte para o Registrador VDP #0
+; E => Byte para o Registrador VDP #1
+; =============================================================================
+; Altera => A
+; =============================================================================
+SetScreenMode:
+	ld a,d		       		; [0][0][0][0][0][0][M3][EV]
+	out (VDPCONTROL),a	; Controla Modo de video
+	ld a,128+0					; Registrador 0
 	out (VDPCONTROL),a
-	ld a,%11010001;          	; [T][T][T][T][B][B][B][B]
+	ld a,e           		; [16K][BLK][IE][M1][M2][0][SPR][MAG]
+	out (VDPCONTROL),a	; Parametros do Modo de video
+	ld a,128+1					; Registrador 1
+	out (VDPCONTROL),a
+ret
+; =============================================================================
+; SetColorRegister - Inicializa o registrador #7 do VDP
+; =============================================================================
+; D => Byte para o Registrador VDP #0 ([T][T][T][T][B][B][B][B])
+; =============================================================================
+SetColorRegister:
+	ld a,d;          					; [T][T][T][T][B][B][B][B]
 	out (VDPCONTROL),a				; Cor dos bits no modo texto / Cor do Backdrop
 	ld a,128+7								; Registrador 7
 	out (VDPCONTROL),a
@@ -120,7 +175,7 @@ ret
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,257              	; bytes a copiar
+	ld bc,1	              	; bytes a copiar
   ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   ld hl,AlieSprites		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites
@@ -142,7 +197,6 @@ GetBMPScreenPos:
 		rr h
 		rr a
 		or b
-		sub 8
 		ld l,a
 		ld (ScreenLinePos_Plus2-2),hl
 		call VDP_SetWriteAddress
