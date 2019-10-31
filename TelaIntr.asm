@@ -3,49 +3,29 @@
 ; -===================================================================-
 TelaInicial:
   call DISSCR
+
     call LimparTela
     call LoadSpritesTable
 
-    ; seta a linha dos sprites
-    ld a,94
-    ld (PosicaoYNave),a
-    ld (PosicaoYAlienigena),a
-    ld (PosicaoYCidade),a
-
-    ; seta a coluna dos sprites
-    ld a,105
-    ld (PosicaoXNave),a
-    ld a,170
-    ld (PosicaoXAlienigena),a
-    ld a,230
-    ld (PosicaoXCidade),a
-
     ; Coloca Sprite da nave
-    ; D => Posicao Y
-    ; E => Posicao X
-    ; B => Numero do Sprite
-    ; C => Early / Cor
-    ld d,100
-    ld e,100
-    ld b,0
-    ld c,%00001011
-    call PutSprite
+    ld bc,4
+    ld de,ADRATRIBUTETBL
+    ld hl,NavePattern
+    call LDIRVM
 
-    ; todo - Coloca Sprite da cidade
-    ld d,120
-    ld e,120
-    ld b,0
-    ld c,%00001011
-    call PutSprite
+    ; Coloca Sprite da cidade
+    ld bc,4
+    ld de,ADRATRIBUTETBL+4
+    ld hl,CidadePattern
+    call LDIRVM
 
-    ; todo - Coloca Sprite da nave alienigena
-    ld d,140
-    ld e,140
-    ld b,0
-    ld c,%00001011
-    call PutSprite
+    ; Coloca Sprite da nave alienigena
+    ld bc,4
+    ld de,ADRATRIBUTETBL+8
+    ld hl,InimigoPattern
+    call LDIRVM
 
-  call ENASCR
+call ENASCR
 TelaIntroLoop:
   call CHGET
   cp 13
@@ -53,3 +33,10 @@ TelaIntroLoop:
   jr TelaIntroLoop
 SairTelaIntro:
 ret
+
+NavePattern:
+  db 100,100,0,13
+CidadePattern:
+  db 120,120,0,13
+InimigoPattern:
+  db 140,140,0,13

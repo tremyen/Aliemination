@@ -95,26 +95,6 @@ ADRSPRITETBL:					equ 14336
 ; C => Early / Cor
 ; =============================================================================
 PutSprite:
-	ld a,b
-	call CALATR
-	di
-		call SETWRT
-SpriteAdress:
-		ld a,d
-		call WRTVRM
-		inc hl
-		call SETWRT
-		ld a,e
-		call WRTVRM
-		inc hl
-		call SETWRT
-		ld a,b
-		call WRTVRM
-		inc hl
-		call SETWRT
-		ld a,c
-		call WRTVRM
-	ei
 ret
 ; =============================================================================
 
@@ -175,7 +155,7 @@ ret
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,1	              	; bytes a copiar
+	ld bc,64              	; bytes a copiar
   ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   ld hl,AlieSprites		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites
