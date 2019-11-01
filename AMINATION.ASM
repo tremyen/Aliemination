@@ -41,6 +41,9 @@ include "Assets\Sprites.asm"
 
 CPLogo:
   incbin "Assets\CRAZYPEO.SC2"
+Cenario:
+	incbin "Assets\CENARIO.SC2"
+
 
 ; =============================================================================
 ; Padding

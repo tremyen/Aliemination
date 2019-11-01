@@ -129,15 +129,10 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; SetScreenMode - Inicializa os registradores #0 e #1 do VDP
-; =============================================================================
-; D => Byte para o Registrador VDP #0
-; E => Byte para o Registrador VDP #1
-; =============================================================================
-; Altera => A
+; SetScreen2_16x16 - Inicializa os registradores #0 e #1 do VDP
 ; =============================================================================
 SetScreen2_16x16:
-	call INIGRP               ; inicia modo grafico 256x191
+	call INIGRP               ; inicia modo grafico 256x192
 	ld a,(RG1SAV)             ; leio o valor do registro 1
 	and 0xE6                  ; também desligo o zoom dos sprites
 	or 2                      ; e ajusto os sprites para 16x16
@@ -157,8 +152,6 @@ SetColorRegister:
 	out (VDPCONTROL),a
 ret
 ; =============================================================================
-
-
 
 ; =============================================================================
 ; Pegar a posicao na tela para um grafico BMP
