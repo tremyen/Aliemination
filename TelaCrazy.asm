@@ -1,23 +1,22 @@
 ; -===================================================================-
 ;  Desenhar a tela da Crazy People
 ; -===================================================================-
+;  (C) 2019 Manoel Neto - tremyen@gmail.com
+; -===================================================================-
 TelaCrazy:
-  call DISSCR
-    ld d,%00000010            ; [0][0][0][0][0][0][M3][EV]
-    ld e,%00000010            ; [16K][BLK][IE][M1][M2][0][SPR][MAG]
-    call SetScreenMode
-    call INIGRP               ; inicia modo grafico
-    call LimparTela
-    ld de,0
+  call DISSCR                 ; desligo a tela
+    call SetScreen2_16x16     ; Seta a tela para screen 2 com sprites
+    call LimparTela           ; 16 x 16 e limpa a tela
+    ld de,0                   ; Base da memoria da VRAM
     ld hl,CPLogo+7            ; os primeiros 7 bytes sao cabecalho
-    ld bc,15360
-    call LDIRVM
-  call ENASCR
+    ld bc,15360               ; tamanho da BMP
+    call LDIRVM               ; copio para a VRAM
+  call ENASCR                 ; ligo a tela
 TelaCrazyLoop:
-  call CHGET
-  cp 13
-  jr z,SairTelaCrazy
-  jr TelaCrazyLoop
+  call CHGET                  ; recebo um caracter
+  cp 13                       ; espero enter
+  jr z,SairTelaCrazy          ; se foi enter, va para proxima tela
+  jr TelaCrazyLoop            ; espere por enter
 SairTelaCrazy:
 ret
 ; -===================================================================-

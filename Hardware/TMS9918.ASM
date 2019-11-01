@@ -9,16 +9,16 @@
 ; MODOS DE OPERACAO DO VDP
 ; =============================================================================
 ;	M1	M2	M3	M4	M5	Mode	 			MSX Version	BASIC Screen
-;	0		0		0		0		0	 	32x24	Text	1 2 2+ tR	 	1
 ;	1		0		0		0		0		40x24 Text	1 2 2+ tR		0
-;	1		0		0		1		0		80x24 Text	  2 2+ tR		0
-;	0		1		0		0		0		Multicolour	1 2 2+ tR		3
+;	0		0		0		0		0	 	32x24	Text	1 2 2+ tR	 	1
 ;	0		0		1		0		0		Graphics 1	1 2 2+ tR		2
+;	0		1		0		0		0		Multicolour	1 2 2+ tR		3
 ;	0		0		0		1		0		Graphics 2	  2 2+ tR		4
 ;	0		0		1		1		0		Graphics 4	  2 2+ tR		5
 ;	0		0		0		0		1		Graphics 5	  2 2+ tR		6
 ;	0		0		1		0		1		Graphics 6	  2 2+ tR		7
 ;	0		0		1		1		1		Graphics 7	  2 2+ tR		8
+;	1		0		0		1		0		80x24 Text	  2 2+ tR		0
 ; =============================================================================
 
 ; =============================================================================
@@ -55,7 +55,7 @@
 ; =============================================================================
 
 ; =============================================================================
-; SPRITE PATTERNS => 256(8X8) OU 64 (16X16) PADROES DE PIXELS
+; SPRITE PATTERNS => 256(8X8) OU 64(16X16) PADROES DE PIXELS
 ; =============================================================================
 ; SE O BIT DE TAMANHO DE SPRITE = 1 NO REGISTRADOR DO VDP #1, ENTAO OS SPRITES
 ; SERAO 16X16 SEGUINDO O ESQUEMA ABAIXO,OU SEJA,VOCE PODE TER 256 OU 64 SPRITES
@@ -76,6 +76,29 @@ ADRATRIBUTETBL:				equ 6912
 ADRPALLETTBL:					equ 7040
 ADRCOLORTBL:					equ 8192
 ADRSPRITETBL:					equ 14336
+
+; =============================================================================
+; Carrega a Tabela de padroes
+; =============================================================================
+LoadPatternTable:
+	ld bc,216            		; bytes a copiar
+  ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
+  ld hl,AlieFont	 				; localização na RAM
+  call LDIRVM             ; copio a tabela de padrões
+ret
+; =============================================================================
+
+; =============================================================================
+; Carrega a Tabela de sprites
+; =============================================================================
+LoadSpritesTable:
+	ld bc,64              	; bytes a copiar
+  ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
+  ld hl,AlieSprites		    ; localização na RAM
+  call LDIRVM             ; copio a tabela de sprites
+ret
+; =============================================================================
+
 ; =============================================================================
 ; SPRITE ATTRIBUTES (4 BYTES)
 ; =============================================================================
@@ -95,6 +118,13 @@ ADRSPRITETBL:					equ 14336
 ; C => Early / Cor
 ; =============================================================================
 PutSprite:
+	; ld a,b
+	; sla											; multiplico o numero do sprite por 4
+	; sla
+	; ld de,ADRATRIBUTETBL+a 	; endereco e igual a base da tabela + resultado
+  ; ld bc,4									; a tabela de atributos tem sempre 4 bytes
+	; ld hl,CidadePattern
+	; call LDIRVM
 ret
 ; =============================================================================
 
@@ -106,15 +136,14 @@ ret
 ; =============================================================================
 ; Altera => A
 ; =============================================================================
-SetScreenMode:
-	ld a,d		       		; [0][0][0][0][0][0][M3][EV]
-	out (VDPCONTROL),a	; Controla Modo de video
-	ld a,128+0					; Registrador 0
-	out (VDPCONTROL),a
-	ld a,e           		; [16K][BLK][IE][M1][M2][0][SPR][MAG]
-	out (VDPCONTROL),a	; Parametros do Modo de video
-	ld a,128+1					; Registrador 1
-	out (VDPCONTROL),a
+SetScreen2_16x16:
+	call INIGRP               ; inicia modo grafico 256x191
+	ld a,(RG1SAV)             ; leio o valor do registro 1
+	and 0xE6                  ; também desligo o zoom dos sprites
+	or 2                      ; e ajusto os sprites para 16x16
+	ld b,a										; carrego o novo valor para o registrador
+	ld c,1										; indico o registrador que vou alterar
+	call WRTVDP               ; altero o valor do registro 1
 ret
 ; =============================================================================
 ; SetColorRegister - Inicializa o registrador #7 do VDP
@@ -129,38 +158,7 @@ SetColorRegister:
 ret
 ; =============================================================================
 
-; =============================================================================
-; Carrega a Tabela de padroes
-; =============================================================================
-; LoadPatternTable:
-; 	ld bc,216            		; bytes a copiar
-;   ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
-;   ld hl,CriptoFont 				; localização na RAM
-;   call LDIRVM             ; copio a tabela de padrões
-; ret
-; =============================================================================
 
-; =============================================================================
-; Carrega a Tabela de Atributos
-; =============================================================================
-; LoadAtributteTable:
-; 	ld bc,32            		; bytes a copiar
-;   ld de,ADRATRIBUTETBL    ; tabela de padrões na VRAM
-;   ld hl,AttributePattern  ; localização na RAM
-;   call LDIRVM             ; copio a tabela de padrões
-; ret
-; =============================================================================
-
-; =============================================================================
-; Carrega a Tabela de sprites
-; =============================================================================
-LoadSpritesTable:
-	ld bc,64              	; bytes a copiar
-  ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
-  ld hl,AlieSprites		    ; localização na RAM
-  call LDIRVM             ; copio a tabela de sprites
-ret
-; =============================================================================
 
 ; =============================================================================
 ; Pegar a posicao na tela para um grafico BMP

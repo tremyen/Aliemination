@@ -1,7 +1,7 @@
 ; =============================================================================
 ;  Aliemination 1.0
 ; =============================================================================
-;  (C) 2019 Manoel Neto - tremyen@gmail.com;
+;  (C) 2019 Manoel Neto - tremyen@gmail.com
 ;  Mude, compartilhe e estude. Conhecimento é de graça.
 ; =============================================================================
 __VERSION:  equ 1
@@ -13,13 +13,13 @@ include "Assets\Variaveis.asm"
 org romArea
 	db "AB"                     ; identifica como ROM
  	dw startCode                ; endereço de execução
- 	db "CW01"                   ; string de identificação
+ 	db "AM01"                   ; string de identificação
  	ds 6,0
 
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
-startCode:  
+startCode:
   call TelaCrazy              ; tela da empresa
   call TelaInicial            ; tela de inicio do jogo
 
@@ -36,6 +36,7 @@ include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Library\Library.asm"
 include "Assets\Strings.asm"
+include "Assets\Fonts.asm"
 include "Assets\Sprites.asm"
 
 CPLogo:

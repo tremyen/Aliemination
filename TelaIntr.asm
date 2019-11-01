@@ -7,22 +7,16 @@ TelaInicial:
     call LimparTela
     call LoadSpritesTable
 
-    ; Coloca Sprite da nave
+    ; Coloca Sprite da nave cor 1
     ld bc,4
     ld de,ADRATRIBUTETBL
-    ld hl,NavePattern
+    ld hl,NavePatternOne
     call LDIRVM
 
-    ; Coloca Sprite da cidade
+    ; Coloca Sprite da nave cor 2
     ld bc,4
     ld de,ADRATRIBUTETBL+4
-    ld hl,CidadePattern
-    call LDIRVM
-
-    ; Coloca Sprite da nave alienigena
-    ld bc,4
-    ld de,ADRATRIBUTETBL+8
-    ld hl,InimigoPattern
+    ld hl,NavePatternTwo
     call LDIRVM
 
 call ENASCR
@@ -34,9 +28,7 @@ TelaIntroLoop:
 SairTelaIntro:
 ret
 
-NavePattern:
-  db 100,100,0,13
-CidadePattern:
-  db 120,120,0,13
-InimigoPattern:
-  db 140,140,0,13
+NavePatternOne:
+  db 100,100,0,1
+NavePatternTwo:
+  db 100,100,4,11
