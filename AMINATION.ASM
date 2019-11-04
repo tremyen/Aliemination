@@ -20,13 +20,13 @@ org romArea
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
-  call TelaCrazy              ; tela da empresa
+  call Inicializar            ; Inicializar o ambiente do jogo
   call TelaInicial            ; tela de inicio do jogo
 
 gameLoop:
 jr gameLoop
 
-include "TelaCrazy.asm"
+include "Inicializar.asm"
 include "TelaIntr.asm"
 
 ; =============================================================================
@@ -39,11 +39,8 @@ include "Assets\Strings.asm"
 include "Assets\Fonts.asm"
 include "Assets\Sprites.asm"
 
-CPLogo:
-  incbin "Assets\CRAZYPEO.SC2"
 Cenario:
 	incbin "Assets\CENARIO.SC2"
-
 
 ; =============================================================================
 ; Padding

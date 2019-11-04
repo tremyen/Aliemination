@@ -92,7 +92,7 @@ ret
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,64              	; bytes a copiar
+	ld bc,192              	; bytes a copiar
   ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   ld hl,AlieSprites		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites
@@ -118,13 +118,21 @@ ret
 ; C => Early / Cor
 ; =============================================================================
 PutSprite:
-	; ld a,b
-	; sla											; multiplico o numero do sprite por 4
-	; sla
-	; ld de,ADRATRIBUTETBL+a 	; endereco e igual a base da tabela + resultado
-  ; ld bc,4									; a tabela de atributos tem sempre 4 bytes
-	; ld hl,CidadePattern
-	; call LDIRVM
+		push de										; salvo o valor de de pq CALATR o altera
+			ld a,b									; carrego o numero do sprite
+			call CALATR							; pega o endereco do sprite na TBL de atributos
+		pop de										; retorno DE
+		ld a,d
+		call WRTVRM								; gravo a posicao Y
+		inc hl										; proximo endereco
+		ld a,e
+		call WRTVRM								; gravo a posicao X
+		inc hl										; proximo endereco
+		ld a,b
+		call WRTVRM								; Gravo o numero na tabela de padroes
+		inc hl										; proximo endereco
+		ld a,c
+		call WRTVRM								; gravo Early / Color		
 ret
 ; =============================================================================
 

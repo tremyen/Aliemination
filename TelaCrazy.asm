@@ -1,14 +1,12 @@
-; -===================================================================-
+; =============================================================================
 ;  Desenhar a tela da Crazy People
-; -===================================================================-
+; =============================================================================
 ;  (C) 2019 Manoel Neto - tremyen@gmail.com
-; -===================================================================-
+; =============================================================================
 TelaCrazy:
   call DISSCR                 ; desligo a tela
-    call SetScreen2_16x16     ; Seta a tela para screen 2 com sprites
-    call LimparTela           ; 16 x 16 e limpa a tela
     ld de,0                   ; Base da memoria da VRAM
-    ld hl,CPLogo+7            ; os primeiros 7 bytes sao cabecalho
+    ld hl,Cenario+7           ; os primeiros 7 bytes sao cabecalho
     ld bc,15360               ; tamanho da BMP
     call LDIRVM               ; copio para a VRAM
   call ENASCR                 ; ligo a tela
@@ -19,4 +17,4 @@ TelaCrazyLoop:
   jr TelaCrazyLoop            ; espere por enter
 SairTelaCrazy:
 ret
-; -===================================================================-
+; =============================================================================
