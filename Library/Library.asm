@@ -18,6 +18,7 @@ LimparTela:
 		call CLS
 	pop af
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Inicializar as variaveis com zero
@@ -27,8 +28,15 @@ ret
 ; Altera => A,HL, Todas as variaveis
 ; =============================================================================
 LimpaMem:
-
+	xor a
+  ld (NumCentenas),a
+	ld (NumDezenas),a
+	ld (NumUnidades),a
+	ld (PosicaoXNave),a
+	ld (PosicaoYNave),a
+	ld (Semana),a
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Limpa uma string terminada em ENTER(13)

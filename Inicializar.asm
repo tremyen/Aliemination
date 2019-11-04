@@ -4,6 +4,7 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
 Inicializar:
+  call LimpaMem
 
   ; ===========================================================================
   ; Inicializa a tela
@@ -21,6 +22,8 @@ Inicializar:
   ld (PosicaoXNave),a         ; Carrega a posicao X da nave
   ld a,88                     ; Prepara a posicao inicial da Nave (Y)
   ld (PosicaoYNave),a         ; Carrega a posicao Y da nave
+  ld a,1                      ; Prepara as vidas do jogador
+  ld (VidaJogador),a          ; Carrega a vida do jogador
   xor a                       ; Zera a pontuacao
   ld (Semana),a               ; Carrega a pontuacao na sua variavel
   ; ===========================================================================
