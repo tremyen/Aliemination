@@ -24,9 +24,9 @@ startCode:
   call TelaInicial            ; tela de inicio do jogo
 
 gameLoop:
-	call PegarEntrada
-	call DesenharFrame
-	call ChecarColisao
+	; call PegarEntrada
+	; call DesenharFrame
+	; call ChecarColisao
 	ld a,(VidaJogador)
 	cp 0
 	jr z,FimDoJogo

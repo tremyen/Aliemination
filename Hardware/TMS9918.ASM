@@ -112,27 +112,31 @@ ret
 ;	PPPPPPPP					=> NUMERO DO PADRAO (TABELA DE PADROES)
 ;	E000CCCC					=> EARLY / 000 / COR DO SPRITE
 ; =============================================================================
+; A => Numero do Sprite na memoria
 ; D => posicao Y
 ; E => posicao X
-; B => Numero do sprite
+; B => Numero do sprite na tabela de padroes
 ; C => Early / Cor
 ; =============================================================================
+; ALTERA => HL
+; =============================================================================
 PutSprite:
-		push de										; salvo o valor de de pq CALATR o altera
-			ld a,b									; carrego o numero do sprite
-			call CALATR							; pega o endereco do sprite na TBL de atributos
-		pop de										; retorno DE
-		ld a,d
-		call WRTVRM								; gravo a posicao Y
-		inc hl										; proximo endereco
-		ld a,e
-		call WRTVRM								; gravo a posicao X
-		inc hl										; proximo endereco
-		ld a,b
-		call WRTVRM								; Gravo o numero na tabela de padroes
-		inc hl										; proximo endereco
-		ld a,c
-		call WRTVRM								; gravo Early / Color		
+		push af
+			push de										; salvo o valor de de pq CALATR o altera
+				call CALATR							; pega o endereco do sprite na TBL de atributos
+			pop de										; retorno DE
+			ld a,d
+			call WRTVRM								; gravo a posicao Y
+			inc hl										; proximo endereco
+			ld a,e
+			call WRTVRM								; gravo a posicao X
+			inc hl										; proximo endereco
+			ld a,b
+			call WRTVRM								; Gravo o numero na tabela de padroes
+			inc hl										; proximo endereco
+			ld a,c
+			call WRTVRM								; gravo Early / Color
+		pop af
 ret
 ; =============================================================================
 

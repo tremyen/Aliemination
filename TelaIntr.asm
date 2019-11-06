@@ -21,36 +21,42 @@ TelaInicial:
     ;call LoadPatternTable
     ;=============================
     ; Desenhar Nave
+    ; A Nave usa 2 sprites
     ;=============================
     ld a,(PosicaoYNave)
     ld d,a
     ld a,(PosicaoXNave)
     ld e,a
+    ld a,0
     call DesenharNave
     ;=============================
     ; Desenhar Cidade 1
+    ; a cidade usa 4 sprites
     ;=============================
     ld a,PosYCidade1
     ld d,a
     ld a,PosXCidade1
     ld e,a
+    ld a,2
     call DesenharCidade
     ;=============================
     ; Desenhar Cidade 2
     ;=============================
-    ; ld a,PosYCidade2
-    ; ld d,a
-    ; ld a,PosXCidade2
-    ; ld e,a
-    ; call DesenharCidade
+    ld a,PosYCidade2
+    ld d,a
+    ld a,PosXCidade2
+    ld e,a
+    ld a,6
+    call DesenharCidade
     ;=============================
     ; Desenhar Cidade 3
     ;=============================
-    ; ld a,PosYCidade3
-    ; ld d,a
-    ; ld a,PosXCidade3
-    ; ld e,a
-    ; call DesenharCidade
+    ld a,PosYCidade3
+    ld d,a
+    ld a,PosXCidade3
+    ld e,a
+    ld a,10
+    call DesenharCidade
     ;=============================
     ; Desenhar Cidade 4
     ;=============================
@@ -58,8 +64,9 @@ TelaInicial:
     ; ld d,a
     ; ld a,PosXCidade4
     ; ld e,a
+    ; ld a,15
     ; call DesenharCidade
-    ;=============================
+    ; ;=============================
 
   call ENASCR
   call WaitEnter
