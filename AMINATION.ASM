@@ -24,18 +24,18 @@ startCode:
   call TelaInicial            ; tela de inicio do jogo
 
 gameLoop:
-	; call PegarEntrada
-	; call DesenharFrame
-	; call ChecarColisao
+	call AtualizarVariaveis
+	call DesenharQuadro
 	ld a,(VidaJogador)
 	cp 0
 	jr z,FimDoJogo
 	jr gameLoop
 FimDoJogo:
+	call WaitEnter
 	jr startCode
 
 include "Inicializar.asm"
-include "TelaIntr.asm"
+include "TelaInicial.asm"
 
 ; =============================================================================
 ; FIM PROGRAMA

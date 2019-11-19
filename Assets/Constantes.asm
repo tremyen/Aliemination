@@ -9,6 +9,6 @@ PosXCidade2:        equ 40
 PosYCidade2:        equ 152
 PosXCidade3:        equ 184
 PosYCidade3:        equ 168
-PosXCidade4:        equ 224
-PosYCidade4:        equ 146
+PosXCidade4:        equ 240
+PosYCidade4:        equ 117
 ; =============================================================================

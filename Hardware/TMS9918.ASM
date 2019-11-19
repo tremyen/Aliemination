@@ -1,7 +1,7 @@
 ; =============================================================================
 ; TMS9918.ASM
 ; =============================================================================
-; Manoel Neto 2019-10-04
+; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; Biblioteca para uso do VDP do MSX 1
 ; =============================================================================
 
@@ -56,6 +56,7 @@
 
 ; =============================================================================
 ; SPRITE PATTERNS => 256(8X8) OU 64(16X16) PADROES DE PIXELS
+; APENAS 32 EXIBIDOS NA TELA
 ; =============================================================================
 ; SE O BIT DE TAMANHO DE SPRITE = 1 NO REGISTRADOR DO VDP #1, ENTAO OS SPRITES
 ; SERAO 16X16 SEGUINDO O ESQUEMA ABAIXO,OU SEJA,VOCE PODE TER 256 OU 64 SPRITES
@@ -66,16 +67,26 @@
 ; BLOCO D => PROXIMOS 8 BYTES
 ; SPRITE FINAL => A,C,B,D
 ; =============================================================================
+
+; =============================================================================
+; PORTAS DO VDP
+; =============================================================================
 VDPDATA:              equ &98
 VDPCONTROL:           equ &99
 VDPPALLET:						equ &9A
 VDPINDIRECT:					equ &9B
+; =============================================================================
+
+; =============================================================================
+; ENDERECOS DAS TABELAS DO VDP
+; =============================================================================
 ADRPATTERNTBL:				equ 0000
 ADRNAMESTBL:					equ 6144
 ADRATRIBUTETBL:				equ 6912
 ADRPALLETTBL:					equ 7040
 ADRCOLORTBL:					equ 8192
 ADRSPRITETBL:					equ 14336
+; =============================================================================
 
 ; =============================================================================
 ; Carrega a Tabela de padroes
@@ -92,7 +103,7 @@ ret
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,192              	; bytes a copiar
+	ld bc,288              	; bytes a copiar
   ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   ld hl,AlieSprites		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites
@@ -150,7 +161,7 @@ SetScreen2_16x16:
 	or 2                      ; e ajusto os sprites para 16x16
 	ld b,a										; carrego o novo valor para o registrador
 	ld c,1										; indico o registrador que vou alterar
-	call WRTVDP               ; altero o valor do registro 1
+	call WRTVDP               ; altero o valor do registrador 1
 ret
 ; =============================================================================
 ; SetColorRegister - Inicializa o registrador #7 do VDP

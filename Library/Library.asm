@@ -1,7 +1,7 @@
 ; =============================================================================
 ; Library.asm
 ; =============================================================================
-; Manoel Neto 2019-09-25
+; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; Funcoes ASM de uso geral para o MSX
 ; =============================================================================
 
@@ -32,8 +32,8 @@ LimpaMem:
   ld (NumCentenas),a
 	ld (NumDezenas),a
 	ld (NumUnidades),a
-	ld (PosicaoXNave),a
-	ld (PosicaoYNave),a
+	ld (PosXNave),a
+	ld (PosYNave),a
 	ld (Semana),a
 ret
 ; =============================================================================
@@ -470,35 +470,84 @@ DesenharAlienigena:
 		  ;=============================
 		  ; Coloca Sprite cor 1
 		  ;=============================
-		  ld b,8
+		  ld b,24
 		  ld c,1
 		  call PutSprite
 		  ;=============================
+		  ; Coloca Sprite cor 3
+		  ;=============================
+		  ld b,28
+		  ld c,3
+			inc a
+		  call PutSprite
+			;=============================
 		  ; Coloca Sprite cor 6
 		  ;=============================
-		  ld b,12
+		  ld b,32
 		  ld c,6
-			inc a
-		  call PutSprite
-			;=============================
-		  ; Coloca Sprite cor 8
-		  ;=============================
-		  ld b,16
-		  ld c,8
-			inc a
-		  call PutSprite
-			;=============================
-		  ; Coloca Sprite cor 9
-		  ;=============================
-		  ld b,20
-		  ld c,9
 			inc a
 		  call PutSprite
 		pop bc
 	pop af
 ret
-;=============================================================================
+;==============================================================================
 
+; =============================================================================
+; Atualizar Variaveis
+; =============================================================================
+AtualizarVariaveis:
+	push af
+		; desce o alien uma posicao
+		ld a,(PosYAlien)
+		inc a
+		ld (PosYAlien),a
+		; sobe a nave uma posicao
+		ld a,(PosYNave)
+		dec a
+		ld (PosYNave),a
+		cp 96
+		jp nz,NaoZeraVidaJogador
+		xor a
+		ld (VidaJogador),a
+NaoZeraVidaJogador:
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; Desenhar Quadro
+; =============================================================================
+DesenharQuadro:
+	push af
+	push de
+	  ;==========================
+		; Desenhar Nave
+		; A Nave usa 2 sprites
+		; (0,1)
+		;==========================
+		ld a,(PosYNave)
+		ld d,a
+		ld a,(PosXNave)
+		ld e,a
+		ld a,0                      ; posicao do sprite na tabela de atributos
+		call DesenharNave
+		;==========================
+		; Desenhar Alien
+		; O Alien usa 3 sprites
+		; (18,19,20)
+		;==========================
+		ld a,(PosYAlien)
+		ld d,a
+		ld a,(PosXAlien)
+		ld e,a
+		ld a,18                     ; posicao do sprite na tabela de atributos
+		call DesenharAlienigena
+		;==========================
+	pop de
+	pop af
+	call WaitEnter
+ret
+;==============================================================================
 
 ; =============================================================================
 ; Esperar a tecla ENTER
