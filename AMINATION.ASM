@@ -31,7 +31,6 @@ gameLoop:
 	jr z,FimDoJogo
 	jr gameLoop
 FimDoJogo:
-	call WaitEnter
 	jr startCode
 
 include "Inicializar.asm"
