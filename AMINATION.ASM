@@ -22,19 +22,32 @@ org romArea
 startCode:
   call Inicializar            ; Inicializar o ambiente do jogo
   call TelaInicial            ; tela de inicio do jogo
-
+	call WaitEnter
 gameLoop:
-	call AtualizarVariaveis
+	call GerarAliens	
+AliensMoving:
+	call MoverAliens
 	call DesenharQuadro
+	call WaitEnter
 	ld a,(VidaJogador)
 	cp 0
 	jr z,FimDoJogo
+	ld a,(AliensMortos)
+	cp 4
+	jr z,ProximoNivel
+	jr AliensMoving
+ProximoNivel:
+	ld a,(VelAlien)
+	inc a
+	ld (VelAlien),a
 	jr gameLoop
 FimDoJogo:
 	jr startCode
 
 include "Inicializar.asm"
 include "TelaInicial.asm"
+include "GerarAliens.asm"
+include "MoverAliens.asm"
 
 ; =============================================================================
 ; FIM PROGRAMA

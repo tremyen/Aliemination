@@ -24,6 +24,7 @@ Inicializar:
   ld (PosYNave),a             ; Carrega a posicao Y da nave
   ld a,1                      ; Prepara as vidas do jogador
   ld (VidaJogador),a          ; Carrega a vida do jogador
+  ld a,3
   ld (VelAlien),a             ; Carrega a velocidade do Alien
   ld a, 16                    ; inicializa primeiro Alien (Y)
   ld (PosYAlien),a            ; Carrega posicao Y ALien
@@ -31,6 +32,8 @@ Inicializar:
   ld (PosXAlien),a            ; Carrega posicao X ALien
   xor a                       ; Zera a pontuacao
   ld (Semana),a               ; Carrega a pontuacao na sua variavel
+  ld a,18
+  ld (NumInimigos),a          ; Carrega a posicao dos inimigos
   ; ===========================================================================
 
 ret

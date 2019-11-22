@@ -21,7 +21,7 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; Inicializar as variaveis com zero
+; Inicializar as variaveis
 ; =============================================================================
 ; Nao tem parametros
 ; =============================================================================
@@ -35,6 +35,13 @@ LimpaMem:
 	ld (PosXNave),a
 	ld (PosYNave),a
 	ld (Semana),a
+	ld (Torpedos),a
+	ld (AliensMortos),a
+	ld (PosXAlien),a
+	ld (PosYAlien),a
+	ld a,1
+	ld (VidaJogador),a
+	ld (VelAlien),a
 ret
 ; =============================================================================
 
@@ -61,6 +68,7 @@ LimpouString:
 	ld a,13
 	ld (hl),a
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Imprime uma Nova linha
@@ -77,6 +85,7 @@ NovaLinha:
 		call CHPUT
 	pop af
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Imprime uma string terminada em ENTER(13)
@@ -94,6 +103,7 @@ PrintString:
 	jp PrintString
 EndString:
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Zerar uma Matriz terminada em 255
@@ -118,6 +128,7 @@ ZerouMatriz:
 	ld a,255
 	ld (hl),a
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Imprimir um espaco
@@ -132,6 +143,7 @@ ImprimeEspaco:
 		call CHPUT
 	pop af
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Converter um numero de 0 a 15 em seu digito hexadecimal
@@ -237,6 +249,7 @@ ret
 QuinzeF:
 	ld a,'F'
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Imprime um Numero
@@ -297,6 +310,7 @@ ImprimeUnidades:
 	add a,&30
 	call CHPUT
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Limpar uma linha em modo INIT32
@@ -314,9 +328,9 @@ LimparLinha:
 		call PrintString
 	pop hl
 ret
-
 LinhaLimpa:
 	db "                                ",13
+; =============================================================================
 
 ; =============================================================================
 ; Causar uma pausa em segundos
@@ -332,34 +346,40 @@ Delay:
   or C
   ret Z
 jr Delay
+; =============================================================================
 
 ; =============================================================================
 ; Sortear Numero randomico
 ; =============================================================================
 ; A => Numero maximo do sorteio
 ; =============================================================================
-; Altera => A
+; Altera => A (Numero aleatorio)
 ; =============================================================================
 RandomNumber:
-	ld b,a								; Numero Maximo Sorteio
-	ld a,128							; Dividir 128 pelo tamanho da frase
-	ld d,0								; contador de subtracao sucessivas
+	push bc
+		push de
+			ld b,a								; Numero Maximo Sorteio
+			ld a,128							; Dividir 128 pelo tamanho numero maximo
+			ld d,0								; contador de subtracao sucessivas
 DvPTamanho:
-	sub b 								; comeca a divisao pelo tamanho da frase
-	inc d									; aumenta o acumulador
-	jr nc, DvPTamanho		  ; repete enquanto nao tem "vai um"
-	dec d									; elimina o resto
-	ld a,d								; nesse momento D tem o divisior ideal
-	ld b,a								; carrega o divisor ideal
-	ld a,r								; Gera um aleatorio entre 0 e 127
-	ld d,0								; contador de subtracao sucessivas
+			sub b 								; comeca a divisao pelo tamanho da frase
+			inc d									; aumenta o acumulador
+			jr nc, DvPTamanho		  ; repete enquanto nao tem "vai um"
+			dec d									; elimina o resto
+			ld a,d								; nesse momento D tem o divisior ideal
+			ld b,a								; carrega o divisor ideal
+			ld a,r								; Gera um aleatorio entre 0 e 127
+			ld d,0								; contador de subtracao sucessivas
 DvPIdeal:
-	sub b 								; comeca a divisao pelo divisor ideal
-	inc d									; aumenta o acumulador
-	jr nc, DvPIdeal 			; repete enquanto nao tem "vai um"
-	dec d									; elimina o resto
-	ld a,d								; Retorna o numero aleatorio
+			sub b 								; comeca a divisao pelo divisor ideal
+			inc d									; aumenta o acumulador
+			jr nc, DvPIdeal 			; repete enquanto nao tem "vai um"
+			dec d									; elimina o resto
+			ld a,d								; Retorna o numero aleatorio
+		pop de
+	pop bc
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Limpar um espaco de memoria
@@ -392,21 +412,21 @@ ret
 ; =============================================================================
 DesenharNave:
 	push af
-	push bc
-	  ;=============================
-	  ; Coloca Sprite da nave cor 1
-	  ;=============================
-	  ld b,0
-	  ld c,1
-	  call PutSprite
-  ;=============================
-	  ; Coloca Sprite da nave cor 11
-	  ;=============================
-	  ld b,4
-	  ld c,11
-		inc a
-	  call PutSprite
-	pop bc
+		push bc
+		  ;=============================
+		  ; Coloca Sprite da nave cor 1
+		  ;=============================
+		  ld b,0
+		  ld c,1
+		  call PutSprite
+	  	;=============================
+		  ; Coloca Sprite da nave cor 11
+		  ;=============================
+		  ld b,4
+		  ld c,11
+			inc a
+		  call PutSprite
+		pop bc
 	pop af
 ret
 ;=============================================================================
@@ -436,20 +456,6 @@ DesenharCidade:
 		  ld c,6
 			inc a
 		  call PutSprite
-			;=============================
-		  ; Coloca Sprite cor 8
-		  ;=============================
-		  ld b,16
-		  ld c,8
-			inc a
-		  call PutSprite
-			;=============================
-		  ; Coloca Sprite cor 9
-		  ;=============================
-		  ld b,20
-		  ld c,9
-			inc a
-		  call PutSprite
 		pop bc
 	pop af
 ret
@@ -470,21 +476,14 @@ DesenharAlienigena:
 		  ;=============================
 		  ; Coloca Sprite cor 1
 		  ;=============================
-		  ld b,24
+		  ld b,16
 		  ld c,1
 		  call PutSprite
 		  ;=============================
 		  ; Coloca Sprite cor 3
 		  ;=============================
-		  ld b,28
+		  ld b,20
 		  ld c,3
-			inc a
-		  call PutSprite
-			;=============================
-		  ; Coloca Sprite cor 6
-		  ;=============================
-		  ld b,32
-		  ld c,6
 			inc a
 		  call PutSprite
 		pop bc
@@ -493,59 +492,26 @@ ret
 ;==============================================================================
 
 ; =============================================================================
-; Atualizar Variaveis
-; =============================================================================
-AtualizarVariaveis:
-	push af
-		; desce o alien uma posicao
-		ld a,(PosYAlien)
-		inc a
-		ld (PosYAlien),a
-		; sobe a nave uma posicao
-		ld a,(PosYNave)
-		dec a
-		ld (PosYNave),a
-		cp 96
-		jp nz,NaoZeraVidaJogador
-		xor a
-		ld (VidaJogador),a
-NaoZeraVidaJogador:
-	pop af
-ret
-; =============================================================================
 
 ; =============================================================================
 ; Desenhar Quadro
 ; =============================================================================
 DesenharQuadro:
 	push af
-	push de
-	  ;==========================
-		; Desenhar Nave
-		; A Nave usa 2 sprites
-		; (0,1)
-		;==========================
-		ld a,(PosYNave)
-		ld d,a
-		ld a,(PosXNave)
-		ld e,a
-		ld a,0                      ; posicao do sprite na tabela de atributos
-		call DesenharNave
-		;==========================
-		; Desenhar Alien
-		; O Alien usa 3 sprites
-		; (18,19,20)
-		;==========================
-		ld a,(PosYAlien)
-		ld d,a
-		ld a,(PosXAlien)
-		ld e,a
-		ld a,18                     ; posicao do sprite na tabela de atributos
-		call DesenharAlienigena
-		;==========================
-	pop de
-	pop af
-	call WaitEnter
+		push de
+		  ;==========================
+			; Desenhar Nave
+			; A Nave usa 2 sprites
+			; (0,1)
+			;==========================
+			ld a,(PosYNave)
+			ld d,a
+			ld a,(PosXNave)
+			ld e,a
+			ld a,0                      ; posicao do sprite na tabela de atributos
+			call DesenharNave
+		pop de
+	pop af	
 ret
 ;==============================================================================
 

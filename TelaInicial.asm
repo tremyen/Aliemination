@@ -18,7 +18,6 @@ TelaInicial:
     ; CARREGA AS TABELAS DO VDP
     ;==========================
     call LoadSpritesTable
-    ;call LoadPatternTable
     ;==========================
     ; Desenhar Nave
     ; A Nave usa 2 sprites
@@ -32,8 +31,8 @@ TelaInicial:
     call DesenharNave
     ;==========================
     ; Desenhar Cidade 1
-    ; a cidade usa 4 sprites
-    ; (2,3,4,5)
+    ; a cidade usa 2 sprites
+    ; (2,3)
     ;==========================
     ld a,PosYCidade1
     ld d,a
@@ -43,8 +42,8 @@ TelaInicial:
     call DesenharCidade
     ;==========================
     ; Desenhar Cidade 2
-    ; a cidade usa 4 sprites
-    ; (6,7,8,9)
+    ; a cidade usa 2 sprites
+    ; (4,5)
     ;==========================
     ld a,PosYCidade2
     ld d,a
@@ -54,8 +53,8 @@ TelaInicial:
     call DesenharCidade
     ;==========================
     ; Desenhar Cidade 3
-    ; a cidade usa 4 sprites
-    ; (10,11,12,13)
+    ; a cidade usa 2 sprites
+    ; (6,7)
     ;==========================
     ld a,PosYCidade3
     ld d,a
@@ -65,8 +64,8 @@ TelaInicial:
     call DesenharCidade
     ;==========================
     ; Desenhar Cidade 4
-    ; a cidade usa 4 sprites
-    ; (14,15,16,17)
+    ; a cidade usa 2 sprites
+    ; (8,9)
     ;==========================
     ld a,PosYCidade4
     ld d,a
@@ -75,17 +74,6 @@ TelaInicial:
     ld a,14                     ; posicao do sprite na tabela de atributos
     call DesenharCidade
     ;==========================
-    ; Desenhar Alien
-    ; O Alien usa 3 sprites
-    ; (18,19,20)
-    ;==========================
-    ld a,(PosYAlien)
-    ld d,a
-    ld a,(PosXAlien)
-    ld e,a
-    ld a,18                     ; posicao do sprite na tabela de atributos
-    call DesenharAlienigena
-    ;==========================
 
-  call ENASCR  
+  call ENASCR
 ret
