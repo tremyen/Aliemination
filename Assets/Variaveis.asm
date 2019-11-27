@@ -17,7 +17,5 @@ VidaJogador        equ ramArea+7    ; Variavel => Vidas do jogador
 VelAlien           equ ramArea+8    ; Variavel => Velocidade dos aliens
 Torpedos           equ ramArea+9    ; Variavel => Conta os torpedos na tela
 AliensMortos       equ ramArea+10   ; Variavel => Conta os aliens mortos
-PosXAlien          equ ramArea+11   ; Variavel => Posicao Inicial Alien X
-PosYAlien          equ ramArea+12   ; Variavel => Posicao Inicial Alien Y
-NumInimigos        equ ramArea+13   ; Variavel => Numero de inimigos na tela
+NumInimigos        equ ramArea+11   ; Variavel => Numero de inimigos na tela
 ; =============================================================================

@@ -80,7 +80,7 @@ Posicao240:
   ld a,(NumInimigos)
   add a,4                     ; os sprites estao em blocos de 4 bytes
   ld (NumInimigos),a          ; guarda o ponteiro de inimigos
-  ld d,0                     ; posicao y
+  ld d,0                      ; posicao y
   ld e,240                    ; posicao x
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
   dec b                       ; reduz o loop do sorteio de aliens
