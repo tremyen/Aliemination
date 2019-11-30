@@ -25,9 +25,10 @@ ret
 ; =============================================================================
 ; Nao tem parametros
 ; =============================================================================
-; Altera => A,HL, Todas as variaveis
+; Altera => Todas as variaveis para 0
 ; =============================================================================
 LimpaMem:
+	push af
 	xor a
   ld (NumCentenas),a
 	ld (NumDezenas),a
@@ -37,11 +38,15 @@ LimpaMem:
 	ld (Semana),a
 	ld (Torpedos),a
 	ld (AliensMortos),a
-	ld (PosXAlien),a
-	ld (PosYAlien),a
-	ld a,1
+	ld (NumInimigos),a
+	ld (KeyPresses),a
+	ld (NumContColuna1),a
+	ld (NumContColuna2),a
+	ld (NumContColuna3),a
+	ld (NumContColuna4),a
 	ld (VidaJogador),a
 	ld (VelAlien),a
+	pop af
 ret
 ; =============================================================================
 
@@ -511,7 +516,7 @@ DesenharQuadro:
 			ld a,0                      ; posicao do sprite na tabela de atributos
 			call DesenharNave
 		pop de
-	pop af	
+	pop af
 ret
 ;==============================================================================
 
@@ -529,5 +534,26 @@ WaitEnter:
 		jr z,EndWaitEnter
 		jr WaitEnter
 EndWaitEnter:
+ret
+; =============================================================================
+
+; =============================================================================
+; Multiply
+; =============================================================================
+; Parametros
+; A => Multiplicando
+; B => Multiplicador
+; =============================================================================
+; Altera => A (resultado)
+; =============================================================================
+Multiply:
+	ld c,a
+AddAgain:
+	add a,c
+	dec b
+	cp 0
+	jr z,EndMultiply
+	jr AddAgain
+EndMultiply:
 ret
 ; =============================================================================

@@ -49,7 +49,7 @@ TelaInicial:
     ld d,a
     ld a,PosXCidade2
     ld e,a
-    ld a,6                      ; posicao do sprite na tabela de atributos
+    ld a,4                      ; posicao do sprite na tabela de atributos
     call DesenharCidade
     ;==========================
     ; Desenhar Cidade 3
@@ -60,7 +60,7 @@ TelaInicial:
     ld d,a
     ld a,PosXCidade3
     ld e,a
-    ld a,10                     ; posicao do sprite na tabela de atributos
+    ld a,6                     ; posicao do sprite na tabela de atributos
     call DesenharCidade
     ;==========================
     ; Desenhar Cidade 4
@@ -71,9 +71,14 @@ TelaInicial:
     ld d,a
     ld a,PosXCidade4
     ld e,a
-    ld a,14                     ; posicao do sprite na tabela de atributos
+    ld a,8                     ; posicao do sprite na tabela de atributos
     call DesenharCidade
     ;==========================
-
+    ld h,96
+    ld l,127
+    call POSIT
+    ld hl,MsgInicioJogo         ; DIGITE ENTER PARA JOGAR
+    call PrintString
   call ENASCR
+  call WaitEnter
 ret

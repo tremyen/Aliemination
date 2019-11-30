@@ -22,27 +22,26 @@ org romArea
 startCode:
   call Inicializar            ; Inicializar o ambiente do jogo
   call TelaInicial            ; tela de inicio do jogo
-	call WaitEnter
 gameLoop:
-	call GerarAliens	
+	call GerarAliens						; sorteia os aliens de acordo com a semana
 AliensMoving:
-	call MoverAliens
-	call DesenharQuadro
-	call WaitEnter
-	ld a,(VidaJogador)
+	;call MoverAliens						; adiciona a velocidade a pos y dos aliens
+	call DesenharQuadro					; desenha frame
+	call WaitEnter							; debug do desenho do quadro
+	ld a,(VidaJogador)					; pega as vidas do jogador
 	cp 0
-	jr z,FimDoJogo
-	ld a,(AliensMortos)
-	cp 4
-	jr z,ProximoNivel
-	jr AliensMoving
+	jr z,FimDoJogo							; se for zero o jogo acabou
+	ld a,(AliensMortos)					; pega os aliens mortos
+	cp 4												; se for 4 vai para a proxima semana
+	jr z,ProximoNivel						; proxima semana
+	jr AliensMoving							; loop de movimento dos inimigos
 ProximoNivel:
-	ld a,(VelAlien)
-	inc a
-	ld (VelAlien),a
-	jr gameLoop
+	ld a,(VelAlien)							; pega a velocidade dos aliens
+	inc a												; aumenta em um
+	ld (VelAlien),a							; atualiza
+	jr gameLoop									; recomeca no novo nivel
 FimDoJogo:
-	jr startCode
+	jr startCode								; recomeca o jogo
 
 include "Inicializar.asm"
 include "TelaInicial.asm"

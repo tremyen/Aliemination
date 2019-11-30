@@ -4,3 +4,5 @@
 ; Manoel Neto 2019-10-28
 ; Strings utilizadas no jogo
 ; =============================================================================
+MsgInicioJogo:
+  db "Digite <ENTER> para jogar.",0

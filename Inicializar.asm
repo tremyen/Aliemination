@@ -5,7 +5,6 @@
 ; =============================================================================
 Inicializar:
   call LimpaMem
-
   ; ===========================================================================
   ; Inicializa a tela
   ; ===========================================================================
@@ -14,7 +13,6 @@ Inicializar:
     call LimparTela           ; e limpa a tela
   call ENASCR                 ; ligo a tela
   ; ===========================================================================
-
   ; ===========================================================================
   ; Inicializar momento 0 do jogo
   ; ===========================================================================
@@ -24,16 +22,15 @@ Inicializar:
   ld (PosYNave),a             ; Carrega a posicao Y da nave
   ld a,1                      ; Prepara as vidas do jogador
   ld (VidaJogador),a          ; Carrega a vida do jogador
-  ld a,3
+  ld a,3                      ; Prepara a velocidade dos aliens
   ld (VelAlien),a             ; Carrega a velocidade do Alien
-  ld a, 16                    ; inicializa primeiro Alien (Y)
-  ld (PosYAlien),a            ; Carrega posicao Y ALien
-  ld a, 120                   ; inicializa primeiro Alien (X)
-  ld (PosXAlien),a            ; Carrega posicao X ALien
-  xor a                       ; Zera a pontuacao
-  ld (Semana),a               ; Carrega a pontuacao na sua variavel
-  ld a,18
-  ld (NumInimigos),a          ; Carrega a posicao dos inimigos
+  ld a,9                      ; Prepara o num de inimigos
+  ld (NumInimigos),a          ; Os inimigos comecam no sprite 10 (9+1) 
+  xor a                       ; Zera A
+  ld (Semana),a               ; zera a pontuacao
+  ld (NumContColuna1),a       ; zera os inimigos na coluna 1
+  ld (NumContColuna2),a       ; zera os inimigos na coluna 2
+  ld (NumContColuna3),a       ; zera os inimigos na coluna 3
+  ld (NumContColuna4),a       ; zera os inimigos na coluna 4
   ; ===========================================================================
-
 ret
