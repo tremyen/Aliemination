@@ -25,7 +25,7 @@ Inicializar:
   ld a,3                      ; Prepara a velocidade dos aliens
   ld (VelAlien),a             ; Carrega a velocidade do Alien
   ld a,9                      ; Prepara o num de inimigos
-  ld (NumInimigos),a          ; Os inimigos comecam no sprite 10 (9+1) 
+  ld (NumSprites),a           ; Os inimigos comecam a partir do sprite 9 
   xor a                       ; Zera A
   ld (Semana),a               ; zera a pontuacao
   ld (NumContColuna1),a       ; zera os inimigos na coluna 1

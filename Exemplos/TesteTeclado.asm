@@ -39,6 +39,10 @@ Mensagem:
 include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Hardware\KEYBOARD.ASM"
+include "Library\Library.asm"
+include "Assets\Strings.asm"
+include "Assets\Fonts.asm"
+include "Assets\Sprites.asm"
 ; =============================================================================
 ; Padding
 ; =============================================================================

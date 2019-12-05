@@ -74,11 +74,11 @@ TelaInicial:
     ld a,8                     ; posicao do sprite na tabela de atributos
     call DesenharCidade
     ;==========================
-    ld h,96
-    ld l,127
-    call POSIT
-    ld hl,MsgInicioJogo         ; DIGITE ENTER PARA JOGAR
-    call PrintString
   call ENASCR
+  ld h,96
+  ld l,127
+  call POSIT
+  ld hl,MsgInicioJogo         ; DIGITE ENTER PARA JOGAR
+  call PrintString
   call WaitEnter
 ret

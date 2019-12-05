@@ -29,23 +29,24 @@ ret
 ; =============================================================================
 LimpaMem:
 	push af
-	xor a
-  ld (NumCentenas),a
-	ld (NumDezenas),a
-	ld (NumUnidades),a
-	ld (PosXNave),a
-	ld (PosYNave),a
-	ld (Semana),a
-	ld (Torpedos),a
-	ld (AliensMortos),a
-	ld (NumInimigos),a
-	ld (KeyPresses),a
-	ld (NumContColuna1),a
-	ld (NumContColuna2),a
-	ld (NumContColuna3),a
-	ld (NumContColuna4),a
-	ld (VidaJogador),a
-	ld (VelAlien),a
+		xor a
+  	ld (NumCentenas),a
+		ld (NumDezenas),a
+		ld (NumUnidades),a
+		ld (PosXNave),a
+		ld (PosYNave),a
+		ld (Semana),a
+		ld (VidaJogador),a
+		ld (VelAlien),a
+		ld (NumTorpedos),a
+		ld (NumAliensMortos),a
+		ld (NumSprites),a
+		ld (KeyPresses),a
+		ld (NumContColuna1),a
+		ld (NumContColuna2),a
+		ld (NumContColuna3),a
+		ld (NumContColuna4),a
+		ld (NumSorteios),a
 	pop af
 ret
 ; =============================================================================
@@ -358,7 +359,7 @@ jr Delay
 ; =============================================================================
 ; A => Numero maximo do sorteio
 ; =============================================================================
-; Altera => A (Numero aleatorio)
+; Altera => A (Numero aleatorio de 0 ate A)
 ; =============================================================================
 RandomNumber:
 	push bc
@@ -367,7 +368,7 @@ RandomNumber:
 			ld a,128							; Dividir 128 pelo tamanho numero maximo
 			ld d,0								; contador de subtracao sucessivas
 DvPTamanho:
-			sub b 								; comeca a divisao pelo tamanho da frase
+			sub b    							; comeca a divisao pelo tamanho maximo
 			inc d									; aumenta o acumulador
 			jr nc, DvPTamanho		  ; repete enquanto nao tem "vai um"
 			dec d									; elimina o resto
@@ -478,23 +479,11 @@ ret
 DesenharAlienigena:
 	push af
 		push bc
-			;=============================
-			; Os aliens comecao no sprite
-			; 14. Temos de calcular a pos
-			; somando 1
-			;=============================
-		  ;=============================
-		  ; Coloca Sprite cor 1
-		  ;=============================
-		  ld b,16
-		  ld c,1
-		  call PutSprite
 		  ;=============================
 		  ; Coloca Sprite cor 3
 		  ;=============================
-		  ld b,20
+		  ld b,16
 		  ld c,3
-			inc a
 		  call PutSprite
 		pop bc
 	pop af
@@ -550,13 +539,22 @@ ret
 ; Altera => A (resultado)
 ; =============================================================================
 Multiply:
-	ld c,a
+	push bc
+	push de
+		ld c,a 							; carrega multiplicando
+		ld d,a							; guarda buffer de soma
 AddAgain:
-	add a,c
-	dec b
-	cp 0
-	jr z,EndMultiply
-	jr AddAgain
+		ld a,d							; pega o buffer de soma a cada passada
+		add a,c							; adiciona multiplicando
+		dec b								; controla multiplicador
+		ld d,a							; salva soma ate o momento
+		ld a,b 							; prepara comparacao
+		cp 1								; se b = 1 multiplicamos tudo
+		jr z,EndMultiply		; termina a multiplicacao
+		jr AddAgain					; mais uma soma
 EndMultiply:
+		ld a,d							; pega o buffer de soma
+	pop de
+	pop bc
 ret
 ; =============================================================================

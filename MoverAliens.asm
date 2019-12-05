@@ -4,16 +4,16 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
 ; Desce os aliens de acordo com sua velocidade. Os aliens são todos os sprites
-; maiores ou iguais a 18.
+; maiores ou iguais a 10.
 ; =============================================================================
 MoverAliens:
 	push af
 		push bc
-			ld a,(NumInimigos)						; pega o ultimo sprite inimigo
+			ld a,(NumSprites)							; pega o ultimo sprite
 			ld b,a												; guarda para comparacao
-			ld d,14
+			ld d,10
 LoopMoveAlien:
-			ld a,d	 											; pega o sprite atual (comeca no 18)
+			ld a,d	 											; pega o sprite atual (comeca no 10)
 			add a,4												; cada bloco tem 4 bytes
 			ld d,a												; guarda o ultimo sprite movido
 			call CALATR 									; pega o endereco do sprite atual

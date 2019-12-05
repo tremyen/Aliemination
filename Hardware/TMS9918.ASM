@@ -103,7 +103,7 @@ ret
 ; Carrega a Tabela de sprites
 ; =============================================================================
 LoadSpritesTable:
-	ld bc,192              	; bytes a copiar (reduzido de 288)
+	ld bc,160             	; bytes a copiar (reduzido de 288)
   ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   ld hl,AlieSprites		    ; localização na RAM
   call LDIRVM             ; copio a tabela de sprites

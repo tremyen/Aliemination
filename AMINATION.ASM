@@ -25,16 +25,20 @@ startCode:
 gameLoop:
 	call GerarAliens						; sorteia os aliens de acordo com a semana
 AliensMoving:
-	;call MoverAliens						; adiciona a velocidade a pos y dos aliens
-	call DesenharQuadro					; desenha frame
+	;call PegarComandos					; pega a entrada de teclado do jogador
+	;call MoverNave							; Atualiza coordenadas da nave
+	;call MoverTorpedos					; Atualiza coordenadas dos torpedos
+	;call MoverAliens						; Atualiza coordenadas dos Aliens
+	;call ChecarColisao					; checa as colisoes
+	;call DesenharQuadro				  ; desenha frame
 	call WaitEnter							; debug do desenho do quadro
 	ld a,(VidaJogador)					; pega as vidas do jogador
 	cp 0
 	jr z,FimDoJogo							; se for zero o jogo acabou
-	ld a,(AliensMortos)					; pega os aliens mortos
+	ld a,(NumAliensMortos)			; pega os aliens mortos
 	cp 4												; se for 4 vai para a proxima semana
 	jr z,ProximoNivel						; proxima semana
-	jr AliensMoving							; loop de movimento dos inimigos
+	jr gameLoop   							; loop de movimento dos inimigos
 ProximoNivel:
 	ld a,(VelAlien)							; pega a velocidade dos aliens
 	inc a												; aumenta em um
