@@ -18,7 +18,7 @@ VelAlien           equ ramArea+8    ; Velocidade dos aliens
 NumTorpedos        equ ramArea+9    ; Conta os torpedos na tela
 NumAliensMortos    equ ramArea+10   ; Conta os aliens mortos
 NumSprites         equ ramArea+11   ; Numero de inimigos na tela
-KeyPresses         equ ramArea+12   ; Buffer de teclado
+BufKeyPresses      equ ramArea+12   ; Buffer de teclado
 NumContColuna1     equ ramArea+13   ; Conta inimigos na coluna 1
 NumContColuna2     equ ramArea+14   ; Conta inimigos na coluna 2
 NumContColuna3     equ ramArea+15   ; Conta inimigos na coluna 3

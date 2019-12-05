@@ -68,18 +68,9 @@ Keyboard:
 KeyboardCleanBuffer:
 	push hl
 	push af
-	push bc
-		ld b,0
 		ld hl,KeyPresses
-loopCleanKBuffer:
 		xor a
 		ld (hl),a
-		inc b
-		inc hl
-		ld a,b
-		cp 11
-		jp nz,loopCleanKBuffer
-	pop bc
 	pop af
 	pop hl
 ret
@@ -89,12 +80,10 @@ ret
 ; =============================================================================
 ; A => linha do teclado a ser lida
 ; =============================================================================
-; Altera => A, KeyPresses
+; Altera => AF, BufKeyPresses
 ; =============================================================================
-KeyboardRead:
+KeyboardReadLine:
+	ld hl,BufKeyPresses 			; pega o endereco do buffer
 	call SNSMAT								; le a linha na matrix do teclado
-	bit 7,a 									; se o bit 7 esta ligado
-	jp z, &print_b						; digitou B
-	bit 6,a 									; se o bit 6 esta ligado
-	jp z, &print_a						; digitou a
+	ld (hl),a 								; carrega o buffer do teclado
 ret
