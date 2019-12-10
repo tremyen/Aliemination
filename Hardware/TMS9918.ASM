@@ -91,22 +91,44 @@ ADRSPRITETBL:					equ 14336
 ; =============================================================================
 ; Carrega a Tabela de padroes
 ; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera => Nada
+; =============================================================================
 LoadPatternTable:
-	ld bc,192            		; bytes a copiar (reduzido de 216)
-  ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
-  ld hl,AlieFont	 				; localização na RAM
-  call LDIRVM             ; copio a tabela de padrões
+	push bc
+	push de
+	push hl
+		ld bc,192            		; bytes a copiar (reduzido de 216)
+  	ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
+  	ld hl,AlieFont	 				; localização na RAM
+  	call LDIRVM             ; copio a tabela de padrões
+	pop hl
+	pop de
+	pop bc
 ret
 ; =============================================================================
 
 ; =============================================================================
 ; Carrega a Tabela de sprites
 ; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera => Nada
+; =============================================================================
 LoadSpritesTable:
-	ld bc,160             	; bytes a copiar (reduzido de 288)
-  ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
-  ld hl,AlieSprites		    ; localização na RAM
-  call LDIRVM             ; copio a tabela de sprites
+	push bc
+	push de
+	push hl
+		ld bc,160             	; bytes a copiar
+  	ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
+  	ld hl,AlieSprites		    ; localização na RAM
+  	call LDIRVM             ; copio a tabela de sprites
+	pop hl
+	pop de
+	pop bc
 ret
 ; =============================================================================
 

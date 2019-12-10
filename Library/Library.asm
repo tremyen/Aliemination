@@ -33,15 +33,15 @@ LimpaMem:
   	ld (NumCentenas),a
 		ld (NumDezenas),a
 		ld (NumUnidades),a
-		ld (PosXNave),a
-		ld (PosYNave),a
-		ld (Semana),a
-		ld (VidaJogador),a
-		ld (VelAlien),a
+		ld (NumPosXNave),a
+		ld (NumPosYNave),a
+		ld (NumSemana),a
+		ld (NumVidaJogador),a
+		ld (NumVelAlien),a
 		ld (NumTorpedos),a
 		ld (NumAliensMortos),a
 		ld (NumSprites),a
-		ld (KeyPresses),a
+		ld (NumVelNave),a
 		ld (NumContColuna1),a
 		ld (NumContColuna2),a
 		ld (NumContColuna3),a
@@ -424,13 +424,14 @@ DesenharNave:
 		  ;=============================
 		  ld b,0
 		  ld c,1
+			xor a
 		  call PutSprite
 	  	;=============================
 		  ; Coloca Sprite da nave cor 11
 		  ;=============================
 		  ld b,4
 		  ld c,11
-			inc a
+			ld a,1
 		  call PutSprite
 		pop bc
 	pop af
@@ -486,28 +487,6 @@ DesenharAlienigena:
 		  ld c,3
 		  call PutSprite
 		pop bc
-	pop af
-ret
-;==============================================================================
-
-; =============================================================================
-; Desenhar Quadro
-; =============================================================================
-DesenharQuadro:
-	push af
-		push de
-		  ;==========================
-			; Desenhar Nave
-			; A Nave usa 2 sprites
-			; (0,1)
-			;==========================
-			ld a,(PosYNave)
-			ld d,a
-			ld a,(PosXNave)
-			ld e,a
-			ld a,0                      ; posicao do sprite na tabela de atributos
-			call DesenharNave
-		pop de
 	pop af
 ret
 ;==============================================================================

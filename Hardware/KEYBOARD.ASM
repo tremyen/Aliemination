@@ -52,39 +52,15 @@ PPICOMMAND:	EQU 0xAB
 ; 6 Joystick input selection, for r#14 inputs 1 = port 2
 ; 7 Kana led control 1 = off
 ; =============================================================================
-KeyboardScanner_LineCount equ 13
-KeyboardScanner_LineWidth equ 8
-KeyChar_Backspace					equ 8
-KeyChar_Enter							equ 13
-
 Keyboard:
-; =============================================================================
-; Limpa o buffer do teclado
-; =============================================================================
-; Nao tem parametros
-; =============================================================================
-; Altera => nada
-; =============================================================================
-KeyboardCleanBuffer:
-	push hl
-	push af
-		ld hl,KeyPresses
-		xor a
-		ld (hl),a
-	pop af
-	pop hl
-ret
-
 ; =============================================================================
 ; Ler a entrada do teclado em seu buffer
 ; =============================================================================
 ; A => linha do teclado a ser lida
 ; =============================================================================
-; Altera => AF, BufKeyPresses
+; Altera => A
 ; =============================================================================
 KeyboardReadLine:
-	ld hl,BufKeyPresses 			; pega o endereco do buffer
 	call SNSMAT								; le a linha na matrix do teclado
-	ld (hl),a 								; carrega o buffer do teclado
 ret
 ; =============================================================================

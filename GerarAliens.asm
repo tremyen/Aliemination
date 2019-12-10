@@ -4,9 +4,9 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
 GerarAliens:
-  ld a,(Semana)           ; pega a semana atual
+  ld a,(NumSemana)        ; pega a semana atual
   inc a                   ; aumenta em 1
-  ld (Semana),a           ; atualiza a semana atual
+  ld (NumSemana),a        ; atualiza a semana atual
   cp 5                    ; se for a 5 semana ja sorteamos o maximo
   jp z,NaoAdicionaAliens  ; nao podemos adicionar mais aliens
   ld b,4                  ; prepara multipilicador

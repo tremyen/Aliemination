@@ -6,7 +6,7 @@
 ; =============================================================================
 __VERSION:  equ 1
 __RELEASE:  equ 0
-include "Hardware\BiosMSX.asm"
+include "Hardware\BIOSMSX.ASM"
 include "Assets\Constantes.asm"
 include "Assets\Variaveis.asm"
 
@@ -24,25 +24,23 @@ startCode:
   call TelaInicial            ; tela de inicio do jogo
 gameLoop:
 	call GerarAliens						; sorteia os aliens de acordo com a semana
-AliensMoving:
-	;call PegarComandos					; pega a entrada de teclado do jogador
-	;call MoverNave							; Atualiza coordenadas da nave
+DesenharQuadro:
+	call PegarComandos					; pega a entrada de teclado do jogador
 	;call MoverTorpedos					; Atualiza coordenadas dos torpedos
+	call MoverNave							; Atualiza coordenadas da nave
 	;call MoverAliens						; Atualiza coordenadas dos Aliens
 	;call ChecarColisao					; checa as colisoes
-	;call DesenharQuadro				  ; desenha frame
-	call WaitEnter							; debug do desenho do quadro
-	ld a,(VidaJogador)					; pega as vidas do jogador
+	ld a,(NumVidaJogador)	  		; pega as vidas do jogador
 	cp 0
 	jr z,FimDoJogo							; se for zero o jogo acabou
 	ld a,(NumAliensMortos)			; pega os aliens mortos
 	cp 4												; se for 4 vai para a proxima semana
 	jr z,ProximoNivel						; proxima semana
-	jr gameLoop   							; loop de movimento dos inimigos
+	jr DesenharQuadro						; loop de movimento dos inimigos
 ProximoNivel:
-	ld a,(VelAlien)							; pega a velocidade dos aliens
+	ld a,(NumVelAlien)					; pega a velocidade dos aliens
 	inc a												; aumenta em um
-	ld (VelAlien),a							; atualiza
+	ld (NumVelAlien),a					; atualiza
 	jr gameLoop									; recomeca no novo nivel
 FimDoJogo:
 	jr startCode								; recomeca o jogo
@@ -50,13 +48,15 @@ FimDoJogo:
 include "Inicializar.asm"
 include "TelaInicial.asm"
 include "GerarAliens.asm"
-include "MoverAliens.asm"
+include "PegarComandos.asm"
+include "MoverNave.asm"
 
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
 include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
+include "Hardware\KEYBOARD.ASM"
 include "Library\Library.asm"
 include "Assets\Strings.asm"
 include "Assets\Fonts.asm"

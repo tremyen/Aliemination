@@ -5,29 +5,28 @@
 ; =============================================================================
 TelaInicial:
   call DISSCR
-
     call LimparTela
-    ;==========================
-    ; DESENHA O CENARIO
-    ;==========================
+    ;=============================
+    ; Desenhar o cenario
+    ;=============================
     ld de,0                     ; Base da memoria da VRAM
     ld hl,Cenario+7             ; os primeiros 7 bytes sao cabecalho
     ld bc,15360                 ; tamanho da BMP
     call LDIRVM                 ; copio para a VRAM
-    ;==========================
+    ;=============================
     ; CARREGA AS TABELAS DO VDP
-    ;==========================
+    ;=============================
+    ;call LoadPatternTable
     call LoadSpritesTable
     ;==========================
     ; Desenhar Nave
     ; A Nave usa 2 sprites
     ; (0,1)
     ;==========================
-    ld a,(PosYNave)
+    ld a,(NumPosYNave)
     ld d,a
-    ld a,(PosXNave)
+    ld a,(NumPosXNave)
     ld e,a
-    ld a,0                      ; posicao do sprite na tabela de atributos
     call DesenharNave
     ;==========================
     ; Desenhar Cidade 1
@@ -75,7 +74,7 @@ TelaInicial:
     call DesenharCidade
     ;==========================
   call ENASCR
-  ld h,96
+  ld h,961
   ld l,127
   call POSIT
   ld hl,MsgInicioJogo         ; DIGITE ENTER PARA JOGAR
