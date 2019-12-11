@@ -44,9 +44,9 @@ Posicao10:
   ;===================================
   ; Atualiza num de inimigos
   ;===================================
-  ld a,(NumAliens)           ; pegamos o numero de sprites na tela
+  ld a,(NumAliens)            ; pegamos o numero de aliens
   inc a                       ; adicinamos mais um
-  ld (NumAliens),a           ; atualizamos
+  ld (NumAliens),a            ; atualizamos
   ;============================
   ; Desenhar Alien na coluna 1
   ; O Alien usa 2 sprites
@@ -56,7 +56,8 @@ Posicao10:
   call Multiply               ; Multiplicams por 16
   ld d,a                      ; posicao y = num na coluna x comp do sprite
   ld e,10                     ; posicao x = fixa
-  ld a,(NumAliens)           ; posicao na tabela de atributos
+  ld a,(NumAliens)            ; a posicao na tabela de atributos
+  add a,9                     ; e igual a seu numero +9
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien
 
@@ -83,7 +84,8 @@ Posicao40:
   add a,16                    ; As cidades mais baixas os aliens saem na frente
   ld d,a                      ; posicao y = num na coluna x comp do sprite
   ld e,40                     ; posicao x
-  ld a,(NumAliens)           ; posicao na tabela de atributos
+  ld a,(NumAliens)            ; a posicao na tabela de atributos
+  add a,9                     ; e igual a seu numero +9
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien
 
@@ -110,7 +112,8 @@ Posicao184:
   add a,16
   ld d,a                      ; posicao y
   ld e,184                    ; posicao x
-  ld a,(NumAliens)           ; posicao na tabela de atributos
+  ld a,(NumAliens)            ; a posicao na tabela de atributos
+  add a,9                     ; e igual a seu numero+9
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien
 
@@ -136,6 +139,7 @@ Posicao240:
   call Multiply               ; Multiplicar o contador de inimigos por 16
   ld d,a                      ; posicao y
   ld e,240                    ; posicao x
-  ld a,(NumAliens)           ; posicao na tabela de atributos
+  ld a,(NumAliens)            ; a posicao na tabela de atributos
+  add a,9                     ; e igual a seu numero +9
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien

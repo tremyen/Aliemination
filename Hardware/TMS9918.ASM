@@ -89,12 +89,15 @@ ADRSPRITETBL:					equ 14336
 ; =============================================================================
 
 ; =============================================================================
+; LoadPatternTable
+; =============================================================================
 ; Carrega a Tabela de padroes
 ; =============================================================================
 ; Parametros
 ; Nenhum
 ; =============================================================================
-; Altera => Nada
+; Altera
+; Nada
 ; =============================================================================
 LoadPatternTable:
 	push bc
@@ -111,12 +114,15 @@ ret
 ; =============================================================================
 
 ; =============================================================================
+; LoadSpritesTable
+; =============================================================================
 ; Carrega a Tabela de sprites
 ; =============================================================================
 ; Parametros
 ; Nenhum
 ; =============================================================================
-; Altera => Nada
+; Altera
+; Nada
 ; =============================================================================
 LoadSpritesTable:
 	push bc
@@ -133,7 +139,7 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; SPRITE ATTRIBUTES (4 BYTES)
+; PutSprite
 ; =============================================================================
 ;	Você pode colar até trinta e dois sprites
 ;	só quatro podem estar presentes na mesma linha horizontal
@@ -145,15 +151,18 @@ ret
 ;	PPPPPPPP					=> NUMERO DO PADRAO (TABELA DE PADROES)
 ;	E000CCCC					=> EARLY / 000 / COR DO SPRITE
 ; =============================================================================
+; Parametros
 ; A => Numero do Sprite na tabela de atributos
 ; D => posicao Y
 ; E => posicao X
 ; B => Numero do sprite na tabela de sprites
 ; C => Early / Cor
 ; =============================================================================
-; ALTERA => HL
+; ALTERA
+; Nada
 ; =============================================================================
 PutSprite:
+		push hl
 		push af
 			push de										; salvo o valor de DE pq CALATR o altera
 				call CALATR							; pega o endereco do sprite na TBL de atributos
@@ -170,21 +179,66 @@ PutSprite:
 			ld a,c
 			call WRTVRM								; gravo Early / Color
 		pop af
+		pop hl
 ret
 ; =============================================================================
 
 ; =============================================================================
-; SetScreen2_16x16 - Inicializa os registradores #0 e #1 do VDP
+; ReadSprite
+; =============================================================================
+; Transfere os dados do sprite da VRAM para os registradores
+; =============================================================================
+; Parametros
+; A => Numero do Sprite na tabela de atributos
+; =============================================================================
+; Altera
+; D => posicao Y
+; E => posicao X
+; B => Numero do sprite na tabela de sprites
+; C => Early / Cor
+; =============================================================================
+ReadSprite:
+	push af
+		call CALATR								; pega o endereco do sprite na TBL de atributos
+		call RDVRM								; le a posicao Y
+		ld d,a										; salva em D
+		inc hl										; proximo endereco
+		call RDVRM								; le a posicao X
+		ld e,a										; salva em E
+		inc hl										; proximo endereco
+		call RDVRM								; le o numero do sprite na tabela de sprites
+		ld b,a 										; salva em B
+		inc hl										; proximo endereco
+		call RDVRM								; Le Early / Color
+		ld c,a										; salva em C
+	pop af
+ret
+
+; =============================================================================
+; SetScreen2_16x16
+; =============================================================================
+; Inicializa os registradores #0 e #1 do VDP
+; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; Nada
 ; =============================================================================
 SetScreen2_16x16:
-	call INIGRP               ; inicia modo grafico 256x192
-	ld a,(RG1SAV)             ; leio o valor do registro 1
-	and 0xE6                  ; também desligo o zoom dos sprites
-	or 2                      ; e ajusto os sprites para 16x16
-	ld b,a										; carrego o novo valor para o registrador
-	ld c,1										; indico o registrador que vou alterar
-	call WRTVDP               ; altero o valor do registrador 1
+	push af
+	push bc
+		call INIGRP               ; inicia modo grafico 256x192
+		ld a,(RG1SAV)             ; leio o valor do registro 1
+		and 0xE6                  ; também desligo o zoom dos sprites
+		or 2                      ; e ajusto os sprites para 16x16
+		ld b,a										; carrego o novo valor para o registrador
+		ld c,1										; indico o registrador que vou alterar
+		call WRTVDP               ; altero o valor do registrador 1
+	pop bc
+	pop af
 ret
+
 ; =============================================================================
 ; SetColorRegister - Inicializa o registrador #7 do VDP
 ; =============================================================================
@@ -196,15 +250,17 @@ SetColorRegister:
 	ld a,128+7								; Registrador 7
 	out (VDPCONTROL),a
 ret
-; =============================================================================
 
 ; =============================================================================
 ; Pegar a posicao na tela para um grafico BMP
 ; =============================================================================
+; Parametros
 ; B	=> posicao X
 ; C => posicao Y
 ; =============================================================================
-; Altera => HL (endereco de memoria da coordenada xy),A
+; Altera
+; HL => (endereco de memoria da coordenada xy)
+; A
 ; =============================================================================
 GetBMPScreenPos:
 	push bc

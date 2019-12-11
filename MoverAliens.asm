@@ -14,7 +14,7 @@ MoverAliens:
 	    cp 0                          ; se nao existem aliens
 	    jp z,FimMoveAliens            ; nao preciso mover nada
 			ld b,a												; guarda para loop
-     	add a,25											; comeco pelo ultimo alien
+     	add a,9 											; comeco pelo ultimo alien
 LoopMoveAliens:
 			call CALATR  									; pega o endereco do sprite atual
 			call RDVRM										; pega o conteudo do endereco byte 1(y)
@@ -24,7 +24,7 @@ LoopMoveAliens:
       ld a,b                        ; pega o sprite anterior
       cp 0                          ; verifica se movemos todos os aliens
       jr z,FimMoveTorpedos          ; acabou o loop
-      add a,25                      ; pega o proximo
+      add a,9                       ; pega o proximo
       jr LoopMoveAliens	            ; move o proximo
 FimMoveAliens:
 		pop bc
