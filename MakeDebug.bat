@@ -1,2 +1,2 @@
 @echo off
-pasmo -d AMINATION.ASM ROM\AMINATION.rom 
+pasmo -d AMINATION.ASM ROM\AMINATION.ROM 
