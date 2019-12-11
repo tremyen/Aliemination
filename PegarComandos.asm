@@ -6,7 +6,7 @@
 ; =============================================================================
 
 ; =============================================================================
-; layout do buffer de entrada (BufKeyPresses)
+; layout do buffer de entrada 
 ; =============================================================================
 ; Todas as teclas que usamos estao na linha 8 do teclado
 ; 00000000 => 76543210
@@ -51,6 +51,30 @@ PegarComandos:
 ret
 
 AdicionaTorpedo:
+  push af
+  push bc
+  push de
+    ld hl,NumTorpedos       ; pegar endereco do NumTorpedos
+    ld a,(hl)               ; pegar conteudo do endereco
+    inc a                   ; adicionamos um torpedo
+    ld (hl),a               ; atualizamos a variavel NumTorpedos
+    ld b,a                  ; guarda NumTorpedos para uso futuro
+    cp 5                    ; Voce so pode ter 4 torpedos
+    jp nc,JaEstaNoMaximo    ; se tiver mais de 4, nao adiciona
+    ld hl,NumPosYNave       ; pegar endereco da NumPosYNave
+    ld a,(hl)               ; pegar conteudo do endereco
+    sub 16                  ; coordenada y = NumPosYNave-16
+    ld d,a                  ; Guarda a posicao y
+    ld hl,NumPosXNave       ; pegar endereco da NumPosXNave
+    ld a,(hl)               ; pegar conteudo do endereco
+    ld e,a                  ; Guarda a posicao X
+    ld a,b                  ; pegar o numero de torpedos
+    add a,27                ; Os Torpedos comecam na pos 28 (tblAtributos)
+    call DesenharTorpedo
+JaEstaNoMaximo:
+  pop de
+  pop bc
+  pop af
 ret
 
 Direita:
@@ -60,8 +84,11 @@ Direita:
     ld d,a                    ; no registrador d
     ld hl,NumPosXNave         ; pega posicao x da nave
     ld a,(hl)                 ; prepara o acumulador para a conta
+    cp 240                    ; A nave nao pode sair da tela
+    jp nc,PosMaximaDir        ; na posicao maxima, nao se move mais
     add a,d                   ; tira a velocidade da coordenada X
     ld (hl),a                 ; guarda a posicao da nave
+PosMaximaDir:
   pop af
 ret
 
@@ -72,8 +99,11 @@ Subir:
     ld d,a                    ; no registrador d
     ld hl,NumPosYNave         ; pega posicao y da nave
     ld a,(hl)                 ; prepara o acumulador para a conta
+    cp 16                     ; A nave nao pode sair da tela
+    jp c,PosMaximaSub         ; na posicao maxima, nao se move mais
     sub d                     ; tira a velocidade da coordenada y
     ld (hl),a                 ; guarda a posicao da nave
+PosMaximaSub:
   pop af
 ret
 
@@ -84,8 +114,11 @@ Descer:
     ld d,a                    ; no registrador d
     ld hl,NumPosYNave         ; pega posicao y da nave
     ld a,(hl)                 ; prepara o acumulador para a conta
+    cp 101                    ; A nave nao pode sair da tela
+    jp nc,PosMaximaDes        ; na posicao maxima, nao se move mais
     add a,d                   ; tira a velocidade da coordenada y
     ld (hl),a                 ; guarda a posicao da nave
+PosMaximaDes:
   pop af
 ret
 
@@ -96,7 +129,10 @@ Esquerda:
     ld d,a                    ; no registrador d
     ld hl,NumPosXNave         ; pega posicao x da nave
     ld a,(hl)                 ; prepara o acumulador para a conta
+    cp 1                      ; A nave nao pode sair da tela
+    jp c,PosMaximaEsq         ; na posicao maxima, nao se move mais
     sub d                     ; tira a velocidade da coordenada X
     ld (hl),a                 ; guarda a posicao da nave
+PosMaximaEsq:
   pop af
 ret

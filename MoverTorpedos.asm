@@ -1,32 +1,32 @@
 ; =============================================================================
-; Mover os Aliens na tela
+; Mover os torpedos na tela
 ; =============================================================================
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
-; Desce os aliens de acordo com sua velocidade. Os aliens são todos os sprites
-; maiores ou iguais a 10.
+; Sobe os torpedos de acordo com sua velocidade.
+; Os torpedos são todos os sprites maiores ou iguais a 28.
 ; =============================================================================
-MoverAliens:
+MoverTorpedos:
 	push af
 		push bc
-	    ld hl,NumAliens		            ; pega o endereco do num de aliens
+      ld hl,NumTorpedos             ; pega o endereco do numero dos torpedos
 			ld a,(hl)							        ; pega o conteudo do endereco
-	    cp 0                          ; se nao existem aliens
-	    jp z,FimMoveAliens            ; nao preciso mover nada
+      cp 0                          ; se nao existem torpedos
+      jp z,FimMoveTorpedos          ; nao preciso mover nada
 			ld b,a												; guarda para loop
-     	add a,25											; comeco pelo ultimo alien
-LoopMoveAliens:
+      add a,31											; comeco pelo ultimo torpedo
+LoopMoveTorpedos:
 			call CALATR  									; pega o endereco do sprite atual
 			call RDVRM										; pega o conteudo do endereco byte 1(y)
-			inc a                         ; desce uma posicao
+			dec a                         ; sobe uma posicao
       call WRTVRM                   ; atualiza
       dec b                         ; controla o loop
       ld a,b                        ; pega o sprite anterior
-      cp 0                          ; verifica se movemos todos os aliens
+      cp 0                          ; verifica se movemos todos os torpedos
       jr z,FimMoveTorpedos          ; acabou o loop
-      add a,25                      ; pega o proximo
-      jr LoopMoveAliens	            ; move o proximo
-FimMoveAliens:
+      add a,31                      ; pega o proximo
+      jr LoopMoveTorpedos           ; move o proximo
+FimMoveTorpedos:
 		pop bc
 	pop af
 ret

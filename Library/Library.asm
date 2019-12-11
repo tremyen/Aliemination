@@ -40,7 +40,7 @@ LimpaMem:
 		ld (NumVelAlien),a
 		ld (NumTorpedos),a
 		ld (NumAliensMortos),a
-		ld (NumSprites),a
+		ld (NumAliens),a
 		ld (NumVelNave),a
 		ld (NumContColuna1),a
 		ld (NumContColuna2),a
@@ -481,10 +481,33 @@ DesenharAlienigena:
 	push af
 		push bc
 		  ;=============================
-		  ; Coloca Sprite cor 3
+		  ; Coloca Sprite cor 13
 		  ;=============================
 		  ld b,16
-		  ld c,3
+		  ld c,13
+		  call PutSprite
+		pop bc
+	pop af
+ret
+;==============================================================================
+
+; =============================================================================
+; Desenhar Torpedo
+; =============================================================================
+; Parametros
+; d => Coordenada Y
+; e => Coordenada X
+; =============================================================================
+; Altera => Nada
+; =============================================================================
+DesenharTorpedo:
+	push af
+		push bc
+		  ;=============================
+		  ; Coloca Sprite cor 8
+		  ;=============================
+		  ld b,20
+		  ld c,8
 		  call PutSprite
 		pop bc
 	pop af

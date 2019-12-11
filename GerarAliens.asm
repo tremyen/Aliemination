@@ -44,9 +44,9 @@ Posicao10:
   ;===================================
   ; Atualiza num de inimigos
   ;===================================
-  ld a,(NumSprites)           ; pegamos o numero de sprites na tela
+  ld a,(NumAliens)           ; pegamos o numero de sprites na tela
   inc a                       ; adicinamos mais um
-  ld (NumSprites),a           ; atualizamos
+  ld (NumAliens),a           ; atualizamos
   ;============================
   ; Desenhar Alien na coluna 1
   ; O Alien usa 2 sprites
@@ -56,7 +56,7 @@ Posicao10:
   call Multiply               ; Multiplicams por 16
   ld d,a                      ; posicao y = num na coluna x comp do sprite
   ld e,10                     ; posicao x = fixa
-  ld a,(NumSprites)           ; posicao na tabela de atributos
+  ld a,(NumAliens)           ; posicao na tabela de atributos
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien
 
@@ -70,9 +70,9 @@ Posicao40:
   ;===================================
   ; Atualiza num de inimigos
   ;===================================
-  ld a,(NumSprites)           ; pegamos o numero de sprites na tela
+  ld a,(NumAliens)           ; pegamos o numero de sprites na tela
   inc a                       ; adicinamos mais um
-  ld (NumSprites),a           ; atualizamos
+  ld (NumAliens),a           ; atualizamos
   ;===================================
   ; Desenhar Alien na coluna 2
   ; O Alien usa 2 sprites
@@ -83,7 +83,7 @@ Posicao40:
   add a,16                    ; As cidades mais baixas os aliens saem na frente
   ld d,a                      ; posicao y = num na coluna x comp do sprite
   ld e,40                     ; posicao x
-  ld a,(NumSprites)           ; posicao na tabela de atributos
+  ld a,(NumAliens)           ; posicao na tabela de atributos
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien
 
@@ -97,9 +97,9 @@ Posicao184:
   ;===================================
   ; Atualiza num de inimigos
   ;===================================
-  ld a,(NumSprites)
+  ld a,(NumAliens)
   inc a                       ; adicinamos mais um
-  ld (NumSprites),a
+  ld (NumAliens),a
   ;==========================
   ; Desenhar Alien coluna 3
   ; O Alien usa 2 sprites
@@ -110,7 +110,7 @@ Posicao184:
   add a,16
   ld d,a                      ; posicao y
   ld e,184                    ; posicao x
-  ld a,(NumSprites)           ; posicao na tabela de atributos
+  ld a,(NumAliens)           ; posicao na tabela de atributos
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien
 
@@ -124,9 +124,9 @@ Posicao240:
   ;===================================
   ; Atualiza num de sprites
   ;===================================
-  ld a,(NumSprites)           ; pegamos o numero de sprites na tela
+  ld a,(NumAliens)           ; pegamos o numero de sprites na tela
   inc a                       ; adicinamos mais um
-  ld (NumSprites),a           ; atualizamos
+  ld (NumAliens),a           ; atualizamos
   ;===================================
   ; Desenhar Alien coluna 4
   ; O Alien usa 2 sprites
@@ -136,6 +136,6 @@ Posicao240:
   call Multiply               ; Multiplicar o contador de inimigos por 16
   ld d,a                      ; posicao y
   ld e,240                    ; posicao x
-  ld a,(NumSprites)           ; posicao na tabela de atributos
+  ld a,(NumAliens)           ; posicao na tabela de atributos
   call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
 jp FimDesenhoAlien            ; Final de adicao de alien

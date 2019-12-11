@@ -100,7 +100,7 @@ LoadPatternTable:
 	push bc
 	push de
 	push hl
-		ld bc,192            		; bytes a copiar (reduzido de 216)
+		ld bc,192            		; bytes a copiar
   	ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
   	ld hl,AlieFont	 				; localização na RAM
   	call LDIRVM             ; copio a tabela de padrões
@@ -122,7 +122,7 @@ LoadSpritesTable:
 	push bc
 	push de
 	push hl
-		ld bc,160             	; bytes a copiar
+		ld bc,192             	; bytes a copiar
   	ld de,ADRSPRITETBL	    ; tabela de sprites na VRAM
   	ld hl,AlieSprites		    ; localização na RAM
   	call LDIRVM             ; copio a tabela de sprites
@@ -145,17 +145,17 @@ ret
 ;	PPPPPPPP					=> NUMERO DO PADRAO (TABELA DE PADROES)
 ;	E000CCCC					=> EARLY / 000 / COR DO SPRITE
 ; =============================================================================
-; A => Numero do Sprite na memoria
+; A => Numero do Sprite na tabela de atributos
 ; D => posicao Y
 ; E => posicao X
-; B => Numero do sprite na tabela de padroes
+; B => Numero do sprite na tabela de sprites
 ; C => Early / Cor
 ; =============================================================================
 ; ALTERA => HL
 ; =============================================================================
 PutSprite:
 		push af
-			push de										; salvo o valor de de pq CALATR o altera
+			push de										; salvo o valor de DE pq CALATR o altera
 				call CALATR							; pega o endereco do sprite na TBL de atributos
 			pop de										; retorno DE
 			ld a,d

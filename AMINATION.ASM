@@ -26,7 +26,7 @@ gameLoop:
 	call GerarAliens						; sorteia os aliens de acordo com a semana
 DesenharQuadro:
 	call PegarComandos					; pega a entrada de teclado do jogador
-	;call MoverTorpedos					; Atualiza coordenadas dos torpedos
+	call MoverTorpedos					; Atualiza coordenadas dos torpedos
 	call MoverNave							; Atualiza coordenadas da nave
 	;call MoverAliens						; Atualiza coordenadas dos Aliens
 	;call ChecarColisao					; checa as colisoes
@@ -50,6 +50,7 @@ include "TelaInicial.asm"
 include "GerarAliens.asm"
 include "PegarComandos.asm"
 include "MoverNave.asm"
+include "MoverTorpedos.asm"
 
 ; =============================================================================
 ; FIM PROGRAMA

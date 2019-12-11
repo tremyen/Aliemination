@@ -22,17 +22,16 @@ Inicializar:
   ld (NumPosYNave),a          ; Carrega a posicao Y da nave
   ld a,1                      ; Prepara as vidas do jogador
   ld (NumVidaJogador),a       ; Carrega a vida do jogador
-  ld (NumVelNave),a           ; Carrega a vida do jogador
-  ld a,3                      ; Prepara a velocidade dos aliens
-  ld (NumVelAlien),a          ; Carrega a velocidade do Alien
-  ld a,9                      ; Prepara o num de inimigos
-  ld (NumSprites),a           ; Os inimigos comecam a partir do sprite 9
+  ld (NumVelNave),a           ; Carrega a velocidade da nave
+  ld a,1                      ; Prepara a velocidade dos aliens
+  ld (NumVelAlien),a          ; Carrega a velocidade do Alien  
   xor a                       ; Zera A
   ld (NumSemana),a            ; zera a pontuacao
+  ld (NumTorpedos),a          ; zera o numero de torpedo
+  ld (NumAliens),a            ; zera o nuemro de aliens
   ld (NumContColuna1),a       ; zera os inimigos na coluna 1
   ld (NumContColuna2),a       ; zera os inimigos na coluna 2
   ld (NumContColuna3),a       ; zera os inimigos na coluna 3
   ld (NumContColuna4),a       ; zera os inimigos na coluna 4
   ; ===========================================================================
-
 ret
