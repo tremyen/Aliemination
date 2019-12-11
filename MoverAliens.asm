@@ -3,8 +3,8 @@
 ; =============================================================================
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
-; Desce os aliens de acordo com sua velocidade. Os aliens são todos os sprites
-; maiores ou iguais a 10.
+; Desce os aliens de acordo com sua velocidade.
+; Os aliens são todos os sprites maiores ou iguais a 10.
 ; =============================================================================
 MoverAliens:
 	push af
@@ -23,7 +23,7 @@ LoopMoveAliens:
       dec b                         ; controla o loop
       ld a,b                        ; pega o sprite anterior
       cp 0                          ; verifica se movemos todos os aliens
-      jr z,FimMoveTorpedos          ; acabou o loop
+      jr z,FimMoveAliens 		        ; acabou o loop
       add a,9                       ; pega o proximo
       jr LoopMoveAliens	            ; move o proximo
 FimMoveAliens:

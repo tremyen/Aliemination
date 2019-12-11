@@ -27,8 +27,8 @@ gameLoop:
 DesenharQuadro:
 	call PegarComandos					; pega a entrada de teclado do jogador
 	call MoverTorpedos					; Atualiza coordenadas dos torpedos
+	call MoverAliens						; Atualiza coordenadas dos Aliens
 	call MoverNave							; Atualiza coordenadas da nave
-	;call MoverAliens						; Atualiza coordenadas dos Aliens
 	;call ChecarColisao					; checa as colisoes
 	ld a,(NumVidaJogador)	  		; pega as vidas do jogador
 	cp 0
@@ -49,8 +49,10 @@ include "Inicializar.asm"
 include "TelaInicial.asm"
 include "GerarAliens.asm"
 include "PegarComandos.asm"
-include "MoverNave.asm"
 include "MoverTorpedos.asm"
+include "MoverAliens.asm"
+include "MoverNave.asm"
+
 
 ; =============================================================================
 ; FIM PROGRAMA
