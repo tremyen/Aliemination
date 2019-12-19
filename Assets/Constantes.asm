@@ -3,6 +3,8 @@
 ; =============================================================================
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
+PAL:                equ  5    ; 1/10s em 50Hz (PAL-B/G/N)
+NTSC:               equ  6    ; 1/10s em 60Hz (NTSC & PAL-M)
 PosXCidade1:        equ 10
 PosYCidade1:        equ 136
 PosXCidade2:        equ 40

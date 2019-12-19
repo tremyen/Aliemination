@@ -36,7 +36,13 @@ DesenharQuadro:
 	ld a,(NumAliensMortos)			; pega os aliens mortos
 	cp 4												; se for 4 vai para a proxima semana
 	jr z,ProximoNivel						; proxima semana
-	jr DesenharQuadro						; loop de movimento dos inimigos
+	xor a 											; zero A
+	ld hl,JIFFY									; carrego endereco do incremento do VPD
+	ld (hl),a										; zero o incremento do VDP
+	ld hl,vdpCycle1							; carrego 1/10s
+  ld b,(hl)										; carrego 1/10s em B
+  call PauseVDP               ; aguardo 1/10s
+	jr DesenharQuadro						; loop de desenho do frame
 ProximoNivel:
 	ld a,(NumVelAlien)					; pega a velocidade dos aliens
 	inc a												; aumenta em um

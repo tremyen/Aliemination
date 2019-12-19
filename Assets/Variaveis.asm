@@ -24,4 +24,6 @@ NumContColuna2     equ ramArea+14   ; Conta inimigos na coluna 2
 NumContColuna3     equ ramArea+15   ; Conta inimigos na coluna 3
 NumContColuna4     equ ramArea+16   ; Conta inimigos na coluna 4
 NumSorteios        equ ramArea+17   ; Conta quantos aliens foram sorteados
+vdpCycle1          equ ramArea+18   ; Calculo de um ciclo de VPD
+vdpCycle5          equ ramArea+19   ; Calculo de cinco ciclos de VPD
 ; =============================================================================
