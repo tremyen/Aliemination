@@ -29,7 +29,7 @@ DesenharQuadro:
 	call MoverTorpedos					; Atualiza coordenadas dos torpedos
 	call MoverAliens						; Atualiza coordenadas dos Aliens
 	call MoverNave							; Atualiza coordenadas da nave
-	;call ChecarColisao					; checa as colisoes
+	call ChecarColisao					; checa as colisoes
 	ld a,(NumVidaJogador)	  		; pega as vidas do jogador
 	cp 0
 	jr z,FimDoJogo							; se for zero o jogo acabou
@@ -58,6 +58,7 @@ include "PegarComandos.asm"
 include "MoverTorpedos.asm"
 include "MoverAliens.asm"
 include "MoverNave.asm"
+include "ChecarColisao.asm"
 
 ; =============================================================================
 ; FIM PROGRAMA

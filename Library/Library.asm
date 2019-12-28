@@ -574,3 +574,29 @@ PauseVDP:
   cp b
   ret z                         ; sai da rotina
 jr PauseVDP
+; =============================================================================
+
+; =============================================================================
+; RemoverTorpedo
+; =============================================================================
+; Parametros
+; A => Numero do torpedo a ser removido (de 28 ate 31)
+; =============================================================================
+; Altera => nada
+; =============================================================================
+RemoverTorpedo:
+	inc a											; pego o proximo sprite
+	cp 32											; verifico se passou do ultimo sprite
+	jp z,RemoverUltimoDaFila	; como e o ultimo nao preciso reorganizar a fila
+	call ReadSprite						; le o proximo sprite para a RAM
+	dec a 										; posiciono no sprite que sera removido
+	call PutSprite						; coloco o proximo sprite na posicao atual
+	inc a											; vou de novo para o sprite superior
+	call RemoveSprite					; removo a copia da fila
+ret
+
+RemoverUltimoDaFila:
+	ld a,31										; posiciono no ultimo torpedo
+	call RemoveSprite					; removo da fila
+ret
+; =============================================================================

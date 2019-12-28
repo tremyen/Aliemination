@@ -38,6 +38,7 @@ noPalAdjust:
   ld (NumPosYNave),a          ; Carrega a posicao Y da nave
   ld a,1                      ; Prepara as vidas do jogador
   ld (NumVidaJogador),a       ; Carrega a vida do jogador
+  ld a,4
   ld (NumVelNave),a           ; Carrega a velocidade da nave
   ld a,1                      ; Prepara a velocidade dos aliens
   ld (NumVelAlien),a          ; Carrega a velocidade do Alien

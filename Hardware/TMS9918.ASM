@@ -215,6 +215,41 @@ ReadSprite:
 ret
 
 ; =============================================================================
+; RemoveSprite
+; =============================================================================
+;	Remover um sprite da tabela de atributos. Um sprite e representado por
+; 4 bytes a partir de sua posicao na tabela de atributos.
+; =============================================================================
+; VVVVVVVV					=> POSICAO VERTICAL
+; HHHHHHHH					=> POSICAO HORIZONTAL
+;	PPPPPPPP					=> NUMERO DO PADRAO (TABELA DE PADROES)
+;	E000CCCC					=> EARLY / 000 / COR DO SPRITE
+; =============================================================================
+; Parametros
+; A => Numero do Sprite na tabela de atributos
+; =============================================================================
+; ALTERA
+; Zera o sprite na tabela de atributos
+; =============================================================================
+RemoveSprite:
+			push hl
+			push af
+				push de								; salvo o valor de DE pq CALATR o altera
+					call CALATR					; pega o endereco do sprite na TBL de atributos
+				pop de								; retorno DE
+				xor a 								; zero o acumulador
+				call WRTVRM						; zero a posicao Y
+				inc hl								; proximo endereco
+				call WRTVRM						; zero a posicao X
+				inc hl								; proximo endereco
+				call WRTVRM						; zero o numero na tabela de padroes
+				inc hl								; proximo endereco
+				call WRTVRM						; zero Early / Color
+			pop af
+			pop hl
+ret
+
+; =============================================================================
 ; SetScreen2_16x16
 ; =============================================================================
 ; Inicializa os registradores #0 e #1 do VDP
