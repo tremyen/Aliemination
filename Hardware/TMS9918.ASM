@@ -287,7 +287,9 @@ SetColorRegister:
 ret
 
 ; =============================================================================
-; Pegar a posicao na tela para um grafico BMP
+; GetBMPScreenPos
+; =============================================================================
+; Pegar a posicao na memoria para um grafico BMP
 ; =============================================================================
 ; Parametros
 ; B	=> posicao X
@@ -295,9 +297,9 @@ ret
 ; =============================================================================
 ; Altera
 ; HL => (endereco de memoria da coordenada xy)
-; A
 ; =============================================================================
 GetBMPScreenPos:
+	push af
 	push bc
 		xor a
 		ld h,c
@@ -308,6 +310,7 @@ GetBMPScreenPos:
 		ld (ScreenLinePos_Plus2-2),hl
 		call VDP_SetWriteAddress
 	pop bc
+	pop af
 ret
 
 GetNextLine:
@@ -431,6 +434,6 @@ ret
 ; A => Status do VDP
 ; =============================================================================
 ReadStatus:
-	RDVDP
+	call RDVDP
 ret
 ; =============================================================================

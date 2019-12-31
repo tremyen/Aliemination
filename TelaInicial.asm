@@ -16,7 +16,7 @@ TelaInicial:
     ;=============================
     ; CARREGA AS TABELAS DO VDP
     ;=============================
-    ;call LoadPatternTable
+    call LoadPatternTable
     call LoadSpritesTable
     ;==========================
     ; Desenhar Nave
