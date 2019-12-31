@@ -1,8 +1,8 @@
 ; =============================================================================
-;  ChecarColisao.asm
+; ChecarColisao.asm
 ; =============================================================================
-;  (C) 2019 Manoel Neto - tremyen@gmail.com
-;  Testa as colisoes dos sprites na tela
+; (C) 2019 Manoel Neto - tremyen@gmail.com
+; Testa as colisoes dos sprites na tela
 ; =============================================================================
 ChecarColisao:
   ; ================================================
@@ -25,14 +25,24 @@ LoopTorpedos:
   pop de                ; retorno DE
   pop bc                ; retorno BC
   cp 1                  ; verifico se a posicao e 1
-  call z,ArrumaTorpedos ; se for 1 preciso reorganizar a fila de TORPEDOS
+  call c,ArrumaTorpedos ; se for menor que 1 preciso reorganizar TORPEDOS
   dec b                 ; decremento o loop
   ld a,b                ; preparo a comparacao
   cp 0                  ; comparo com zero
   jp z,FimTorpedos      ; se decrementamos tudo, checamos os TORPEDOS
 jp LoopTorpedos
-
 FimTorpedos:
+  call ReadStatus       ; verifica se houve alguma colisao de sprites
+  bit 5,a               ; posicao no status do vdp para colisao
+  jp nz,FimColisoes     ; nao houve colisao, terminar
+ChecarNave:
+  ; todo - checar nos sprites da nave o flag de colisao
+ChecarCidades:
+  ; todo - checar nos sprite que tem cidades o flag de colisao
+ChecarAliens:
+  ; todo - checar nos sprites que tem aliens o flag de colisao
+
+FimColisoes:
 ret
 
 ArrumaTorpedos:

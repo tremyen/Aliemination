@@ -458,7 +458,7 @@ vdpCycle5	EQU E013
 40A7:CD4100	CALL 0041
 40AA:CD8244	CALL 4482
 40AD:110000	LD DE, 0000
-40B0:217748	LD HL, 4877
+40B0:217B48	LD HL, 487B
 40B3:01003C	LD BC, 3C00
 40B6:CD5C00	CALL 005C
 40B9:CD7943	CALL 4379
@@ -495,7 +495,7 @@ vdpCycle5	EQU E013
 40F6:26C1	LD H, C1
 40F8:2E7F	LD L, 7F
 40FA:CDC600	CALL 00C6
-40FD:21BD46	LD HL, 46BD
+40FD:21C146	LD HL, 46C1
 4100:CDE244	CALL 44E2
 4103:CD8146	CALL 4681
 4106:C9		RET
@@ -794,7 +794,7 @@ vdpCycle5	EQU E013
 42EC:D1		POP DE
 42ED:C1		POP BC
 42EE:FE01	CP 01
-42F0:CCFE42	CALL Z, 42FE
+42F0:DCFE42	CALL C, 42FE
 42F3:05		DEC B
 42F4:78		LD A, B
 42F5:FE00	CP 00
@@ -887,7 +887,7 @@ ADRSPRITETBL	EQU 3800
 4368:E5		PUSH HL
 4369:01C000	LD BC, 00C0
 436C:110000	LD DE, 0000
-436F:21D846	LD HL, 46D8
+436F:21DC46	LD HL, 46DC
 4372:CD5C00	CALL 005C
 4375:E1		POP HL
 4376:D1		POP DE
@@ -899,7 +899,7 @@ ADRSPRITETBL	EQU 3800
 437B:E5		PUSH HL
 437C:01C000	LD BC, 00C0
 437F:110038	LD DE, 3800
-4382:21B047	LD HL, 47B0
+4382:21B447	LD HL, 47B4
 4385:CD5C00	CALL 005C
 4388:E1		POP HL
 4389:D1		POP DE
@@ -1439,408 +1439,408 @@ PPICOMMAND	EQU 00AB
 46A5:		label RemoverTorpedo
 46A5:3C		INC A
 46A6:FE20	CP 20
-46A8:CAB746	JP Z, 46B7
-46AB:CDA943	CALL 43A9
-46AE:3D		DEC A
-46AF:CD8C43	CALL 438C
-46B2:3C		INC A
-46B3:CDC243	CALL 43C2
-46B6:C9		RET
-46B7:		label RemoverUltimoDaFila
-46B7:3E1F	LD A, 1F
-46B9:CDC243	CALL 43C2
-46BC:C9		RET
+46A8:CABB46	JP Z, 46BB
+46AB:C5		PUSH BC
+46AC:D5		PUSH DE
+46AD:CDA943	CALL 43A9
+46B0:3D		DEC A
+46B1:CD8C43	CALL 438C
+46B4:D1		POP DE
+46B5:C1		POP BC
+46B6:3C		INC A
+46B7:CDC243	CALL 43C2
+46BA:C9		RET
+46BB:		label RemoverUltimoDaFila
+46BB:3E1F	LD A, 1F
+46BD:CDC243	CALL 43C2
+46C0:C9		RET
 		End of INCLUDE
 		INCLUDE Assets\Strings.asm
-46BD:		label MsgInicioJogo
-46BD:44696769	DEFB of 27 bytes
-46C1:7465203C
-46C5:454E5445
-46C9:523E2070
-46CD:61726120
-46D1:6A6F6761
-46D5:722E00
+46C1:		label MsgInicioJogo
+46C1:44696769	DEFB of 27 bytes
+46C5:7465203C
+46C9:454E5445
+46CD:523E2070
+46D1:61726120
+46D5:6A6F6761
+46D9:722E00
 		End of INCLUDE
 		INCLUDE Assets\Fonts.asm
-46D8:		label AlieFont
-46D8:00		DEFB of 1 bytes
-46D9:00		DEFB of 1 bytes
-46DA:00		DEFB of 1 bytes
-46DB:FF		DEFB of 1 bytes
+46DC:		label AlieFont
 46DC:00		DEFB of 1 bytes
 46DD:00		DEFB of 1 bytes
 46DE:00		DEFB of 1 bytes
-46DF:00		DEFB of 1 bytes
-46E0:20		DEFB of 1 bytes
-46E1:50		DEFB of 1 bytes
-46E2:88		DEFB of 1 bytes
-46E3:88		DEFB of 1 bytes
-46E4:F8		DEFB of 1 bytes
-46E5:88		DEFB of 1 bytes
+46DF:FF		DEFB of 1 bytes
+46E0:00		DEFB of 1 bytes
+46E1:00		DEFB of 1 bytes
+46E2:00		DEFB of 1 bytes
+46E3:00		DEFB of 1 bytes
+46E4:20		DEFB of 1 bytes
+46E5:50		DEFB of 1 bytes
 46E6:88		DEFB of 1 bytes
-46E7:00		DEFB of 1 bytes
-46E8:F0		DEFB of 1 bytes
+46E7:88		DEFB of 1 bytes
+46E8:F8		DEFB of 1 bytes
 46E9:88		DEFB of 1 bytes
 46EA:88		DEFB of 1 bytes
-46EB:F8		DEFB of 1 bytes
-46EC:88		DEFB of 1 bytes
+46EB:00		DEFB of 1 bytes
+46EC:F0		DEFB of 1 bytes
 46ED:88		DEFB of 1 bytes
-46EE:F0		DEFB of 1 bytes
-46EF:00		DEFB of 1 bytes
-46F0:70		DEFB of 1 bytes
+46EE:88		DEFB of 1 bytes
+46EF:F8		DEFB of 1 bytes
+46F0:88		DEFB of 1 bytes
 46F1:88		DEFB of 1 bytes
-46F2:80		DEFB of 1 bytes
-46F3:80		DEFB of 1 bytes
-46F4:80		DEFB of 1 bytes
+46F2:F0		DEFB of 1 bytes
+46F3:00		DEFB of 1 bytes
+46F4:70		DEFB of 1 bytes
 46F5:88		DEFB of 1 bytes
-46F6:70		DEFB of 1 bytes
-46F7:00		DEFB of 1 bytes
-46F8:F0		DEFB of 1 bytes
+46F6:80		DEFB of 1 bytes
+46F7:80		DEFB of 1 bytes
+46F8:80		DEFB of 1 bytes
 46F9:88		DEFB of 1 bytes
-46FA:88		DEFB of 1 bytes
-46FB:88		DEFB of 1 bytes
-46FC:88		DEFB of 1 bytes
+46FA:70		DEFB of 1 bytes
+46FB:00		DEFB of 1 bytes
+46FC:F0		DEFB of 1 bytes
 46FD:88		DEFB of 1 bytes
-46FE:F0		DEFB of 1 bytes
-46FF:00		DEFB of 1 bytes
-4700:FC		DEFB of 1 bytes
-4701:80		DEFB of 1 bytes
-4702:80		DEFB of 1 bytes
-4703:FC		DEFB of 1 bytes
-4704:80		DEFB of 1 bytes
+46FE:88		DEFB of 1 bytes
+46FF:88		DEFB of 1 bytes
+4700:88		DEFB of 1 bytes
+4701:88		DEFB of 1 bytes
+4702:F0		DEFB of 1 bytes
+4703:00		DEFB of 1 bytes
+4704:FC		DEFB of 1 bytes
 4705:80		DEFB of 1 bytes
-4706:FC		DEFB of 1 bytes
-4707:00		DEFB of 1 bytes
-4708:FC		DEFB of 1 bytes
+4706:80		DEFB of 1 bytes
+4707:FC		DEFB of 1 bytes
+4708:80		DEFB of 1 bytes
 4709:80		DEFB of 1 bytes
-470A:80		DEFB of 1 bytes
-470B:FC		DEFB of 1 bytes
-470C:80		DEFB of 1 bytes
+470A:FC		DEFB of 1 bytes
+470B:00		DEFB of 1 bytes
+470C:FC		DEFB of 1 bytes
 470D:80		DEFB of 1 bytes
 470E:80		DEFB of 1 bytes
-470F:00		DEFB of 1 bytes
-4710:F8		DEFB of 1 bytes
-4711:84		DEFB of 1 bytes
+470F:FC		DEFB of 1 bytes
+4710:80		DEFB of 1 bytes
+4711:80		DEFB of 1 bytes
 4712:80		DEFB of 1 bytes
-4713:9C		DEFB of 1 bytes
-4714:84		DEFB of 1 bytes
+4713:00		DEFB of 1 bytes
+4714:F8		DEFB of 1 bytes
 4715:84		DEFB of 1 bytes
-4716:F8		DEFB of 1 bytes
-4717:00		DEFB of 1 bytes
+4716:80		DEFB of 1 bytes
+4717:9C		DEFB of 1 bytes
 4718:84		DEFB of 1 bytes
 4719:84		DEFB of 1 bytes
-471A:84		DEFB of 1 bytes
-471B:FC		DEFB of 1 bytes
+471A:F8		DEFB of 1 bytes
+471B:00		DEFB of 1 bytes
 471C:84		DEFB of 1 bytes
 471D:84		DEFB of 1 bytes
 471E:84		DEFB of 1 bytes
-471F:00		DEFB of 1 bytes
-4720:30		DEFB of 1 bytes
-4721:30		DEFB of 1 bytes
-4722:00		DEFB of 1 bytes
-4723:30		DEFB of 1 bytes
+471F:FC		DEFB of 1 bytes
+4720:84		DEFB of 1 bytes
+4721:84		DEFB of 1 bytes
+4722:84		DEFB of 1 bytes
+4723:00		DEFB of 1 bytes
 4724:30		DEFB of 1 bytes
 4725:30		DEFB of 1 bytes
-4726:30		DEFB of 1 bytes
-4727:00		DEFB of 1 bytes
-4728:04		DEFB of 1 bytes
-4729:04		DEFB of 1 bytes
-472A:04		DEFB of 1 bytes
-472B:04		DEFB of 1 bytes
-472C:84		DEFB of 1 bytes
-472D:84		DEFB of 1 bytes
-472E:78		DEFB of 1 bytes
-472F:00		DEFB of 1 bytes
-4730:82		DEFB of 1 bytes
+4726:00		DEFB of 1 bytes
+4727:30		DEFB of 1 bytes
+4728:30		DEFB of 1 bytes
+4729:30		DEFB of 1 bytes
+472A:30		DEFB of 1 bytes
+472B:00		DEFB of 1 bytes
+472C:04		DEFB of 1 bytes
+472D:04		DEFB of 1 bytes
+472E:04		DEFB of 1 bytes
+472F:04		DEFB of 1 bytes
+4730:84		DEFB of 1 bytes
 4731:84		DEFB of 1 bytes
-4732:B8		DEFB of 1 bytes
-4733:E0		DEFB of 1 bytes
-4734:B8		DEFB of 1 bytes
+4732:78		DEFB of 1 bytes
+4733:00		DEFB of 1 bytes
+4734:82		DEFB of 1 bytes
 4735:84		DEFB of 1 bytes
-4736:82		DEFB of 1 bytes
-4737:00		DEFB of 1 bytes
-4738:80		DEFB of 1 bytes
-4739:80		DEFB of 1 bytes
-473A:80		DEFB of 1 bytes
-473B:80		DEFB of 1 bytes
+4736:B8		DEFB of 1 bytes
+4737:E0		DEFB of 1 bytes
+4738:B8		DEFB of 1 bytes
+4739:84		DEFB of 1 bytes
+473A:82		DEFB of 1 bytes
+473B:00		DEFB of 1 bytes
 473C:80		DEFB of 1 bytes
 473D:80		DEFB of 1 bytes
-473E:FE		DEFB of 1 bytes
-473F:00		DEFB of 1 bytes
-4740:82		DEFB of 1 bytes
-4741:C6		DEFB of 1 bytes
-4742:AA		DEFB of 1 bytes
-4743:92		DEFB of 1 bytes
+473E:80		DEFB of 1 bytes
+473F:80		DEFB of 1 bytes
+4740:80		DEFB of 1 bytes
+4741:80		DEFB of 1 bytes
+4742:FE		DEFB of 1 bytes
+4743:00		DEFB of 1 bytes
 4744:82		DEFB of 1 bytes
-4745:82		DEFB of 1 bytes
-4746:82		DEFB of 1 bytes
-4747:00		DEFB of 1 bytes
+4745:C6		DEFB of 1 bytes
+4746:AA		DEFB of 1 bytes
+4747:92		DEFB of 1 bytes
 4748:82		DEFB of 1 bytes
-4749:C2		DEFB of 1 bytes
-474A:A2		DEFB of 1 bytes
-474B:92		DEFB of 1 bytes
-474C:8A		DEFB of 1 bytes
-474D:86		DEFB of 1 bytes
-474E:82		DEFB of 1 bytes
-474F:00		DEFB of 1 bytes
-4750:7C		DEFB of 1 bytes
-4751:82		DEFB of 1 bytes
+4749:82		DEFB of 1 bytes
+474A:82		DEFB of 1 bytes
+474B:00		DEFB of 1 bytes
+474C:82		DEFB of 1 bytes
+474D:C2		DEFB of 1 bytes
+474E:A2		DEFB of 1 bytes
+474F:92		DEFB of 1 bytes
+4750:8A		DEFB of 1 bytes
+4751:86		DEFB of 1 bytes
 4752:82		DEFB of 1 bytes
-4753:82		DEFB of 1 bytes
-4754:82		DEFB of 1 bytes
+4753:00		DEFB of 1 bytes
+4754:7C		DEFB of 1 bytes
 4755:82		DEFB of 1 bytes
-4756:7C		DEFB of 1 bytes
-4757:00		DEFB of 1 bytes
-4758:FC		DEFB of 1 bytes
+4756:82		DEFB of 1 bytes
+4757:82		DEFB of 1 bytes
+4758:82		DEFB of 1 bytes
 4759:82		DEFB of 1 bytes
-475A:82		DEFB of 1 bytes
-475B:FC		DEFB of 1 bytes
-475C:80		DEFB of 1 bytes
-475D:80		DEFB of 1 bytes
-475E:80		DEFB of 1 bytes
-475F:00		DEFB of 1 bytes
-4760:7C		DEFB of 1 bytes
-4761:82		DEFB of 1 bytes
-4762:82		DEFB of 1 bytes
-4763:82		DEFB of 1 bytes
-4764:82		DEFB of 1 bytes
-4765:7C		DEFB of 1 bytes
-4766:02		DEFB of 1 bytes
-4767:01		DEFB of 1 bytes
-4768:FC		DEFB of 1 bytes
-4769:82		DEFB of 1 bytes
-476A:82		DEFB of 1 bytes
-476B:FC		DEFB of 1 bytes
-476C:90		DEFB of 1 bytes
-476D:88		DEFB of 1 bytes
-476E:84		DEFB of 1 bytes
-476F:00		DEFB of 1 bytes
-4770:7C		DEFB of 1 bytes
-4771:80		DEFB of 1 bytes
-4772:60		DEFB of 1 bytes
-4773:98		DEFB of 1 bytes
-4774:04		DEFB of 1 bytes
-4775:02		DEFB of 1 bytes
-4776:FC		DEFB of 1 bytes
-4777:00		DEFB of 1 bytes
-4778:FE		DEFB of 1 bytes
-4779:10		DEFB of 1 bytes
-477A:10		DEFB of 1 bytes
-477B:10		DEFB of 1 bytes
-477C:10		DEFB of 1 bytes
+475A:7C		DEFB of 1 bytes
+475B:00		DEFB of 1 bytes
+475C:FC		DEFB of 1 bytes
+475D:82		DEFB of 1 bytes
+475E:82		DEFB of 1 bytes
+475F:FC		DEFB of 1 bytes
+4760:80		DEFB of 1 bytes
+4761:80		DEFB of 1 bytes
+4762:80		DEFB of 1 bytes
+4763:00		DEFB of 1 bytes
+4764:7C		DEFB of 1 bytes
+4765:82		DEFB of 1 bytes
+4766:82		DEFB of 1 bytes
+4767:82		DEFB of 1 bytes
+4768:82		DEFB of 1 bytes
+4769:7C		DEFB of 1 bytes
+476A:02		DEFB of 1 bytes
+476B:01		DEFB of 1 bytes
+476C:FC		DEFB of 1 bytes
+476D:82		DEFB of 1 bytes
+476E:82		DEFB of 1 bytes
+476F:FC		DEFB of 1 bytes
+4770:90		DEFB of 1 bytes
+4771:88		DEFB of 1 bytes
+4772:84		DEFB of 1 bytes
+4773:00		DEFB of 1 bytes
+4774:7C		DEFB of 1 bytes
+4775:80		DEFB of 1 bytes
+4776:60		DEFB of 1 bytes
+4777:98		DEFB of 1 bytes
+4778:04		DEFB of 1 bytes
+4779:02		DEFB of 1 bytes
+477A:FC		DEFB of 1 bytes
+477B:00		DEFB of 1 bytes
+477C:FE		DEFB of 1 bytes
 477D:10		DEFB of 1 bytes
 477E:10		DEFB of 1 bytes
-477F:00		DEFB of 1 bytes
-4780:00		DEFB of 1 bytes
-4781:82		DEFB of 1 bytes
-4782:82		DEFB of 1 bytes
-4783:82		DEFB of 1 bytes
-4784:82		DEFB of 1 bytes
+477F:10		DEFB of 1 bytes
+4780:10		DEFB of 1 bytes
+4781:10		DEFB of 1 bytes
+4782:10		DEFB of 1 bytes
+4783:00		DEFB of 1 bytes
+4784:00		DEFB of 1 bytes
 4785:82		DEFB of 1 bytes
-4786:7C		DEFB of 1 bytes
-4787:00		DEFB of 1 bytes
-4788:00		DEFB of 1 bytes
+4786:82		DEFB of 1 bytes
+4787:82		DEFB of 1 bytes
+4788:82		DEFB of 1 bytes
 4789:82		DEFB of 1 bytes
-478A:82		DEFB of 1 bytes
-478B:82		DEFB of 1 bytes
-478C:44		DEFB of 1 bytes
-478D:28		DEFB of 1 bytes
-478E:10		DEFB of 1 bytes
-478F:00		DEFB of 1 bytes
-4790:00		DEFB of 1 bytes
-4791:82		DEFB of 1 bytes
-4792:44		DEFB of 1 bytes
-4793:30		DEFB of 1 bytes
-4794:30		DEFB of 1 bytes
-4795:48		DEFB of 1 bytes
-4796:84		DEFB of 1 bytes
-4797:00		DEFB of 1 bytes
-4798:81		DEFB of 1 bytes
-4799:42		DEFB of 1 bytes
-479A:24		DEFB of 1 bytes
-479B:10		DEFB of 1 bytes
-479C:10		DEFB of 1 bytes
-479D:10		DEFB of 1 bytes
-479E:10		DEFB of 1 bytes
-479F:00		DEFB of 1 bytes
-47A0:FE		DEFB of 1 bytes
-47A1:04		DEFB of 1 bytes
-47A2:08		DEFB of 1 bytes
-47A3:10		DEFB of 1 bytes
-47A4:20		DEFB of 1 bytes
-47A5:40		DEFB of 1 bytes
-47A6:FE		DEFB of 1 bytes
-47A7:00		DEFB of 1 bytes
-47A8:00		DEFB of 1 bytes
-47A9:00		DEFB of 1 bytes
-47AA:00		DEFB of 1 bytes
+478A:7C		DEFB of 1 bytes
+478B:00		DEFB of 1 bytes
+478C:00		DEFB of 1 bytes
+478D:82		DEFB of 1 bytes
+478E:82		DEFB of 1 bytes
+478F:82		DEFB of 1 bytes
+4790:44		DEFB of 1 bytes
+4791:28		DEFB of 1 bytes
+4792:10		DEFB of 1 bytes
+4793:00		DEFB of 1 bytes
+4794:00		DEFB of 1 bytes
+4795:82		DEFB of 1 bytes
+4796:44		DEFB of 1 bytes
+4797:30		DEFB of 1 bytes
+4798:30		DEFB of 1 bytes
+4799:48		DEFB of 1 bytes
+479A:84		DEFB of 1 bytes
+479B:00		DEFB of 1 bytes
+479C:81		DEFB of 1 bytes
+479D:42		DEFB of 1 bytes
+479E:24		DEFB of 1 bytes
+479F:10		DEFB of 1 bytes
+47A0:10		DEFB of 1 bytes
+47A1:10		DEFB of 1 bytes
+47A2:10		DEFB of 1 bytes
+47A3:00		DEFB of 1 bytes
+47A4:FE		DEFB of 1 bytes
+47A5:04		DEFB of 1 bytes
+47A6:08		DEFB of 1 bytes
+47A7:10		DEFB of 1 bytes
+47A8:20		DEFB of 1 bytes
+47A9:40		DEFB of 1 bytes
+47AA:FE		DEFB of 1 bytes
 47AB:00		DEFB of 1 bytes
 47AC:00		DEFB of 1 bytes
 47AD:00		DEFB of 1 bytes
 47AE:00		DEFB of 1 bytes
 47AF:00		DEFB of 1 bytes
+47B0:00		DEFB of 1 bytes
+47B1:00		DEFB of 1 bytes
+47B2:00		DEFB of 1 bytes
+47B3:00		DEFB of 1 bytes
 		End of INCLUDE
 		INCLUDE Assets\Sprites.asm
-47B0:		label AlieSprites
-47B0:00		DEFB of 1 bytes
-47B1:03		DEFB of 1 bytes
-47B2:02		DEFB of 1 bytes
-47B3:06		DEFB of 1 bytes
-47B4:3C		DEFB of 1 bytes
-47B5:29		DEFB of 1 bytes
-47B6:23		DEFB of 1 bytes
-47B7:62		DEFB of 1 bytes
-47B8:C0		DEFB of 1 bytes
-47B9:81		DEFB of 1 bytes
-47BA:83		DEFB of 1 bytes
-47BB:E3		DEFB of 1 bytes
-47BC:33		DEFB of 1 bytes
-47BD:12		DEFB of 1 bytes
-47BE:1E		DEFB of 1 bytes
-47BF:00		DEFB of 1 bytes
-47C0:00		DEFB of 1 bytes
-47C1:C0		DEFB of 1 bytes
-47C2:40		DEFB of 1 bytes
-47C3:60		DEFB of 1 bytes
-47C4:3C		DEFB of 1 bytes
-47C5:94		DEFB of 1 bytes
-47C6:C4		DEFB of 1 bytes
-47C7:46		DEFB of 1 bytes
-47C8:03		DEFB of 1 bytes
-47C9:81		DEFB of 1 bytes
-47CA:C1		DEFB of 1 bytes
-47CB:C7		DEFB of 1 bytes
-47CC:CC		DEFB of 1 bytes
-47CD:48		DEFB of 1 bytes
-47CE:78		DEFB of 1 bytes
-47CF:00		DEFB of 1 bytes
-47D0:00		DEFB of 1 bytes
-47D1:00		DEFB of 1 bytes
-47D2:01		DEFB of 1 bytes
-47D3:01		DEFB of 1 bytes
-47D4:03		DEFB of 1 bytes
-47D5:16		DEFB of 1 bytes
-47D6:1C		DEFB of 1 bytes
-47D7:1D		DEFB of 1 bytes
-47D8:3F		DEFB of 1 bytes
-47D9:7E		DEFB of 1 bytes
-47DA:7C		DEFB of 1 bytes
-47DB:1C		DEFB of 1 bytes
-47DC:0C		DEFB of 1 bytes
-47DD:0C		DEFB of 1 bytes
-47DE:00		DEFB of 1 bytes
-47DF:00		DEFB of 1 bytes
-47E0:00		DEFB of 1 bytes
-47E1:00		DEFB of 1 bytes
-47E2:80		DEFB of 1 bytes
-47E3:80		DEFB of 1 bytes
-47E4:C0		DEFB of 1 bytes
-47E5:68		DEFB of 1 bytes
-47E6:38		DEFB of 1 bytes
-47E7:B8		DEFB of 1 bytes
-47E8:FC		DEFB of 1 bytes
-47E9:7E		DEFB of 1 bytes
-47EA:3E		DEFB of 1 bytes
-47EB:38		DEFB of 1 bytes
-47EC:30		DEFB of 1 bytes
-47ED:30		DEFB of 1 bytes
-47EE:00		DEFB of 1 bytes
-47EF:00		DEFB of 1 bytes
-47F0:00		DEFB of 1 bytes
-47F1:00		DEFB of 1 bytes
-47F2:04		DEFB of 1 bytes
-47F3:08		DEFB of 1 bytes
-47F4:10		DEFB of 1 bytes
-47F5:38		DEFB of 1 bytes
-47F6:7C		DEFB of 1 bytes
-47F7:00		DEFB of 1 bytes
+47B4:		label AlieSprites
+47B4:00		DEFB of 1 bytes
+47B5:03		DEFB of 1 bytes
+47B6:02		DEFB of 1 bytes
+47B7:06		DEFB of 1 bytes
+47B8:3C		DEFB of 1 bytes
+47B9:29		DEFB of 1 bytes
+47BA:23		DEFB of 1 bytes
+47BB:62		DEFB of 1 bytes
+47BC:C0		DEFB of 1 bytes
+47BD:81		DEFB of 1 bytes
+47BE:83		DEFB of 1 bytes
+47BF:E3		DEFB of 1 bytes
+47C0:33		DEFB of 1 bytes
+47C1:12		DEFB of 1 bytes
+47C2:1E		DEFB of 1 bytes
+47C3:00		DEFB of 1 bytes
+47C4:00		DEFB of 1 bytes
+47C5:C0		DEFB of 1 bytes
+47C6:40		DEFB of 1 bytes
+47C7:60		DEFB of 1 bytes
+47C8:3C		DEFB of 1 bytes
+47C9:94		DEFB of 1 bytes
+47CA:C4		DEFB of 1 bytes
+47CB:46		DEFB of 1 bytes
+47CC:03		DEFB of 1 bytes
+47CD:81		DEFB of 1 bytes
+47CE:C1		DEFB of 1 bytes
+47CF:C7		DEFB of 1 bytes
+47D0:CC		DEFB of 1 bytes
+47D1:48		DEFB of 1 bytes
+47D2:78		DEFB of 1 bytes
+47D3:00		DEFB of 1 bytes
+47D4:00		DEFB of 1 bytes
+47D5:00		DEFB of 1 bytes
+47D6:01		DEFB of 1 bytes
+47D7:01		DEFB of 1 bytes
+47D8:03		DEFB of 1 bytes
+47D9:16		DEFB of 1 bytes
+47DA:1C		DEFB of 1 bytes
+47DB:1D		DEFB of 1 bytes
+47DC:3F		DEFB of 1 bytes
+47DD:7E		DEFB of 1 bytes
+47DE:7C		DEFB of 1 bytes
+47DF:1C		DEFB of 1 bytes
+47E0:0C		DEFB of 1 bytes
+47E1:0C		DEFB of 1 bytes
+47E2:00		DEFB of 1 bytes
+47E3:00		DEFB of 1 bytes
+47E4:00		DEFB of 1 bytes
+47E5:00		DEFB of 1 bytes
+47E6:80		DEFB of 1 bytes
+47E7:80		DEFB of 1 bytes
+47E8:C0		DEFB of 1 bytes
+47E9:68		DEFB of 1 bytes
+47EA:38		DEFB of 1 bytes
+47EB:B8		DEFB of 1 bytes
+47EC:FC		DEFB of 1 bytes
+47ED:7E		DEFB of 1 bytes
+47EE:3E		DEFB of 1 bytes
+47EF:38		DEFB of 1 bytes
+47F0:30		DEFB of 1 bytes
+47F1:30		DEFB of 1 bytes
+47F2:00		DEFB of 1 bytes
+47F3:00		DEFB of 1 bytes
+47F4:00		DEFB of 1 bytes
+47F5:00		DEFB of 1 bytes
+47F6:04		DEFB of 1 bytes
+47F7:08		DEFB of 1 bytes
 47F8:10		DEFB of 1 bytes
-47F9:00		DEFB of 1 bytes
-47FA:00		DEFB of 1 bytes
+47F9:38		DEFB of 1 bytes
+47FA:7C		DEFB of 1 bytes
 47FB:00		DEFB of 1 bytes
-47FC:01		DEFB of 1 bytes
-47FD:01		DEFB of 1 bytes
-47FE:7F		DEFB of 1 bytes
-47FF:FF		DEFB of 1 bytes
-4800:00		DEFB of 1 bytes
-4801:00		DEFB of 1 bytes
-4802:02		DEFB of 1 bytes
-4803:04		DEFB of 1 bytes
-4804:08		DEFB of 1 bytes
-4805:1C		DEFB of 1 bytes
-4806:3E		DEFB of 1 bytes
-4807:00		DEFB of 1 bytes
+47FC:10		DEFB of 1 bytes
+47FD:00		DEFB of 1 bytes
+47FE:00		DEFB of 1 bytes
+47FF:00		DEFB of 1 bytes
+4800:01		DEFB of 1 bytes
+4801:01		DEFB of 1 bytes
+4802:7F		DEFB of 1 bytes
+4803:FF		DEFB of 1 bytes
+4804:00		DEFB of 1 bytes
+4805:00		DEFB of 1 bytes
+4806:02		DEFB of 1 bytes
+4807:04		DEFB of 1 bytes
 4808:08		DEFB of 1 bytes
-4809:00		DEFB of 1 bytes
-480A:00		DEFB of 1 bytes
+4809:1C		DEFB of 1 bytes
+480A:3E		DEFB of 1 bytes
 480B:00		DEFB of 1 bytes
-480C:80		DEFB of 1 bytes
-480D:80		DEFB of 1 bytes
-480E:FE		DEFB of 1 bytes
-480F:FF		DEFB of 1 bytes
-4810:00		DEFB of 1 bytes
-4811:00		DEFB of 1 bytes
-4812:00		DEFB of 1 bytes
-4813:00		DEFB of 1 bytes
+480C:08		DEFB of 1 bytes
+480D:00		DEFB of 1 bytes
+480E:00		DEFB of 1 bytes
+480F:00		DEFB of 1 bytes
+4810:80		DEFB of 1 bytes
+4811:80		DEFB of 1 bytes
+4812:FE		DEFB of 1 bytes
+4813:FF		DEFB of 1 bytes
 4814:00		DEFB of 1 bytes
 4815:00		DEFB of 1 bytes
 4816:00		DEFB of 1 bytes
-4817:7C		DEFB of 1 bytes
-4818:6D		DEFB of 1 bytes
-4819:7F		DEFB of 1 bytes
-481A:7F		DEFB of 1 bytes
-481B:7F		DEFB of 1 bytes
-481C:7E		DEFB of 1 bytes
-481D:7E		DEFB of 1 bytes
-481E:00		DEFB of 1 bytes
-481F:00		DEFB of 1 bytes
-4820:00		DEFB of 1 bytes
-4821:00		DEFB of 1 bytes
+4817:00		DEFB of 1 bytes
+4818:00		DEFB of 1 bytes
+4819:00		DEFB of 1 bytes
+481A:00		DEFB of 1 bytes
+481B:7C		DEFB of 1 bytes
+481C:6D		DEFB of 1 bytes
+481D:7F		DEFB of 1 bytes
+481E:7F		DEFB of 1 bytes
+481F:7F		DEFB of 1 bytes
+4820:7E		DEFB of 1 bytes
+4821:7E		DEFB of 1 bytes
 4822:00		DEFB of 1 bytes
 4823:00		DEFB of 1 bytes
 4824:00		DEFB of 1 bytes
 4825:00		DEFB of 1 bytes
 4826:00		DEFB of 1 bytes
-4827:3E		DEFB of 1 bytes
-4828:B6		DEFB of 1 bytes
-4829:FE		DEFB of 1 bytes
-482A:FE		DEFB of 1 bytes
-482B:FE		DEFB of 1 bytes
-482C:7E		DEFB of 1 bytes
-482D:7E		DEFB of 1 bytes
-482E:00		DEFB of 1 bytes
-482F:00		DEFB of 1 bytes
-4830:00		DEFB of 1 bytes
-4831:41		DEFB of 1 bytes
-4832:21		DEFB of 1 bytes
-4833:11		DEFB of 1 bytes
-4834:1B		DEFB of 1 bytes
-4835:0E		DEFB of 1 bytes
-4836:0E		DEFB of 1 bytes
-4837:0F		DEFB of 1 bytes
-4838:0E		DEFB of 1 bytes
-4839:06		DEFB of 1 bytes
-483A:03		DEFB of 1 bytes
-483B:01		DEFB of 1 bytes
-483C:00		DEFB of 1 bytes
-483D:00		DEFB of 1 bytes
-483E:00		DEFB of 1 bytes
-483F:00		DEFB of 1 bytes
+4827:00		DEFB of 1 bytes
+4828:00		DEFB of 1 bytes
+4829:00		DEFB of 1 bytes
+482A:00		DEFB of 1 bytes
+482B:3E		DEFB of 1 bytes
+482C:B6		DEFB of 1 bytes
+482D:FE		DEFB of 1 bytes
+482E:FE		DEFB of 1 bytes
+482F:FE		DEFB of 1 bytes
+4830:7E		DEFB of 1 bytes
+4831:7E		DEFB of 1 bytes
+4832:00		DEFB of 1 bytes
+4833:00		DEFB of 1 bytes
+4834:00		DEFB of 1 bytes
+4835:41		DEFB of 1 bytes
+4836:21		DEFB of 1 bytes
+4837:11		DEFB of 1 bytes
+4838:1B		DEFB of 1 bytes
+4839:0E		DEFB of 1 bytes
+483A:0E		DEFB of 1 bytes
+483B:0F		DEFB of 1 bytes
+483C:0E		DEFB of 1 bytes
+483D:06		DEFB of 1 bytes
+483E:03		DEFB of 1 bytes
+483F:01		DEFB of 1 bytes
 4840:00		DEFB of 1 bytes
-4841:04		DEFB of 1 bytes
-4842:08		DEFB of 1 bytes
-4843:10		DEFB of 1 bytes
-4844:B0		DEFB of 1 bytes
-4845:E0		DEFB of 1 bytes
-4846:E0		DEFB of 1 bytes
-4847:E0		DEFB of 1 bytes
-4848:E0		DEFB of 1 bytes
-4849:C0		DEFB of 1 bytes
-484A:80		DEFB of 1 bytes
-484B:00		DEFB of 1 bytes
-484C:00		DEFB of 1 bytes
-484D:00		DEFB of 1 bytes
-484E:00		DEFB of 1 bytes
+4841:00		DEFB of 1 bytes
+4842:00		DEFB of 1 bytes
+4843:00		DEFB of 1 bytes
+4844:00		DEFB of 1 bytes
+4845:04		DEFB of 1 bytes
+4846:08		DEFB of 1 bytes
+4847:10		DEFB of 1 bytes
+4848:B0		DEFB of 1 bytes
+4849:E0		DEFB of 1 bytes
+484A:E0		DEFB of 1 bytes
+484B:E0		DEFB of 1 bytes
+484C:E0		DEFB of 1 bytes
+484D:C0		DEFB of 1 bytes
+484E:80		DEFB of 1 bytes
 484F:00		DEFB of 1 bytes
 4850:00		DEFB of 1 bytes
 4851:00		DEFB of 1 bytes
@@ -1854,14 +1854,14 @@ PPICOMMAND	EQU 00AB
 4859:00		DEFB of 1 bytes
 485A:00		DEFB of 1 bytes
 485B:00		DEFB of 1 bytes
-485C:01		DEFB of 1 bytes
-485D:03		DEFB of 1 bytes
-485E:01		DEFB of 1 bytes
-485F:01		DEFB of 1 bytes
-4860:00		DEFB of 1 bytes
-4861:00		DEFB of 1 bytes
-4862:00		DEFB of 1 bytes
-4863:00		DEFB of 1 bytes
+485C:00		DEFB of 1 bytes
+485D:00		DEFB of 1 bytes
+485E:00		DEFB of 1 bytes
+485F:00		DEFB of 1 bytes
+4860:01		DEFB of 1 bytes
+4861:03		DEFB of 1 bytes
+4862:01		DEFB of 1 bytes
+4863:01		DEFB of 1 bytes
 4864:00		DEFB of 1 bytes
 4865:00		DEFB of 1 bytes
 4866:00		DEFB of 1 bytes
@@ -1869,17 +1869,20 @@ PPICOMMAND	EQU 00AB
 4868:00		DEFB of 1 bytes
 4869:00		DEFB of 1 bytes
 486A:00		DEFB of 1 bytes
-486B:80		DEFB of 1 bytes
-486C:C0		DEFB of 1 bytes
-486D:E0		DEFB of 1 bytes
-486E:C0		DEFB of 1 bytes
-486F:40		DEFB of 1 bytes
+486B:00		DEFB of 1 bytes
+486C:00		DEFB of 1 bytes
+486D:00		DEFB of 1 bytes
+486E:00		DEFB of 1 bytes
+486F:80		DEFB of 1 bytes
+4870:C0		DEFB of 1 bytes
+4871:E0		DEFB of 1 bytes
+4872:C0		DEFB of 1 bytes
+4873:40		DEFB of 1 bytes
 		End of INCLUDE
-4870:		label Cenario
+4874:		label Cenario
 		INCBIN Assets\CENARIO.SC2
-8077:		label romPad
-8077:00000000	DEFS of 16265 bytes with value 00
-807B:00000000
+807B:		label romPad
+807B:00000000	DEFS of 16261 bytes with value 00
 807F:00000000
 8083:00000000
 8087:00000000

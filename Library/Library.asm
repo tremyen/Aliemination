@@ -588,9 +588,13 @@ RemoverTorpedo:
 	inc a											; pego o proximo sprite
 	cp 32											; verifico se passou do ultimo sprite
 	jp z,RemoverUltimoDaFila	; como e o ultimo nao preciso reorganizar a fila
-	call ReadSprite						; le o proximo sprite para a RAM
-	dec a 										; posiciono no sprite que sera removido
-	call PutSprite						; coloco o proximo sprite na posicao atual
+	push bc										; alterado por ReadSprite, entao guardo
+	push de										; alterado por ReadSprite, entao guardo
+		call ReadSprite					; le o proximo sprite para a RAM
+		dec a 									; posiciono no sprite que sera removido
+		call PutSprite					; coloco o proximo sprite na posicao atual
+	pop de 										; retorno backup
+	pop bc 										; retorno backup
 	inc a											; vou de novo para o sprite superior
 	call RemoveSprite					; removo a copia da fila
 ret

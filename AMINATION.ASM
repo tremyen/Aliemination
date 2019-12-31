@@ -31,7 +31,7 @@ DesenharQuadro:
 	call MoverNave							; Atualiza coordenadas da nave
 	call ChecarColisao					; checa as colisoes
 	ld a,(NumVidaJogador)	  		; pega as vidas do jogador
-	cp 0
+	cp 0												; verifica se acabaram as vidas do jogador 
 	jr z,FimDoJogo							; se for zero o jogo acabou
 	ld a,(NumAliensMortos)			; pega os aliens mortos
 	cp 4												; se for 4 vai para a proxima semana
