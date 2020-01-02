@@ -30,27 +30,17 @@ DesenharQuadro:
 	call MoverAliens						; Atualiza coordenadas dos Aliens
 	call MoverNave							; Atualiza coordenadas da nave
 	call ChecarColisao					; checa as colisoes
-	ld a,(NumVidaJogador)	  		; pega as vidas do jogador
-	cp 0												; verifica se acabaram as vidas do jogador 
-	jr z,FimDoJogo							; se for zero o jogo acabou
-	ld a,(NumAliensMortos)			; pega os aliens mortos
-	cp 4												; se for 4 vai para a proxima semana
-	jr z,ProximoNivel						; proxima semana
 	xor a 											; zero A
-	ld hl,JIFFY									; carrego endereco do incremento do VPD
-	ld (hl),a										; zero o incremento do VDP
-	ld hl,vdpCycle1							; carrego 1/10s
-  ld b,(hl)										; carrego 1/10s em B
+	ld (JIFFY),a								; zero o incremento do VDP
+	ld a,(vdpCycle1)						; carrego 1/10s
+  ld b,a											; carrego 1/10s em b
   call PauseVDP               ; aguardo 1/10s
-	jr DesenharQuadro						; loop de desenho do frame
-ProximoNivel:
-	ld a,(NumVelAlien)					; pega a velocidade dos aliens
-	inc a												; aumenta em um
-	ld (NumVelAlien),a					; atualiza
-	jr gameLoop									; recomeca no novo nivel
+jr DesenharQuadro						  ; loop de desenho do frame
 FimDoJogo:
 	jr startCode								; recomeca o jogo
-
+; =============================================================================
+; FIM PROGRAMA
+; =============================================================================
 include "Inicializar.asm"
 include "TelaInicial.asm"
 include "GerarAliens.asm"
@@ -59,10 +49,6 @@ include "MoverTorpedos.asm"
 include "MoverAliens.asm"
 include "MoverNave.asm"
 include "ChecarColisao.asm"
-
-; =============================================================================
-; FIM PROGRAMA
-; =============================================================================
 include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Hardware\KEYBOARD.ASM"
@@ -70,10 +56,8 @@ include "Library\Library.asm"
 include "Assets\Strings.asm"
 include "Assets\Fonts.asm"
 include "Assets\Sprites.asm"
-
 Cenario:
 	incbin "Assets\CENARIO.SC2"
-
 ; =============================================================================
 ; Padding
 ; =============================================================================

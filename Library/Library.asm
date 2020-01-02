@@ -6,11 +6,13 @@
 ; =============================================================================
 
 ; =============================================================================
-; Limpar a tela
+; LimparTela
 ; =============================================================================
-; Nao tem parametros
+; Parametros
+; Nenhum
 ; =============================================================================
-; Altera => Nada
+; Altera
+; Nada
 ; =============================================================================
 LimparTela:
 	push af
@@ -47,6 +49,11 @@ LimpaMem:
 		ld (NumContColuna3),a
 		ld (NumContColuna4),a
 		ld (NumSorteios),a
+		ld (vdpCycle1),a
+		ld (vdpCycle5),a
+		ld (flgColisao),a
+		ld (NumCidades),a
+		ld (NumAlienColidiu),a
 	pop af
 ret
 ; =============================================================================
@@ -439,7 +446,7 @@ ret
 ;=============================================================================
 
 ; =============================================================================
-; Desenhar Cidade
+; DesenharCidade
 ; =============================================================================
 ; Parametros
 ; d => Coordenada Y da cidade
@@ -469,6 +476,67 @@ ret
 ;=============================================================================
 
 ; =============================================================================
+; RemoverCidade
+; =============================================================================
+; Parametros
+; A => Numero da cidade a ser destruida (1 a 4)
+; =============================================================================
+; Altera
+; Nada
+; =============================================================================
+RemoverCidade:
+	cp 1
+	jr z,Remove1
+	cp 2
+	jr z,Remove2
+	cp 3
+	jr z,Remove3
+	cp 4
+	jr z,Remove4
+ret
+
+Remove1:
+	ld a,2
+	call RemoveSprite
+	ld a,3
+	call RemoveSprite
+	ld a,(NumCidades)
+	dec a
+	ld (NumCidades),a
+ret
+
+Remove2:
+	ld a,3
+	call RemoveSprite
+	ld a,4
+	call RemoveSprite
+	ld a,(NumCidades)
+	dec a
+	ld (NumCidades),a
+ret
+
+Remove3:
+	ld a,5
+	call RemoveSprite
+	ld a,6
+	call RemoveSprite
+	ld a,(NumCidades)
+	dec a
+	ld (NumCidades),a
+ret
+
+Remove4:
+	ld a,7
+	call RemoveSprite
+	ld a,8
+	call RemoveSprite
+	ld a,(NumCidades)
+	dec a
+	ld (NumCidades),a
+ret
+;=============================================================================
+
+; =============================================================================
 ; Desenhar Alienigena
 ; =============================================================================
 ; Parametros
@@ -485,29 +553,6 @@ DesenharAlienigena:
 		  ;=============================
 		  ld b,16
 		  ld c,13
-		  call PutSprite
-		pop bc
-	pop af
-ret
-;==============================================================================
-
-; =============================================================================
-; Desenhar Torpedo
-; =============================================================================
-; Parametros
-; d => Coordenada Y
-; e => Coordenada X
-; =============================================================================
-; Altera => Nada
-; =============================================================================
-DesenharTorpedo:
-	push af
-		push bc
-		  ;=============================
-		  ; Coloca Sprite cor 8
-		  ;=============================
-		  ld b,20
-		  ld c,8
 		  call PutSprite
 		pop bc
 	pop af
@@ -562,45 +607,148 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; PauseVDP
-; =============================================================================
-; Parametros
-; B => Numero de ciclos de pausa
-; =============================================================================
-; Altera => A
-; =============================================================================
-PauseVDP:
-  ld a,(JIFFY)
-  cp b
-  ret z                         ; sai da rotina
-jr PauseVDP
-; =============================================================================
-
-; =============================================================================
 ; RemoverTorpedo
 ; =============================================================================
 ; Parametros
-; A => Numero do torpedo a ser removido (de 28 ate 31)
+; C => Numero do sprite do torpedo (28 a 31)
 ; =============================================================================
-; Altera => nada
+; Altera
+; NumTorpedos
 ; =============================================================================
 RemoverTorpedo:
-	inc a											; pego o proximo sprite
-	cp 32											; verifico se passou do ultimo sprite
-	jp z,RemoverUltimoDaFila	; como e o ultimo nao preciso reorganizar a fila
-	push bc										; alterado por ReadSprite, entao guardo
-	push de										; alterado por ReadSprite, entao guardo
-		call ReadSprite					; le o proximo sprite para a RAM
-		dec a 									; posiciono no sprite que sera removido
-		call PutSprite					; coloco o proximo sprite na posicao atual
-	pop de 										; retorno backup
-	pop bc 										; retorno backup
-	inc a											; vou de novo para o sprite superior
-	call RemoveSprite					; removo a copia da fila
+	push af
+		ld a,c
+		call RemoveSprite
+		ld a,(NumTorpedos)
+		dec a
+		ld (NumTorpedos),a
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; AdicionarTorpedo
+; =============================================================================
+; Parametros
+; Nada
+; =============================================================================
+; Altera
+; NumTorpedos
+; =============================================================================
+AdicionarTorpedo:
+  push af
+  push bc
+  push de
+    ld a,(NumTorpedos)      ; pegar numero de torpedos
+		cp 4                    ; Voce so pode ter 4 torpedos
+		jp z,JaEstaNoMaximo     ; se tiver 4, nao adiciona
+    inc a                   ; adicionamos um torpedo
+    ld (NumTorpedos),a      ; atualizamos a variavel NumTorpedos
+    ld b,a                  ; guarda NumTorpedos para uso futuro
+    ld a,(NumPosYNave)      ; pegar posicao y da nave
+    sub 16                  ; coordenada y = NumPosYNave-16
+    ld d,a                  ; Guarda a posicao y
+    ld a,(NumPosXNave)      ; pegar posicao x da nave
+    ld e,a                  ; Guarda a posicao X
+    ld a,b                  ; pegar o numero de torpedos
+    add a,27                ; Os Torpedos comecam na pos 28 (tblAtributos)
+    call DesenharTorpedo
+JaEstaNoMaximo:
+  pop de
+  pop bc
+  pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; Desenhar Torpedo
+; =============================================================================
+; Parametros
+; d => Coordenada Y
+; e => Coordenada X
+; =============================================================================
+; Altera => Nada
+; =============================================================================
+DesenharTorpedo:
+	push bc
+	  ;==================================
+	  ; Coloca Sprite pattern 20 na cor 8
+	  ;==================================
+	  ld b,20
+	  ld c,8
+	  call PutSprite
+	pop bc
+ret
+;==============================================================================
+
+; =============================================================================
+; ChecarAlienXY
+; =============================================================================
+; Parametros
+; h => Coordenada Y
+; l => Coordenada X
+; =============================================================================
+; Altera
+; A => Se existe um alien nessa posicao, retorna 1, se nao existe retorna 0
+; =============================================================================
+ChecarAlienXY:
+	xor a										; zera acumulador
+	ld (flgColisao),a				; zera o flag de colisao
+  ld a,(NumAliens)      	; pega o numero de Aliens
+	cp 0 										; se nao tem aliens
+	jp z,ChecouTodos				; nao tem colisao
+  add a,9                	; os aliens comecam no sprite 10
+  ld b,a                	; carrega controle do loop
+  ld a,10               	; os aliens comecam no sprite 10
+loopAlienPosicao:
+	ld (NumAlienColidiu),a 	; Quarda o numero do alien que estamos testando
+	push af 								; backup
+    call ReadSprite       ; le o sprite do alien (D=Y, E=X)
+  	ld a,h  							; pega y
+  	cp d                  ; compara com y do alien
+  	call z,AlienPosYOK    ; seta o flag de colisao X
+  	ld a,l							  ; pega X
+  	cp e                  ; compara com x do alien
+  	call z,AlienPosXOK 		; seta o flag de colisao X
+		ld a,(flgColisao)			; pega o resultado das colisoes
+		cp %00000011					; se esta no x-y mata o alien e retorna 1
+		jp z,Colidiu					; COLISAO
+	pop af
+	cp b                  	; verifica se foram todos os aliens
+  jp z,ChecouTodos       	; checamos todos os aliens
+  inc a                 	; proximo alien
+jr loopAlienPosicao
+
+ChecouTodos:
+	ld a,0									; retorna o status de nao houve colisao
 ret
 
-RemoverUltimoDaFila:
-	ld a,31										; posiciono no ultimo torpedo
-	call RemoveSprite					; removo da fila
+Colidiu:
+	pop af									; Retorna AF
+	ld a,(NumAlienColidiu)	; Prepara a remocao do alien
+	call RemoveSprite				; Remove o alien
+	ld a,(NumAliensMortos)	; pega contador de aliens mortos
+	inc a 									; Incrementa o contador de aliens mortos
+	ld (NumAliensMortos),a	; atualiza contador de aliens mortos
+	ld a,(NumAliens) 				; pega contador de aliens
+	dec a 									; decrementa o contador de aliens
+	ld (NumAliens),a 				; atualiza contador de aliens
+	ld a,1									; retorna o status de houve colisao
+ret
+
+AlienPosXOK:
+  push af
+    ld a,(flgColisao)
+    set 0,a
+    ld (flgColisao),a
+  pop af
+ret
+
+AlienPosYOK:
+  push af
+    ld a,(flgColisao)
+    set 1,a
+    ld (flgColisao),a
+  pop af
 ret
 ; =============================================================================

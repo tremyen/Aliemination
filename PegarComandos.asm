@@ -21,7 +21,7 @@ PegarComandos:
   ld a,8                    ; le a linha 8 para ver se as setas estao ligadas
   call Keyboard             ; carrega linha 8 no acumulador
   bit 0,a                   ; Se 0, adiciona um torpedo na posx da nave
-  call z,AdicionaTorpedo
+  call z,AdicionarTorpedo
   bit 4,a                   ; Se 4 foi ligado, Esquerda
   call z,Esquerda
   bit 5,a                   ; Se 5 foi ligado, Subir
@@ -30,33 +30,6 @@ PegarComandos:
   call z,Descer
   bit 7,a                   ; Se 7 foi ligado, Direita
   call z,Direita
-ret
-
-AdicionaTorpedo:
-  push af
-  push bc
-  push de
-    ld hl,NumTorpedos       ; pegar endereco do NumTorpedos
-    ld a,(hl)               ; pegar conteudo do endereco
-    inc a                   ; adicionamos um torpedo
-    ld (hl),a               ; atualizamos a variavel NumTorpedos
-    ld b,a                  ; guarda NumTorpedos para uso futuro
-    cp 5                    ; Voce so pode ter 4 torpedos
-    jp nc,JaEstaNoMaximo    ; se tiver mais de 4, nao adiciona
-    ld hl,NumPosYNave       ; pegar endereco da NumPosYNave
-    ld a,(hl)               ; pegar conteudo do endereco
-    sub 16                  ; coordenada y = NumPosYNave-16
-    ld d,a                  ; Guarda a posicao y
-    ld hl,NumPosXNave       ; pegar endereco da NumPosXNave
-    ld a,(hl)               ; pegar conteudo do endereco
-    ld e,a                  ; Guarda a posicao X
-    ld a,b                  ; pegar o numero de torpedos
-    add a,27                ; Os Torpedos comecam na pos 28 (tblAtributos)
-    call DesenharTorpedo
-JaEstaNoMaximo:
-  pop de
-  pop bc
-  pop af
 ret
 
 Direita:
@@ -81,7 +54,7 @@ Subir:
     ld d,a                    ; no registrador d
     ld hl,NumPosYNave         ; pega posicao y da nave
     ld a,(hl)                 ; prepara o acumulador para a conta
-    cp 16                     ; A nave nao pode sair da tela
+    cp 70                     ; A nave nao pode sair da tela
     jp c,PosMaximaSub         ; na posicao maxima, nao se move mais
     sub d                     ; tira a velocidade da coordenada y
     ld (hl),a                 ; guarda a posicao da nave

@@ -40,6 +40,7 @@ noPalAdjust:
   ld (NumVidaJogador),a       ; Carrega a vida do jogador
   ld a,4
   ld (NumVelNave),a           ; Carrega a velocidade da nave
+  ld (NumCidades),a           ; Carrega o numero de cidades 
   ld a,1                      ; Prepara a velocidade dos aliens
   ld (NumVelAlien),a          ; Carrega a velocidade do Alien
   xor a                       ; Zera A
@@ -50,5 +51,7 @@ noPalAdjust:
   ld (NumContColuna2),a       ; zera os inimigos na coluna 2
   ld (NumContColuna3),a       ; zera os inimigos na coluna 3
   ld (NumContColuna4),a       ; zera os inimigos na coluna 4
+  ld (flgColisao),a           ; zera os flags de colisao
+  ld (NumAlienColidiu),a      ; zera os indicador de alien colidido
   ; ===========================================================================
 ret
