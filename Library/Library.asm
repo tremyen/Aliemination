@@ -6,6 +6,22 @@
 ; =============================================================================
 
 ; =============================================================================
+; The flag register has the following structure
+; =============================================================================
+; Bit		7		6		5		4		3		2		1		0
+; Flag	S		Z		F5	H		F3	P/V	N		C
+; =============================================================================
+;	S 	- Sign flag
+; Z 	- Zero flag
+; F5 	- undocumented flag
+; H 	- Half Carry
+; F3 	- undocumented flag
+; P/V - Parity or Overflow
+; N 	- Subtract
+; C 	- Carry
+; =============================================================================
+
+; =============================================================================
 ; LimparTela
 ; =============================================================================
 ; Parametros
@@ -703,16 +719,14 @@ ChecarAlienXY:
 loopAlienPosicao:
 	ld (NumAlienColidiu),a 	; Quarda o numero do alien que estamos testando
 	push af 								; backup
+	push bc
     call ReadSprite       ; le o sprite do alien (D=Y, E=X)
-  	ld a,h  							; pega y
-  	cp d                  ; compara com y do alien
-  	call z,AlienPosYOK    ; seta o flag de colisao X
-  	ld a,l							  ; pega X
-  	cp e                  ; compara com x do alien
-  	call z,AlienPosXOK 		; seta o flag de colisao X
+  	call AlienPosYOK    	; seta o flag de colisao y
+  	call AlienPosXOK 			; seta o flag de colisao X
 		ld a,(flgColisao)			; pega o resultado das colisoes
-		cp %00000011					; se esta no x-y mata o alien e retorna 1
-		jp z,Colidiu					; COLISAO
+		cp 1									; se esta no x-y mata o alien e retorna 1
+		call z,Colidiu				; COLISAO
+	pop bc
 	pop af
 	cp b                  	; verifica se foram todos os aliens
   jp z,ChecouTodos       	; checamos todos os aliens
@@ -720,11 +734,10 @@ loopAlienPosicao:
 jr loopAlienPosicao
 
 ChecouTodos:
-	ld a,0									; retorna o status de nao houve colisao
+	ld a,(flgColisao)				; retorna o status de colisao
 ret
 
 Colidiu:
-	pop af									; Retorna AF
 	ld a,(NumAlienColidiu)	; Prepara a remocao do alien
 	call RemoveSprite				; Remove o alien
 	ld a,(NumAliensMortos)	; pega contador de aliens mortos
@@ -733,22 +746,76 @@ Colidiu:
 	ld a,(NumAliens) 				; pega contador de aliens
 	dec a 									; decrementa o contador de aliens
 	ld (NumAliens),a 				; atualiza contador de aliens
-	ld a,1									; retorna o status de houve colisao
-ret
-
-AlienPosXOK:
-  push af
-    ld a,(flgColisao)
-    set 0,a
-    ld (flgColisao),a
-  pop af
 ret
 
 AlienPosYOK:
-  push af
-    ld a,(flgColisao)
-    set 1,a
+	push af 									; BKP
+	push bc										; BKP
+		ld a,(NumPosXNave)			; pega posicao da nave
+		ld c,a									; pega a poscicao da nave
+		ld a,h									; pega o parametro y
+		add a,6									; soma 6 para o limite da hitbox
+		ld b,a									; guarda o limite da hitbox
+		ld a,h									; pega o parametro y
+		sub 5										; diminui 5 para o inicio da hitbox
+loopHitboxY:
+		cp c										; verifica se a posicao da nave esta na hitbox
+		call z,SetaFlagColisao	; se sim, houve colisao no eixo y
+		inc a										; Incrementa o loop
+		cp b										; verifica se chegamos ao fim do loop
+		jp z,FimHitboxY					; se sim saimos
+		jp loopHitboxY					; senao pegamos o proximo
+FimHitboxY:
+	pop bc										; volta bkp
+	pop af										; volta bkp
+ret
+
+AlienPosXOK:
+	push af
+	push bc
+		ld a,(NumPosXNave)			; pega posicao da nave
+		ld c,a									; pega a poscicao da nave
+		ld a,l									; pega o parametro x
+		add a,6									; soma 6 para o limite da hitbox
+		ld b,a									; guarda o limite da hitbox
+		ld a,l									; pega o parametro x
+		sub 5										; diminui 5 para o inicio da hitbox
+loopHitboxX:
+		cp c
+		call z,SetaFlagColisao
+		inc a
+		cp b
+		jp z,FimHitboxX
+		jp loopHitboxX
+FimHitboxX:
+	pop bc
+	pop af
+ret
+
+SetaFlagColisao:
+	push af
+		ld a,1
     ld (flgColisao),a
-  pop af
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; CheckVdpColision
+; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; A => Se houve uma colisao 1, senao 0
+; =============================================================================
+CheckVdpColision:
+	call ReadVDPStatus
+	bit 5,a
+	jp z,SemColisao
+	ld a,1
+	ret
+SemColisao:
+	ld a,0
 ret
 ; =============================================================================

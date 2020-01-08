@@ -5,11 +5,11 @@
 ; Testa as colisoes dos sprites na tela
 ; =============================================================================
 ChecarColisao:
-  call ReadStatus       ; verifica se houve alguma colisao de sprites
-  bit 5,a               ; posicao no status do vdp para colisao
-  jp nz,FimColisoes     ; nao houve colisao, terminar
+  call CheckVdpColision ; checar se o vdp detectou uma colisao de sprites
+  cp 0                  ; se nao rolou uma batida
+  jp z,FimColisoes      ; nao houve colisao, terminar
   ; ===============================================================
-  ; Checar Nave
+  ; Checar se Nave colidiu
   ; ===============================================================
   ld a,(NumPosYNave)
   ld h,a
@@ -19,7 +19,7 @@ ChecarColisao:
   cp 1
   jp z,RecomecaNivel      ; a nave foi atingida! fim do jogo
   ; ===============================================================
-  ; Checar Cidade
+  ; Checar se Cidade colidiu
   ; ===============================================================
   ld a,(PosYCidade1)
   ld h,a
@@ -27,8 +27,7 @@ ChecarColisao:
   ld l,a
   call ChecarAlienXY
   cp 1
-  jp z,DestroiCidade1     ; A cidade 1 foi destruida!
-
+  jp z,DestroiCidade1    ; A cidade 1 foi destruida!
 FimColisoes:
 ret
 
@@ -45,6 +44,9 @@ RecomecaNivel:
 ret
 ; ============================================================================
 
+; ============================================================================
+; Destruir Cidade
+; ============================================================================
 DestroiCidade1:
   ld a,1
   call RemoverCidade

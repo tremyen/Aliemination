@@ -4,6 +4,23 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; Biblioteca para uso do VDP do MSX 1
 ; =============================================================================
+; The VDP has 8 control registers (0-7) and one status register.
+;
+; Control Registers
+; Reg/Bit		7			6			5			4			3			2			1			0
+; 0					-			-			-			-			-			-			M2		EXTVID
+; 1					4/16K	BL		GINT	M1		M3		-			SI		MAG
+; 2					-			-			-			-			PN13	PN12	PN11	PN10
+; 3					CT13	CT12	CT11	CT10	CT9		CT8		CT7		CT6
+; 4					-			-			-			-			-			PG13	PG12	PG11
+; 5					-			SA13	SA12	SA11	SA10	SA9		SA8		SA7
+; 6					-			-			-			-			-			SG13	SG12	SG11
+; 7					TC3		TC2		TC1		TC0		BD3		BD2		BD1		BD0
+;
+; Status Register
+;	7		6		5		4		3		2		1		0
+;	INT	5S	C		FS4	FS3	FS2	FS1	FS0
+; =============================================================================
 
 ; =============================================================================
 ; MODOS DE OPERACAO DO VDP
@@ -424,17 +441,27 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; ReadStatus
+; ReadVDPStatus
 ; =============================================================================
 ; Pegar o contedo do registrador de STATUS do VDP
 ; =============================================================================
+; Status Register #0
+; 7				F		Vertical scan interrupt flag
+; 6				5S	Flag do quinto sprite (SCREEN 1 and 2)
+; 5				C		Flag de colisao
+; 4 to 0	5SN	Number of the 5th sprite (SCREEN 1 and 2)
+;
+; * 5,6 e 7 sao resetados quando o registrador e lido ou o VDP Resetado
+; * O registrador deve ser lido apenas quando o VDP interrupt esta pendente
+; =============================================================================
+; Parametros
 ; Nenhum
 ; =============================================================================
 ; Altera
 ; A => Status do VDP
 ; =============================================================================
-ReadStatus:
-	call RDVDP	
+ReadVDPStatus:
+	ld a,(STATFL)         ; le os flags de status do VDP				
 ret
 ; =============================================================================
 
