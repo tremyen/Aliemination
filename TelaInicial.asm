@@ -5,13 +5,12 @@
 ; =============================================================================
 TelaInicial:
   call DISSCR
-    call LimparTela
     ;===========================
     ; Desenhar o cenario
     ;===========================
     ld de,0                     ; Base da memoria da VRAM
     ld hl,Cenario+7             ; os primeiros 7 bytes sao cabecalho
-    ld bc,15360                 ; tamanho da BMP
+    ld bc,16377                 ; tamanho da BMP
     call LDIRVM                 ; copio para a VRAM
     ;===========================
     ; CARREGA AS TABELAS DO VDP

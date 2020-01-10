@@ -7,6 +7,7 @@
 ; The VDP has 8 control registers (0-7) and one status register.
 ;
 ; Control Registers
+; -----------------
 ; Reg/Bit		7			6			5			4			3			2			1			0
 ; 0					-			-			-			-			-			-			M2		EXTVID
 ; 1					4/16K	BL		GINT	M1		M3		-			SI		MAG
@@ -18,6 +19,7 @@
 ; 7					TC3		TC2		TC1		TC0		BD3		BD2		BD1		BD0
 ;
 ; Status Register
+; ---------------
 ;	7		6		5		4		3		2		1		0
 ;	INT	5S	C		FS4	FS3	FS2	FS1	FS0
 ; =============================================================================
@@ -249,21 +251,21 @@ ret
 ; Zera o sprite na tabela de atributos
 ; =============================================================================
 RemoveSprite:
-			push hl
-			push af
-				push de								; salvo o valor de DE pq CALATR o altera
-					call CALATR					; pega o endereco do sprite na TBL de atributos
-				pop de								; retorno DE
-				xor a 								; zero o acumulador
-				call WRTVRM						; zero a posicao Y
-				inc hl								; proximo endereco
-				call WRTVRM						; zero a posicao X
-				inc hl								; proximo endereco
-				call WRTVRM						; zero o numero na tabela de padroes
-				inc hl								; proximo endereco
-				call WRTVRM						; zero Early / Color
-			pop af
-			pop hl
+	push hl
+	push af
+		push de								; salvo o valor de DE pq CALATR o altera
+			call CALATR					; pega o endereco do sprite na TBL de atributos
+		pop de								; retorno DE
+		xor a 								; zero o acumulador
+		call WRTVRM						; zero a posicao Y
+		inc hl								; proximo endereco
+		call WRTVRM						; zero a posicao X
+		inc hl								; proximo endereco
+		call WRTVRM						; zero o numero na tabela de padroes
+		inc hl								; proximo endereco
+		call WRTVRM						; zero Early / Color
+	pop af
+	pop hl
 ret
 
 ; =============================================================================
@@ -461,7 +463,7 @@ ret
 ; A => Status do VDP
 ; =============================================================================
 ReadVDPStatus:
-	ld a,(STATFL)         ; le os flags de status do VDP				
+	ld a,(STATFL)         ; le os flags de status do VDP
 ret
 ; =============================================================================
 
@@ -474,8 +476,8 @@ ret
 ; Altera => A
 ; =============================================================================
 PauseVDP:
-  ld a,(JIFFY)
-  cp b
+  ld a,(JIFFY)									; pega o contador de ciclos
+  cp b													; compara com o padrao 
   ret z                         ; sai da rotina
 jr PauseVDP
 ; =============================================================================

@@ -15,7 +15,6 @@ org romArea
  	dw startCode                ; endereço de execução
  	db "AM01"                   ; string de identificação
  	ds 6,0
-
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
@@ -23,13 +22,21 @@ startCode:
   call Inicializar            ; Inicializar o ambiente do jogo
   call TelaInicial            ; tela de inicio do jogo
 gameLoop:
+	ld a,(NumVidaJogador)				; Pega as vidas do jogador
+	cp 0 												; se nao tem mais vidas
+	jp z,FimDoJogo							; finaliza o jogo
+	ld a,(NumCidades)						; Pega o numero de cidades
+	cp 0 												; se nao tem mais cidades
+	jp z,FimDoJogo							; finaliza o jogo
 	call GerarAliens						; sorteia os aliens de acordo com a semana
 DesenharQuadro:
-	call PegarComandos					; pega a entrada de teclado do jogador
-	call MoverTorpedos					; Atualiza coordenadas dos torpedos
-	call MoverAliens						; Atualiza coordenadas dos Aliens
-	call MoverNave							; Atualiza coordenadas da nave
-	call ChecarColisao					; checa as colisoes
+	call DISSCR
+		call PegarComandos					; pega a entrada de teclado do jogador
+		call MoverTorpedos					; Atualiza coordenadas dos torpedos
+		call MoverAliens						; Atualiza coordenadas dos Aliens
+		call MoverNave							; Atualiza coordenadas da nave
+		call ChecarColisao					; checa as colisoes
+	call ENASCR
 	xor a 											; zero A
 	ld (JIFFY),a								; zero o incremento do VDP
 	ld a,(vdpCycle1)						; carrego 1/10s

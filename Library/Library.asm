@@ -6,22 +6,6 @@
 ; =============================================================================
 
 ; =============================================================================
-; The flag register has the following structure
-; =============================================================================
-; Bit		7		6		5		4		3		2		1		0
-; Flag	S		Z		F5	H		F3	P/V	N		C
-; =============================================================================
-;	S 	- Sign flag
-; Z 	- Zero flag
-; F5 	- undocumented flag
-; H 	- Half Carry
-; F3 	- undocumented flag
-; P/V - Parity or Overflow
-; N 	- Subtract
-; C 	- Carry
-; =============================================================================
-
-; =============================================================================
 ; LimparTela
 ; =============================================================================
 ; Parametros
@@ -70,106 +54,7 @@ LimpaMem:
 		ld (flgColisao),a
 		ld (NumCidades),a
 		ld (NumAlienColidiu),a
-	pop af
-ret
-; =============================================================================
-
-; =============================================================================
-; Limpa uma string terminada em ENTER(13)
-; =============================================================================
-; HL => Endereco da string
-; =============================================================================
-; Altera => A, HL
-; =============================================================================
-LimpaString:
-	ld b,0
-LoopLimpaString:
-	ld a,32
-	ld (hl),a
-	ld a,b
-	cp 13
-	jp z,LimpouString
-	inc hl
-	inc b
-	jp LoopLimpaString
-LimpouString:
-	inc hl
-	ld a,13
-	ld (hl),a
-ret
-; =============================================================================
-
-; =============================================================================
-; Imprime uma Nova linha
-; =============================================================================
-; Nao usa parametros
-; =============================================================================
-; Altera => Nada
-; =============================================================================
-NovaLinha:
-	push af
-		ld a, 13
-		call CHPUT
-		ld a, 10
-		call CHPUT
-	pop af
-ret
-; =============================================================================
-
-; =============================================================================
-; Imprime uma string terminada em ENTER(13)
-; =============================================================================
-; HL => Endereco da string
-; =============================================================================
-; Altera => A,HL
-; =============================================================================
-PrintString:
-	ld a,(hl)
-	cp 13
-	jp z,EndString
-	call CHPUT
-	inc hl
-	jp PrintString
-EndString:
-ret
-; =============================================================================
-
-; =============================================================================
-; Zerar uma Matriz terminada em 255
-; =============================================================================
-; HL => Endereco da Matriz
-; =============================================================================
-; ALTERA => A,HL
-; =============================================================================
-ZerarMatriz:
-	ld b,0
-LoopZerarMatriz:
-	ld a,255
-	ld (hl),a
-	ld a,b
-	cp 13
-	jp z,ZerouMatriz
-	inc hl
-	inc b
-	jp LoopZerarMatriz
-ZerouMatriz:
-	inc hl
-	ld a,255
-	ld (hl),a
-ret
-; =============================================================================
-
-; =============================================================================
-; Imprimir um espaco
-; =============================================================================
-; Nao usa parametros
-; =============================================================================
-; ALTERA => nada
-; =============================================================================
-ImprimeEspaco:
-	push af
-		ld a, ' '
-		call CHPUT
+		ld (NumVelTorpedo),a
 	pop af
 ret
 ; =============================================================================
@@ -302,7 +187,6 @@ ProximaCentena:
 	jr c,ContarDezenas
 	inc (hl)
 jr ProximaCentena
-
 ContarDezenas:
 	add a,d
 	ld d,&0a
@@ -312,12 +196,10 @@ ProximaDezena:
 	jr c,ContaUnidades
 	inc (hl)
 jr ProximaDezena
-
 ContaUnidades:
 	add a,d
 	ld (NumUnidades),a
 	ld d,0
-
 ImprimeCentenas:
 	ld a,(NumCentenas)
 	cp 0
@@ -339,26 +221,6 @@ ImprimeUnidades:
 	add a,&30
 	call CHPUT
 ret
-; =============================================================================
-
-; =============================================================================
-; Limpar uma linha em modo INIT32
-; =============================================================================
-; A => Numero da linha (entre 1 e 24)
-; =============================================================================
-; Altera => Nada
-; =============================================================================
-LimparLinha:
-	push hl
-		ld h,1
-		ld l,a
-		call POSIT
-		ld hl,LinhaLimpa
-		call PrintString
-	pop hl
-ret
-LinhaLimpa:
-	db "                                ",13
 ; =============================================================================
 
 ; =============================================================================
@@ -407,26 +269,6 @@ DvPIdeal:
 			ld a,d								; Retorna o numero aleatorio
 		pop de
 	pop bc
-ret
-; =============================================================================
-
-; =============================================================================
-; Limpar um espaco de memoria
-; =============================================================================
-; HL => Inicio da memoria
-; A	 => bytes a limpar
-; =============================================================================
-; Altera => A, Todos os bytes a partir de HL ate HL+D
-; =============================================================================
-CleanBytes:
-	ld a,d
-CleanByteAgain:
-	ld (hl),32
-	cp 0
-	jr z,CleanedBytes
-	dec a
-	jp CleanByteAgain
-CleanedBytes:
 ret
 ; =============================================================================
 
@@ -512,45 +354,201 @@ RemoverCidade:
 ret
 
 Remove1:
-	ld a,2
-	call RemoveSprite
-	ld a,3
-	call RemoveSprite
-	ld a,(NumCidades)
-	dec a
-	ld (NumCidades),a
+	push af
+		ld a,2
+		call RemoveSprite
+		ld a,3
+		call RemoveSprite
+		ld a,(NumCidades)
+		dec a
+		ld (NumCidades),a
+	pop af
 ret
 
 Remove2:
-	ld a,3
-	call RemoveSprite
-	ld a,4
-	call RemoveSprite
-	ld a,(NumCidades)
-	dec a
-	ld (NumCidades),a
+	push af
+		ld a,4
+		call RemoveSprite
+		ld a,5
+		call RemoveSprite
+		ld a,(NumCidades)
+		dec a
+		ld (NumCidades),a
+	pop af
 ret
 
 Remove3:
-	ld a,5
-	call RemoveSprite
-	ld a,6
-	call RemoveSprite
-	ld a,(NumCidades)
-	dec a
-	ld (NumCidades),a
+	push af
+		ld a,6
+		call RemoveSprite
+		ld a,7
+		call RemoveSprite
+		ld a,(NumCidades)
+		dec a
+		ld (NumCidades),a
+	pop af
 ret
 
 Remove4:
-	ld a,7
-	call RemoveSprite
-	ld a,8
-	call RemoveSprite
-	ld a,(NumCidades)
-	dec a
-	ld (NumCidades),a
+	push af
+		ld a,8
+		call RemoveSprite
+		ld a,9
+		call RemoveSprite
+		ld a,(NumCidades)
+		dec a
+		ld (NumCidades),a
+	pop af
 ret
 ;=============================================================================
+
+; =============================================================================
+; AdicionarAlien
+; =============================================================================
+; Parametros
+; A => Coluna onde entra o ALien (entre 0 e 3)
+; =============================================================================
+; Altera
+; Adiciona um alien na pilha de aliens
+; =============================================================================
+AdicionarAlien:
+	cp 0
+	jp z,Coluna0
+	cp 1
+	jp z,Coluna1
+	cp 2
+	jp z,Coluna2
+	cp 3
+	jp z,Coluna3
+ret
+
+Coluna0:
+	;===================================
+	; Atualiza num de inimigos
+	;===================================
+	ld a,(NumAliens)            ; pegamos o numero de aliens
+	inc a                       ; adicinamos mais um
+	ld (NumAliens),a            ; atualizamos
+  ;===================================
+  ; Atualiza num de inimigos na coluna
+  ;===================================
+  ld a,(NumContColuna1)       ; pegamos o numero de inimigos na coluna
+  inc a                       ; adicionamos mais um
+  ld (NumContColuna1),a       ; atualizamos
+  ;===================================
+  ; Desenhar Alien na coluna 0
+  ;===================================
+  ld a,(NumContColuna1)       ; pegamos o numero de inimigos na coluna
+  ld b,16                     ; preparamos o multiplicando (comp do sprite)
+  call Multiply               ; Multiplicams por 16
+  ld d,a                      ; posicao y = num na coluna x comp do sprite
+  ld e,10                     ; posicao x = fixa
+  ld a,(NumAliens)            ; a posicao na tabela de atributos
+  add a,9                     ; e igual a seu numero +9
+  call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
+ret
+
+Coluna1:
+	;===================================
+	; Atualiza num de aliens
+	;===================================
+	ld a,(NumAliens)           	; pegamos o numero de sprites na tela
+	inc a                       ; adicinamos mais um
+	ld (NumAliens),a           	; atualizamos
+	;===================================
+  ; Atualiza num de inimigos na coluna
+  ;===================================
+  ld a,(NumContColuna2)       ; pegamos o numero de inimigos na coluna
+  inc a                       ; adicionamos mais um
+  ld (NumContColuna2),a       ; atualizamos
+	;===================================
+	; Desenhar Alien na coluna 1
+	;===================================
+	ld a,(NumContColuna2)       ; pegamos o numero de inimigos na coluna
+	ld b,16                     ; preparamos o multiplicando (comp do sprite)
+	call Multiply               ; Multiplicar o contador de inimigos por 16
+	add a,16                    ; As cidades mais baixas os aliens saem na frente
+	ld d,a                      ; posicao y = num na coluna x comp do sprite
+	ld e,40                     ; posicao x
+	ld a,(NumAliens)            ; a posicao na tabela de atributos
+	add a,9                     ; e igual a seu numero +9
+	call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
+ret
+
+Coluna2:
+	;===================================
+	; Atualiza num de aliens
+	;===================================
+	ld a,(NumAliens)
+	inc a                       ; adicinamos mais um
+	ld (NumAliens),a
+	;===================================
+	; Atualiza num de inimigos na coluna
+  ;===================================
+  ld a,(NumContColuna3)
+  inc a
+  ld (NumContColuna3),a
+  ;===================================
+  ; Desenhar Alien na coluna 2
+  ;===================================
+  ld a,(NumContColuna3)
+  ld b,16
+  call Multiply               ; Multiplicar o contador de inimigos por 16
+  add a,16
+  ld d,a                      ; posicao y
+  ld e,184                    ; posicao x
+  ld a,(NumAliens)            ; a posicao na tabela de atributos
+  add a,9                     ; e igual a seu numero+9
+  call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
+ret
+
+Coluna3:
+	;===================================
+	; Atualiza num de aliens
+	;===================================
+	ld a,(NumAliens)           ; pegamos o numero de sprites na tela
+	inc a                      ; adicinamos mais um
+	ld (NumAliens),a           ; atualizamos
+	;===================================
+	; Atualiza num de inimigos na coluna
+	;===================================
+	ld a,(NumContColuna4)       ; pega o numero de inimigos na coluna 4
+	inc a                       ; adicionamos mais um
+	ld (NumContColuna4),a       ; atualizamos o valor
+	;===================================
+	; Desenhar Alien coluna 3
+	;===================================
+	ld a,(NumContColuna4)
+	ld b,16
+	call Multiply               ; Multiplicar o contador de inimigos por 16
+	ld d,a                      ; posicao y
+	ld e,240                    ; posicao x
+	ld a,(NumAliens)            ; a posicao na tabela de atributos
+	add a,9                     ; e igual a seu numero +9
+	call DesenharAlienigena     ; Adicionar o Alienigena na tabela de atributos
+ret
+; =============================================================================
+
+; =============================================================================
+; RemoverAlien
+; =============================================================================
+; Parametros
+; A => numero do alien a ser removido (10 a 25)
+; =============================================================================
+; Altera
+; Remove um alien da pilha de aliens
+; =============================================================================
+RemoverAlien:
+	push af
+		call RemoveSprite				; Remove o alien
+		ld a,(NumAliensMortos)	; pega contador de aliens mortos
+		inc a 									; Incrementa o contador de aliens mortos
+		ld (NumAliensMortos),a	; atualiza contador de aliens mortos
+		ld a,(NumAliens) 				; pega contador de aliens
+		dec a 									; decrementa o contador de aliens
+		ld (NumAliens),a 				; atualiza contador de aliens
+	pop af
+ret
 
 ; =============================================================================
 ; Desenhar Alienigena
@@ -623,6 +621,39 @@ ret
 ; =============================================================================
 
 ; =============================================================================
+; AdicionarTorpedo
+; =============================================================================
+; Parametros
+; Nada
+; =============================================================================
+; Altera
+; NumTorpedos
+; =============================================================================
+AdicionarTorpedo:
+	push af
+	  ld a,(NumTorpedos)      ; pegar numero de torpedos
+		cp 4                    ; Voce so pode ter 4 torpedos
+		jp z,JaEstaNoMaximo     ; se tiver 4, nao adiciona
+  	push bc
+  	push de
+    	inc a                   ; adicionamos um torpedo
+    	ld (NumTorpedos),a      ; atualizamos a variavel NumTorpedos
+    	ld a,(NumPosYNave)      ; pegar posicao y da nave
+    	sub 16                  ; coordenada y = NumPosYNave-16
+    	ld d,a                  ; Guarda a posicao y
+    	ld a,(NumPosXNave)      ; pegar posicao x da nave
+    	ld e,a                  ; Guarda a posicao X
+    	ld a,(NumTorpedos)      ; pegar o numero de torpedos
+    	add a,27                ; Os Torpedos comecam na pos 28 (tblAtributos)
+    	call DesenharTorpedo
+	  pop de
+	  pop bc
+JaEstaNoMaximo:
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
 ; RemoverTorpedo
 ; =============================================================================
 ; Parametros
@@ -639,40 +670,6 @@ RemoverTorpedo:
 		dec a
 		ld (NumTorpedos),a
 	pop af
-ret
-; =============================================================================
-
-; =============================================================================
-; AdicionarTorpedo
-; =============================================================================
-; Parametros
-; Nada
-; =============================================================================
-; Altera
-; NumTorpedos
-; =============================================================================
-AdicionarTorpedo:
-  push af
-  push bc
-  push de
-    ld a,(NumTorpedos)      ; pegar numero de torpedos
-		cp 4                    ; Voce so pode ter 4 torpedos
-		jp z,JaEstaNoMaximo     ; se tiver 4, nao adiciona
-    inc a                   ; adicionamos um torpedo
-    ld (NumTorpedos),a      ; atualizamos a variavel NumTorpedos
-    ld b,a                  ; guarda NumTorpedos para uso futuro
-    ld a,(NumPosYNave)      ; pegar posicao y da nave
-    sub 16                  ; coordenada y = NumPosYNave-16
-    ld d,a                  ; Guarda a posicao y
-    ld a,(NumPosXNave)      ; pegar posicao x da nave
-    ld e,a                  ; Guarda a posicao X
-    ld a,b                  ; pegar o numero de torpedos
-    add a,27                ; Os Torpedos comecam na pos 28 (tblAtributos)
-    call DesenharTorpedo
-JaEstaNoMaximo:
-  pop de
-  pop bc
-  pop af
 ret
 ; =============================================================================
 
@@ -698,6 +695,38 @@ ret
 ;==============================================================================
 
 ; =============================================================================
+; EliminarAliens
+; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; Sprites dos aliens
+; =============================================================================
+EliminarAliens:
+	xor a										; zera acumulador
+  ld a,(NumAliens)      	; pega o numero de Aliens
+	cp 0 										; se nao tem aliens
+	jp z,ChecouEliminacao  	; nao tem colisao
+  add a,9                	; os aliens comecam no sprite 10
+  ld b,a                	; carrega controle do loop
+  ld a,10               	; os aliens comecam no sprite 10
+LoopEliminarAliens:
+	ld (NumAlienColidiu),a 	; Quarda o numero do alien que estamos testando
+	push af 								; backup
+	push bc									; backup
+    call ReadSprite       ; le o sprite do alien (D=Y, E=X)
+	pop bc
+	pop af
+	cp b                  	; verifica se foram todos os aliens
+  jp z,ChecouEliminacao  	; checamos todos os aliens
+  inc a                 	; proximo alien
+jr LoopEliminarAliens
+ChecouEliminacao:
+ret
+; =============================================================================
+
+; =============================================================================
 ; ChecarAlienXY
 ; =============================================================================
 ; Parametros
@@ -708,25 +737,28 @@ ret
 ; A => Se existe um alien nessa posicao, retorna 1, se nao existe retorna 0
 ; =============================================================================
 ChecarAlienXY:
-	xor a										; zera acumulador
-	ld (flgColisao),a				; zera o flag de colisao
-  ld a,(NumAliens)      	; pega o numero de Aliens
+	ld a,(NumAliens)      	; pega o numero de Aliens
 	cp 0 										; se nao tem aliens
 	jp z,ChecouTodos				; nao tem colisao
-  add a,9                	; os aliens comecam no sprite 10
-  ld b,a                	; carrega controle do loop
-  ld a,10               	; os aliens comecam no sprite 10
+	xor a										; zera acumulador
+	ld (flgColisao),a				; zera o flag de colisao
+	ld a,(NumAliens)        ; pego o numero de aliens
+	add a,9                	; somo com 9 pois os aliens estao na posicao 10
+	ld b,a                	; carrega controle do loop
+	ld a,10               	; os aliens comecam no sprite 10
 loopAlienPosicao:
 	ld (NumAlienColidiu),a 	; Quarda o numero do alien que estamos testando
-	push af 								; backup
-	push bc
-    call ReadSprite       ; le o sprite do alien (D=Y, E=X)
-  	call AlienPosYOK    	; seta o flag de colisao y
-  	call AlienPosXOK 			; seta o flag de colisao X
+	push af
+		push bc
+			push de
+				call ReadSprite       ; le o sprite do alien (D=Y, E=X)
+				call AlienPosYOK    	; seta o flag de colisao y
+				call AlienPosXOK 			; seta o flag de colisao X
+			pop de
+		pop bc
 		ld a,(flgColisao)			; pega o resultado das colisoes
 		cp 1									; se esta no x-y mata o alien e retorna 1
 		call z,Colidiu				; COLISAO
-	pop bc
 	pop af
 	cp b                  	; verifica se foram todos os aliens
   jp z,ChecouTodos       	; checamos todos os aliens
@@ -734,55 +766,47 @@ loopAlienPosicao:
 jr loopAlienPosicao
 
 ChecouTodos:
-	ld a,(flgColisao)				; retorna o status de colisao
+	ld a,(flgColisao)
 ret
 
 Colidiu:
-	ld a,(NumAlienColidiu)	; Prepara a remocao do alien
-	call RemoveSprite				; Remove o alien
-	ld a,(NumAliensMortos)	; pega contador de aliens mortos
-	inc a 									; Incrementa o contador de aliens mortos
-	ld (NumAliensMortos),a	; atualiza contador de aliens mortos
-	ld a,(NumAliens) 				; pega contador de aliens
-	dec a 									; decrementa o contador de aliens
-	ld (NumAliens),a 				; atualiza contador de aliens
+	push af
+		ld a,(NumAlienColidiu) 	; pega o numero do alien
+		call RemoverAlien				; remove o alien
+	pop af
 ret
 
 AlienPosYOK:
-	push af 									; BKP
-	push bc										; BKP
-		ld a,(NumPosXNave)			; pega posicao da nave
-		ld c,a									; pega a poscicao da nave
-		ld a,h									; pega o parametro y
-		add a,6									; soma 6 para o limite da hitbox
-		ld b,a									; guarda o limite da hitbox
-		ld a,h									; pega o parametro y
-		sub 5										; diminui 5 para o inicio da hitbox
+	push af 										; BKP
+	push bc											; BKP
+		ld a,h										; pega o parametro y
+		add a,6										; soma 6 para o limite da hitbox
+		ld b,a										; guarda o limite da hitbox
+		ld a,h										; pega o parametro y
+		sub 5											; diminui 5 para o inicio da hitbox
 loopHitboxY:
-		cp c										; verifica se a posicao da nave esta na hitbox
-		call z,SetaFlagColisao	; se sim, houve colisao no eixo y
-		inc a										; Incrementa o loop
-		cp b										; verifica se chegamos ao fim do loop
-		jp z,FimHitboxY					; se sim saimos
-		jp loopHitboxY					; senao pegamos o proximo
+		cp d 											; Compara com a pos y do alien
+		call z,SetaFlagColisao		; se sim esse alien colidiu
+		inc a											; pegamos proxima coordenada do hitbox
+		cp b											; comparamos com o limite da hitbox
+		jp z,FimHitboxX						; verificamos todos os pontos da hitbox
+	jp loopHitboxY						; senao pegamos o proximo
 FimHitboxY:
-	pop bc										; volta bkp
-	pop af										; volta bkp
+	pop bc											; volta bkp
+	pop af											; volta bkp
 ret
 
 AlienPosXOK:
 	push af
 	push bc
-		ld a,(NumPosXNave)			; pega posicao da nave
-		ld c,a									; pega a poscicao da nave
-		ld a,l									; pega o parametro x
-		add a,6									; soma 6 para o limite da hitbox
-		ld b,a									; guarda o limite da hitbox
-		ld a,l									; pega o parametro x
-		sub 5										; diminui 5 para o inicio da hitbox
+		ld a,l										; pega o parametro x
+		add a,6										; soma 6 para o limite da hitbox
+		ld b,a										; guarda o limite da hitbox
+		ld a,l										; pega o parametro x
+		sub 5											; diminui 5 para o inicio da hitbox
 loopHitboxX:
-		cp c
-		call z,SetaFlagColisao
+		cp e											; compara com a posicao x do alien
+		call z,SetaFlagColisao		; se sim esse alien colidou
 		inc a
 		cp b
 		jp z,FimHitboxX
@@ -819,3 +843,14 @@ SemColisao:
 	ld a,0
 ret
 ; =============================================================================
+
+; ============================================================================
+; Recomecar o nivel em caso de colisao com a nave
+; ============================================================================
+RecomecaNivel:
+  ld a,(NumVidaJogador)
+  dec a
+  ld (NumVidaJogador),a
+  jp gameLoop
+ret
+; ============================================================================
