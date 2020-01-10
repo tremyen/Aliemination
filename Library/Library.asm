@@ -16,8 +16,12 @@
 ; =============================================================================
 LimparTela:
 	push af
+	push bc
+	push de
 		xor a
 		call CLS
+	pop de
+	pop bc
 	pop af
 ret
 ; =============================================================================
@@ -53,173 +57,8 @@ LimpaMem:
 		ld (vdpCycle5),a
 		ld (flgColisao),a
 		ld (NumCidades),a
-		ld (NumAlienColidiu),a
 		ld (NumVelTorpedo),a
 	pop af
-ret
-; =============================================================================
-
-; =============================================================================
-; Converter um numero de 0 a 15 em seu digito hexadecimal
-; =============================================================================
-; A => Numero a ser convertido
-; =============================================================================
-; ALTERA => A
-; =============================================================================
-ConvNumChar:
-	cp 0
-	jp z,Zero
-	cp 1
-	jp z,Um
-	cp 2
-	jp z,Dois
-	cp 3
-	jp z,Tres
-	cp 4
-	jp z,Quatro
-	cp 5
-	jp z,Cinco
-	cp 6
-	jp z,Seis
-	cp 7
-	jp z,Sete
-	cp 8
-	jp z,Oito
-	cp 9
-	jp z,Nove
-	cp 10
-	jp z,DezA
-	cp 11
-	jp z,OnzeB
-	cp 12
-	jp z,Dozec
-	cp 13
-	jp z,TrezeD
-	cp 14
-	jp z,QuatorzeE
-	cp 15
-	jp z,QuinzeF
-	ret
-Zero:
-	ld a,'0'
-ret
-
-Um:
-	ld a,'1'
-ret
-
-Dois:
-	ld a,'2'
-ret
-
-Tres:
-	ld a,'3'
-ret
-
-Quatro:
-	ld a,'4'
-ret
-
-Cinco:
-	ld a,'5'
-ret
-
-Seis:
-	ld a,'6'
-ret
-
-Sete:
-	ld a,'7'
-ret
-
-Oito:
-	ld a,'8'
-ret
-
-Nove:
-	ld a,'9'
-ret
-
-DezA:
-	ld a,'A'
-ret
-
-OnzeB:
-	ld a,'B'
-ret
-
-Dozec:
-	ld a,'C'
-ret
-
-TrezeD:
-	ld a,'D'
-ret
-
-QuatorzeE:
-	ld a,'E'
-ret
-
-QuinzeF:
-	ld a,'F'
-ret
-; =============================================================================
-
-; =============================================================================
-; Imprime um Numero
-; =============================================================================
-; A => Numero a ser impresso (8 bits, 255)
-; =============================================================================
-; Altera => A,HL,D
-; =============================================================================
-PrintNumber:
-	ld hl,NumCentenas
-	ld (hl),&00
-	ld hl,NumDezenas
-	ld (hl),&00
-	ld hl,NumUnidades
-	ld (hl),&00
-ContaCentenas:
-	ld d,&64
-	ld hl,NumCentenas
-ProximaCentena:
-	sub d
-	jr c,ContarDezenas
-	inc (hl)
-jr ProximaCentena
-ContarDezenas:
-	add a,d
-	ld d,&0a
-	ld hl,NumDezenas
-ProximaDezena:
-	sub d
-	jr c,ContaUnidades
-	inc (hl)
-jr ProximaDezena
-ContaUnidades:
-	add a,d
-	ld (NumUnidades),a
-	ld d,0
-ImprimeCentenas:
-	ld a,(NumCentenas)
-	cp 0
-	jr z,ImprimeDezenas
-	add a,&30
-	call CHPUT
-	ld d,1
-ImprimeDezenas:
-	ld a,(NumDezenas)
-	add a,d
-	cp &00
-	jr z,ImprimeUnidades
-	sub d
-	ld d,1
-	add a,&30
-	call CHPUT
-ImprimeUnidades:
-	ld a,(NumUnidades)
-	add a,&30
-	call CHPUT
 ret
 ; =============================================================================
 
@@ -631,9 +470,9 @@ ret
 ; =============================================================================
 AdicionarTorpedo:
 	push af
-	  ld a,(NumTorpedos)      ; pegar numero de torpedos
-		cp 4                    ; Voce so pode ter 4 torpedos
-		jp z,JaEstaNoMaximo     ; se tiver 4, nao adiciona
+	  ld a,(NumTorpedos)      	; pegar numero de torpedos
+		cp 4                    	; Voce so pode ter 4 torpedos
+		jp z,JaEstaNoMaximo     	; se tiver 4, nao adiciona
   	push bc
   	push de
     	inc a                   ; adicionamos um torpedo
@@ -704,23 +543,28 @@ ret
 ; Sprites dos aliens
 ; =============================================================================
 EliminarAliens:
-	xor a										; zera acumulador
-  ld a,(NumAliens)      	; pega o numero de Aliens
-	cp 0 										; se nao tem aliens
-	jp z,ChecouEliminacao  	; nao tem colisao
-  add a,9                	; os aliens comecam no sprite 10
-  ld b,a                	; carrega controle do loop
-  ld a,10               	; os aliens comecam no sprite 10
+	push af
+	push bc
+		xor a										; zera acumulador
+  	ld a,(NumAliens)      	; pega o numero de Aliens
+		cp 0 										; se nao tem aliens
+		jp z,ChecouEliminacao  	; nao tem colisao
+  	add a,9                	; os aliens comecam no sprite 10
+  	ld b,a                	; carrega controle do loop
+  	ld a,10               	; os aliens comecam no sprite 10
 LoopEliminarAliens:
-	ld (NumAlienColidiu),a 	; Quarda o numero do alien que estamos testando
-	push af 								; backup
-	push bc									; backup
-    call ReadSprite       ; le o sprite do alien (D=Y, E=X)
+	ld c,a 	; Quarda o numero do alien que estamos testando
+	push bc
+	push de
+	  call ReadSprite       ; le o sprite do alien (D=Y, E=X)
+		; todo checar contra todos os torpedos (sprites 28-31
+		; se estiver no hitbox eliminar o torpedo e o alien
+	pop de
 	pop bc
-	pop af
 	cp b                  	; verifica se foram todos os aliens
   jp z,ChecouEliminacao  	; checamos todos os aliens
   inc a                 	; proximo alien
+	ld c,a 									; proximo alien que vamos testar
 jr LoopEliminarAliens
 ChecouEliminacao:
 ret
@@ -737,41 +581,42 @@ ret
 ; A => Se existe um alien nessa posicao, retorna 1, se nao existe retorna 0
 ; =============================================================================
 ChecarAlienXY:
-	ld a,(NumAliens)      	; pega o numero de Aliens
-	cp 0 										; se nao tem aliens
-	jp z,ChecouTodos				; nao tem colisao
-	xor a										; zera acumulador
-	ld (flgColisao),a				; zera o flag de colisao
-	ld a,(NumAliens)        ; pego o numero de aliens
-	add a,9                	; somo com 9 pois os aliens estao na posicao 10
-	ld b,a                	; carrega controle do loop
-	ld a,10               	; os aliens comecam no sprite 10
+	push bc
+		ld a,(NumAliens)      	; pega o numero de Aliens
+		cp 0 										; se nao tem aliens
+		jp z,ChecouTodos				; nao tem colisao
+		ld a,(NumAliens)        ; pego o numero de aliens
+		add a,9                	; somo com 9 pois os aliens estao na posicao 10
+		ld b,a                	; carrega controle do loop
+		ld c,10               	; os aliens comecam no sprite 10
 loopAlienPosicao:
-	ld (NumAlienColidiu),a 	; Quarda o numero do alien que estamos testando
-	push af
-		push bc
-			push de
-				call ReadSprite       ; le o sprite do alien (D=Y, E=X)
-				call AlienPosYOK    	; seta o flag de colisao y
-				call AlienPosXOK 			; seta o flag de colisao X
-			pop de
-		pop bc
-		ld a,(flgColisao)			; pega o resultado das colisoes
-		cp 1									; se esta no x-y mata o alien e retorna 1
-		call z,Colidiu				; COLISAO
-	pop af
-	cp b                  	; verifica se foram todos os aliens
-  jp z,ChecouTodos       	; checamos todos os aliens
-  inc a                 	; proximo alien
+		xor a										; zera acumulador
+		ld (flgColisao),a				; zera o flag de colisao
+		ld a,c 									; Quarda o numero do alien que estamos testando
+		push bc									; bkp
+		push de									; bkp
+			call ReadSprite   	; le o sprite do alien (D=Y, E=X)
+			call AlienPosYOK  	; seta o flag de colisao y
+			call AlienPosXOK 		; seta o flag de colisao X
+		pop de									; volta bkp
+		pop bc									; volta bkp
+		ld a,(flgColisao)				; pega o resultado das colisoes
+		cp 1										; se esta no x-y mata o alien e retorna 1
+		call z,Colidiu					;	COLISAO
+		ld a,c									; pega o numero do alien atual
+		cp b                  	; verifica se foram todos os aliens
+  	jp z,ChecouTodos       	; checamos todos os aliens
+  	inc a                 	; proximo alien
+		ld c,a									; atualiza o alien que estamos testando para o prox.
 jr loopAlienPosicao
-
 ChecouTodos:
+	pop bc
 	ld a,(flgColisao)
 ret
 
 Colidiu:
 	push af
-		ld a,(NumAlienColidiu) 	; pega o numero do alien
+		ld a,c								 	; pega o numero do alien que estamos testando
 		call RemoverAlien				; remove o alien
 	pop af
 ret
@@ -790,7 +635,7 @@ loopHitboxY:
 		inc a											; pegamos proxima coordenada do hitbox
 		cp b											; comparamos com o limite da hitbox
 		jp z,FimHitboxX						; verificamos todos os pontos da hitbox
-	jp loopHitboxY						; senao pegamos o proximo
+	jp loopHitboxY							; senao pegamos o proximo
 FimHitboxY:
 	pop bc											; volta bkp
 	pop af											; volta bkp
@@ -847,10 +692,37 @@ ret
 ; ============================================================================
 ; Recomecar o nivel em caso de colisao com a nave
 ; ============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; Nada
+; =============================================================================
 RecomecaNivel:
-  ld a,(NumVidaJogador)
-  dec a
-  ld (NumVidaJogador),a
+	push af
+  	ld a,(NumVidaJogador)
+  	dec a
+  	ld (NumVidaJogador),a
+	pop af
+  jp gameLoop
+ret
+; ============================================================================
+
+; ============================================================================
+; PassarSemana
+; ============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; Nada
+; =============================================================================
+PassarSemana:
+	push af
+  	ld a,(NumSemana)
+  	inc a
+  	ld (NumSemana),a
+	pop af
   jp gameLoop
 ret
 ; ============================================================================

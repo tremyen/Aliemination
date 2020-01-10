@@ -26,6 +26,5 @@ vdpCycle1:         equ ramArea+18 ; Calculo de um ciclo de VPD
 vdpCycle5:         equ ramArea+19 ; Calculo de cinco ciclos de VPD
 flgColisao:        equ ramArea+20 ; flag de colisao
 NumCidades:        equ ramArea+21 ; Conta o numero de cidades
-NumAlienColidiu:   equ ramArea+22 ; Identificador do alien que colidiu
-NumVelTorpedo:     equ ramArea+23 ; Velicidade dos torpedos
+NumVelTorpedo:     equ ramArea+22 ; Velicidade dos torpedos
 ; =============================================================================

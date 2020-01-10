@@ -30,13 +30,11 @@ gameLoop:
 	jp z,FimDoJogo							; finaliza o jogo
 	call GerarAliens						; sorteia os aliens de acordo com a semana
 DesenharQuadro:
-	call DISSCR
-		call PegarComandos					; pega a entrada de teclado do jogador
-		call MoverTorpedos					; Atualiza coordenadas dos torpedos
-		call MoverAliens						; Atualiza coordenadas dos Aliens
-		call MoverNave							; Atualiza coordenadas da nave
-		call ChecarColisao					; checa as colisoes
-	call ENASCR
+	call PegarComandos					; pega a entrada de teclado do jogador
+	call MoverTorpedos					; Atualiza coordenadas dos torpedos
+	call MoverAliens						; Atualiza coordenadas dos Aliens
+	call MoverNave							; Atualiza coordenadas da nave
+	;call ChecarColisao					; checa as colisoes
 	xor a 											; zero A
 	ld (JIFFY),a								; zero o incremento do VDP
 	ld a,(vdpCycle1)						; carrego 1/10s
@@ -60,8 +58,6 @@ include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Hardware\KEYBOARD.ASM"
 include "Library\Library.asm"
-include "Assets\Strings.asm"
-include "Assets\Fonts.asm"
 include "Assets\Sprites.asm"
 Cenario:
 	incbin "Assets\CENARIO.SC2"

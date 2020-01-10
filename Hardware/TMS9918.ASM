@@ -108,31 +108,6 @@ ADRSPRITETBL:					equ 14336
 ; =============================================================================
 
 ; =============================================================================
-; LoadPatternTable
-; =============================================================================
-; Carrega a Tabela de padroes
-; =============================================================================
-; Parametros
-; Nenhum
-; =============================================================================
-; Altera
-; Nada
-; =============================================================================
-LoadPatternTable:
-	push bc
-	push de
-	push hl
-		ld bc,192            		; bytes a copiar
-  	ld de,ADRPATTERNTBL     ; tabela de padrões na VRAM
-  	ld hl,AlieFont	 				; localização na RAM
-  	call LDIRVM             ; copio a tabela de padrões
-	pop hl
-	pop de
-	pop bc
-ret
-; =============================================================================
-
-; =============================================================================
 ; LoadSpritesTable
 ; =============================================================================
 ; Carrega a Tabela de sprites
@@ -292,87 +267,7 @@ SetScreen2_16x16:
 	pop bc
 	pop af
 ret
-
 ; =============================================================================
-; SetColorRegister - Inicializa o registrador #7 do VDP
-; =============================================================================
-; D => Byte para o Registrador VDP #0 ([T][T][T][T][B][B][B][B])
-; =============================================================================
-SetColorRegister:
-	ld a,d;          					; [T][T][T][T][B][B][B][B]
-	out (VDPCONTROL),a				; Cor dos bits no modo texto / Cor do Backdrop
-	ld a,128+7								; Registrador 7
-	out (VDPCONTROL),a
-ret
-
-; =============================================================================
-; GetBMPScreenPos
-; =============================================================================
-; Pegar a posicao na memoria para um grafico BMP
-; =============================================================================
-; Parametros
-; B	=> posicao X
-; C => posicao Y
-; =============================================================================
-; Altera
-; HL => (endereco de memoria da coordenada xy)
-; =============================================================================
-GetBMPScreenPos:
-	push af
-	push bc
-		xor a
-		ld h,c
-		rr h
-		rr a
-		or b
-		ld l,a
-		ld (ScreenLinePos_Plus2-2),hl
-		call VDP_SetWriteAddress
-	pop bc
-	pop af
-ret
-
-GetNextLine:
-	push hl
-	push bc
-	push af
-		ld hl,&0000
-ScreenLinePos_Plus2:
-		ld bc,&0080
-		add hl,bc
-		ld (ScreenLinePos_Plus2-2),hl
-		xor a
-		call VDP_SetWriteAddress
-	pop af
-	pop bc
-	pop hl
-	ret
-
-VDP_SetReadAddress:
-	ld C,0
-	jr VDP_SetAddress
-VDP_SetWriteAddress:
-	ld C,64
-VDP_SetAddress:
-	rlc     h
-  rla
-  rlc     h
-  rla
-  srl     h
-  srl     h
-  di
-  	out (VDPCONTROL),a
-  	ld  a,128+14
-  	out (VDPCONTROL),a
-  	ld  a,l
-  	nop
-  	out (VDPCONTROL),a
-  	ld a,h
-  	or C
-  ei
-  out (VDPCONTROL),a
-  ld c,VDPDATA
-ret
 
 ; =============================================================================
 ; Pegar a posicao de memoria de uma coordenada XY
@@ -477,7 +372,7 @@ ret
 ; =============================================================================
 PauseVDP:
   ld a,(JIFFY)									; pega o contador de ciclos
-  cp b													; compara com o padrao 
+  cp b													; compara com o padrao
   ret z                         ; sai da rotina
 jr PauseVDP
 ; =============================================================================

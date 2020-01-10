@@ -4,7 +4,7 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
 Inicializar:
-  call LimpaMem
+  call LimpaMem           ; limpar a memoria
   ; ===========================================================================
   ; Verifico se o MSX eh PAL ou NTSC
   ; ===========================================================================
@@ -21,14 +21,6 @@ palAdjust:
   ld a,PAL*10             ; 1/10*10=1, certo?
   ld (vdpCycle5),a        ; o valor é o de 1s em PAL
 noPalAdjust:
-  ; ===========================================================================
-  ; Inicializa a tela
-  ; ===========================================================================
-  call DISSCR                 ; desligo a tela
-    call SetScreen2_16x16     ; Seta a tela para screen 2 com sprites 16 x 16
-    call LimparTela           ; e limpa a tela
-  call ENASCR                 ; ligo a tela
-  ; ===========================================================================
   ; ===========================================================================
   ; Inicializar momento 0 do jogo
   ; ===========================================================================
@@ -53,6 +45,6 @@ noPalAdjust:
   ld (NumContColuna3),a       ; zera os inimigos na coluna 3
   ld (NumContColuna4),a       ; zera os inimigos na coluna 4
   ld (flgColisao),a           ; zera os flags de colisao
-  ld (NumAlienColidiu),a      ; zera os indicador de alien colidido
+  call LimparTela             ; limpar a VRAM
   ; ===========================================================================
 ret
