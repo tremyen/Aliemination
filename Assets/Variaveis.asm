@@ -24,8 +24,9 @@ NumContColuna4:    equ ramArea+16 ; Conta inimigos na coluna 4
 NumSorteios:       equ ramArea+17 ; Conta quantos aliens foram sorteados
 vdpCycle1:         equ ramArea+18 ; Calculo de um ciclo de VPD
 vdpCycle5:         equ ramArea+19 ; Calculo de cinco ciclos de VPD
-flgColisao:        equ ramArea+20 ; flag de colisao
+flgColisaoAlien:   equ ramArea+20 ; flag de colisao de alien
 NumCidades:        equ ramArea+21 ; Conta o numero de cidades
 NumVelTorpedo:     equ ramArea+22 ; Velicidade dos torpedos
 flgTorpedos:       equ ramArea+23 ; flag de torpedos (0000 T4 T3 T2 T1)
+flgHouveColisao:   equ ramArea+24 ; flag que indica que houve uma colisao 
 ; =============================================================================

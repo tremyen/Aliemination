@@ -55,10 +55,11 @@ LimpaMem:
 		ld (NumSorteios),a
 		ld (vdpCycle1),a
 		ld (vdpCycle5),a
-		ld (flgColisao),a
+		ld (flgColisaoAlien),a
 		ld (NumCidades),a
 		ld (NumVelTorpedo),a
 		ld (flgTorpedos),a
+		ld (flgHouveColisao),a
 	pop af
 ret
 ; =============================================================================
@@ -536,43 +537,6 @@ ret
 ;==============================================================================
 
 ; =============================================================================
-; EliminarAliens
-; =============================================================================
-; Parametros
-; Nenhum
-; =============================================================================
-; Altera
-; Sprites dos aliens
-; =============================================================================
-EliminarAliens:
-	push af
-	push bc
-		xor a										; zera acumulador
-  	ld a,(NumAliens)      	; pega o numero de Aliens
-		cp 0 										; se nao tem aliens
-		jp z,ChecouEliminacao  	; nao tem colisao
-  	add a,9                	; os aliens comecam no sprite 10
-  	ld b,a                	; carrega controle do loop
-  	ld a,10               	; os aliens comecam no sprite 10
-LoopEliminarAliens:
-	ld c,a 	; Quarda o numero do alien que estamos testando
-	push bc
-	push de
-	  call ReadSprite       ; le o sprite do alien (D=Y, E=X)
-		; todo checar contra todos os torpedos (sprites 28-31
-		; se estiver no hitbox eliminar o torpedo e o alien
-	pop de
-	pop bc
-	cp b                  	; verifica se foram todos os aliens
-  jp z,ChecouEliminacao  	; checamos todos os aliens
-  inc a                 	; proximo alien
-	ld c,a 									; proximo alien que vamos testar
-jr LoopEliminarAliens
-ChecouEliminacao:
-ret
-; =============================================================================
-
-; =============================================================================
 ; ChecarAlienXY
 ; =============================================================================
 ; Parametros
@@ -583,43 +547,42 @@ ret
 ; A => Se existe um alien nessa posicao, retorna 1, se nao existe retorna 0
 ; =============================================================================
 ChecarAlienXY:
-	push bc
-		ld a,(NumAliens)      	; pega o numero de Aliens
-		cp 0 										; se nao tem aliens
-		jp z,ChecouTodos				; nao tem colisao
-		ld a,(NumAliens)        ; pego o numero de aliens
-		add a,9                	; somo com 9 pois os aliens estao na posicao 10
-		ld b,a                	; carrega controle do loop
-		ld c,10               	; os aliens comecam no sprite 10
+	ld a,(NumAliens)      	; pega o numero de Aliens
+	cp 0 										; se nao tem aliens
+	jp z,ChecouTodos				; nao tem colisao
+	ld a,(NumAliens)        ; pego o numero de aliens
+	add a,9                	; somo com 9 pois os aliens estao na posicao 10
+	ld b,a                	; carrega o ultimo alien
 loopAlienPosicao:
-		xor a										; zera acumulador
-		ld (flgColisao),a				; zera o flag de colisao
-		ld a,c 									; Quarda o numero do alien que estamos testando
-		push bc									; bkp
-		push de									; bkp
-			call ReadSprite   	; le o sprite do alien (D=Y, E=X)
-			call AlienPosYOK  	; seta o flag de colisao y
-			call AlienPosXOK 		; seta o flag de colisao X
-		pop de									; volta bkp
-		pop bc									; volta bkp
-		ld a,(flgColisao)				; pega o resultado das colisoes
-		cp 1										; se esta no x-y mata o alien e retorna 1
-		call z,Colidiu					;	COLISAO
-		ld a,c									; pega o numero do alien atual
-		cp b                  	; verifica se foram todos os aliens
-  	jp z,ChecouTodos       	; checamos todos os aliens
-  	inc a                 	; proximo alien
-		ld c,a									; atualiza o alien que estamos testando para o prox.
+	xor a										; zera acumulador
+	ld (flgColisaoAlien),a	; zera o flag de colisao
+	ld a,b 									; pega o alien que vamos testar
+	push bc									; bkp
+	push de									; bkp
+		call ReadSprite   		; le o sprite do alien (D=Y, E=X)
+		call AlienPosYOK  		; seta o flag de colisao y
+		call AlienPosXOK 			; seta o flag de colisao X
+	pop de									; volta bkp
+	pop bc									; volta bkp
+	ld a,(flgColisaoAlien)	; pega o resultado das colisoes
+	cp 1										; se esta no x-y houve colisao
+	call z,Colidiu					;	COLISAO
+	ld a,b									; pega o controle do loop
+	cp 0                  	; verifica se foram todos os aliens
+  jp z,ChecouTodos       	; checamos todos os aliens
+  dec a                 	; proximo alien
+	ld b,a									; atualiza o alien que estamos testando
 jr loopAlienPosicao
 ChecouTodos:
-	pop bc
-	ld a,(flgColisao)
+	ld a,(flgHouveColisao)
 ret
 
 Colidiu:
 	push af
-		ld a,c								 	; pega o numero do alien que estamos testando
+		ld a,b								 	; pega o numero do alien que estamos testando
 		call RemoverAlien				; remove o alien
+		ld a,1 									; carrega acumulador
+		ld (flgHouveColisao),a 	; seta o indicador de colisao
 	pop af
 ret
 
@@ -666,7 +629,7 @@ ret
 SetaFlagColisao:
 	push af
 		ld a,1
-    ld (flgColisao),a
+    ld (flgColisaoAlien),a
 	pop af
 ret
 ; =============================================================================

@@ -43,7 +43,8 @@ noPalAdjust:
   ld (NumContColuna2),a       ; zera os inimigos na coluna 2
   ld (NumContColuna3),a       ; zera os inimigos na coluna 3
   ld (NumContColuna4),a       ; zera os inimigos na coluna 4
-  ld (flgColisao),a           ; zera os flags de colisao
+  ld (flgColisaoAlien),a      ; zera os flags de colisao
+  ld (flgHouveColisao),a      ; zera os flags de colisao
   ld (flgTorpedos),a          ; zera os flags de torpedos
   call LimparTela             ; limpar a VRAM
   ; ===========================================================================
