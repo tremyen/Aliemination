@@ -46,6 +46,9 @@ FimDoJogo:
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
+Cenario:
+incbin "Assets\CENARIO.SC2"
+include "Assets\Sprites.asm"
 include "Inicializar.asm"
 include "TelaInicial.asm"
 include "GerarAliens.asm"
@@ -58,9 +61,6 @@ include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Hardware\KEYBOARD.ASM"
 include "Library\Library.asm"
-include "Assets\Sprites.asm"
-Cenario:
-	incbin "Assets\CENARIO.SC2"
 ; =============================================================================
 ; Padding
 ; =============================================================================

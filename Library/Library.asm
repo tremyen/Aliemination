@@ -58,6 +58,7 @@ LimpaMem:
 		ld (flgColisao),a
 		ld (NumCidades),a
 		ld (NumVelTorpedo),a
+		ld (flgTorpedos),a
 	pop af
 ret
 ; =============================================================================
@@ -460,55 +461,55 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; AdicionarTorpedo
-; =============================================================================
-; Parametros
-; Nada
-; =============================================================================
-; Altera
-; NumTorpedos
-; =============================================================================
-AdicionarTorpedo:
-	push af
-	  ld a,(NumTorpedos)      	; pegar numero de torpedos
-		cp 4                    	; Voce so pode ter 4 torpedos
-		jp z,JaEstaNoMaximo     	; se tiver 4, nao adiciona
-  	push bc
-  	push de
-    	inc a                   ; adicionamos um torpedo
-    	ld (NumTorpedos),a      ; atualizamos a variavel NumTorpedos
-    	ld a,(NumPosYNave)      ; pegar posicao y da nave
-    	sub 16                  ; coordenada y = NumPosYNave-16
-    	ld d,a                  ; Guarda a posicao y
-    	ld a,(NumPosXNave)      ; pegar posicao x da nave
-    	ld e,a                  ; Guarda a posicao X
-    	ld a,(NumTorpedos)      ; pegar o numero de torpedos
-    	add a,27                ; Os Torpedos comecam na pos 28 (tblAtributos)
-    	call DesenharTorpedo
-	  pop de
-	  pop bc
-JaEstaNoMaximo:
-	pop af
-ret
-; =============================================================================
-
-; =============================================================================
 ; RemoverTorpedo
-; =============================================================================
-; Parametros
-; C => Numero do sprite do torpedo (28 a 31)
+; remover um torpedo da fila de torpedos
 ; =============================================================================
 ; Altera
 ; NumTorpedos
+; flgTorpedos
 ; =============================================================================
-RemoverTorpedo:
-	push af
-		ld a,c
-		call RemoveSprite
-		ld a,(NumTorpedos)
-		dec a
-		ld (NumTorpedos),a
-	pop af
+RemoveTorp28:
+	ld a,28
+	call RemoveSprite
+	ld a,(flgTorpedos)
+	res 0,a
+	ld (flgTorpedos),a
+	ld a,(NumTorpedos)
+	dec a
+	ld (NumTorpedos),a
+ret
+
+RemoveTorp29:
+	ld a,29
+	call RemoveSprite
+	ld a,(flgTorpedos)
+	res 1,a
+	ld (flgTorpedos),a
+	ld a,(NumTorpedos)
+	dec a
+	ld (NumTorpedos),a
+ret
+
+RemoveTorp30:
+	ld a,30
+	call RemoveSprite
+	ld a,(flgTorpedos)
+	res 2,a
+	ld (flgTorpedos),a
+	ld a,(NumTorpedos)
+	dec a
+	ld (NumTorpedos),a
+ret
+
+RemoveTorp31:
+	ld a,31
+	call RemoveSprite
+	ld a,(flgTorpedos)
+	res 3,a
+	ld (flgTorpedos),a
+	ld a,(NumTorpedos)
+	dec a
+	ld (NumTorpedos),a
 ret
 ; =============================================================================
 
@@ -519,7 +520,8 @@ ret
 ; d => Coordenada Y
 ; e => Coordenada X
 ; =============================================================================
-; Altera => Nada
+; Altera
+;	Adiciona o sprite do torpedo na fila de atributos
 ; =============================================================================
 DesenharTorpedo:
 	push bc

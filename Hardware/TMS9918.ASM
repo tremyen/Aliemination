@@ -156,24 +156,24 @@ ret
 ; Nada
 ; =============================================================================
 PutSprite:
-		push hl
-		push af
-			push de										; salvo o valor de DE pq CALATR o altera
-				call CALATR							; pega o endereco do sprite na TBL de atributos
-			pop de										; retorno DE
-			ld a,d
-			call WRTVRM								; gravo a posicao Y
-			inc hl										; proximo endereco
-			ld a,e
-			call WRTVRM								; gravo a posicao X
-			inc hl										; proximo endereco
-			ld a,b
-			call WRTVRM								; Gravo o numero na tabela de padroes
-			inc hl										; proximo endereco
-			ld a,c
-			call WRTVRM								; gravo Early / Color
-		pop af
-		pop hl
+	push hl
+	push af
+		push de										; salvo o valor de DE pq CALATR o altera
+			call CALATR							; pega o endereco do sprite na TBL de atributos
+		pop de										; retorno DE
+		ld a,d
+		call WRTVRM								; gravo a posicao Y
+		inc hl										; proximo endereco
+		ld a,e
+		call WRTVRM								; gravo a posicao X
+		inc hl										; proximo endereco
+		ld a,b
+		call WRTVRM								; Gravo o numero na tabela de padroes
+		inc hl										; proximo endereco
+		ld a,c
+		call WRTVRM								; gravo Early / Color
+	pop af
+	pop hl
 ret
 ; =============================================================================
 
@@ -192,6 +192,7 @@ ret
 ; C => Early / Cor
 ; =============================================================================
 ReadSprite:
+	push hl
 	push af
 		call CALATR								; pega o endereco do sprite na TBL de atributos
 		call RDVRM								; le a posicao Y
@@ -206,6 +207,7 @@ ReadSprite:
 		call RDVRM								; Le Early / Color
 		ld c,a										; salva em C
 	pop af
+	pop hl
 ret
 
 ; =============================================================================
@@ -242,6 +244,22 @@ RemoveSprite:
 	pop af
 	pop hl
 ret
+
+; =============================================================================
+; SpriteEmpty
+; =============================================================================
+;	Retorna 1 se o sprite estiver preenchido ou 0 se não estiver
+; =============================================================================
+; Parametros
+; A => Numero do Sprite na tabela de atributos
+; =============================================================================
+; ALTERA
+; A => (0) Vazio / (1) Preenchido
+; =============================================================================
+SpriteEmpty:
+	ld a,0
+ret
+; =============================================================================
 
 ; =============================================================================
 ; SetScreen2_16x16

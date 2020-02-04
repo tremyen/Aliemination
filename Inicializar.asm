@@ -38,13 +38,13 @@ noPalAdjust:
   ld (NumVelAlien),a          ; Carrega a velocidade do Alien
   xor a                       ; Zera A
   ld (NumSemana),a            ; zera a pontuacao
-  ld (NumTorpedos),a          ; zera o numero de torpedo
   ld (NumAliens),a            ; zera o nuemro de aliens
   ld (NumContColuna1),a       ; zera os inimigos na coluna 1
   ld (NumContColuna2),a       ; zera os inimigos na coluna 2
   ld (NumContColuna3),a       ; zera os inimigos na coluna 3
   ld (NumContColuna4),a       ; zera os inimigos na coluna 4
   ld (flgColisao),a           ; zera os flags de colisao
+  ld (flgTorpedos),a          ; zera os flags de torpedos
   call LimparTela             ; limpar a VRAM
   ; ===========================================================================
 ret

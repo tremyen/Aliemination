@@ -29,6 +29,7 @@ SairTelaCrazy:
 ret
 
 include "..\Hardware\TMS9918.ASM"
+include "..\Library\Library.ASM"
 
 Cenario:
   incbin "CPLOGOBW.SC2"
