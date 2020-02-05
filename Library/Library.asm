@@ -560,12 +560,12 @@ loopAlienPosicao:
 	push bc									; bkp
 	push de									; bkp
 		call ReadSprite   		; le o sprite do alien (D=Y, E=X)
-		call AlienPosYOK  		; seta o flag de colisao y
-		call AlienPosXOK 			; seta o flag de colisao X
+		call AlienPosYOK  		; seta o flag de colisao y (bit 0 flgColisaoAlien)
+		call AlienPosXOK 			; seta o flag de colisao X (bit 1 flgColisaoAlien)
 	pop de									; volta bkp
 	pop bc									; volta bkp
 	ld a,(flgColisaoAlien)	; pega o resultado das colisoes
-	cp 1										; se esta no x-y houve colisao
+	cp 3										; se bits 0 e 1 estao ligados houve colisao
 	call z,Colidiu					;	COLISAO
 	ld a,b									; pega o controle do loop
 	cp 0                  	; verifica se foram todos os aliens
@@ -596,7 +596,7 @@ AlienPosYOK:
 		sub 5											; diminui 5 para o inicio da hitbox
 loopHitboxY:
 		cp d 											; Compara com a pos y do alien
-		call z,SetaFlagColisao		; se sim esse alien colidiu
+		call z,SetaFlagColisaoY		; se sim esse alien colidiu
 		inc a											; pegamos proxima coordenada do hitbox
 		cp b											; comparamos com o limite da hitbox
 		jp z,FimHitboxX						; verificamos todos os pontos da hitbox
@@ -616,7 +616,7 @@ AlienPosXOK:
 		sub 5											; diminui 5 para o inicio da hitbox
 loopHitboxX:
 		cp e											; compara com a posicao x do alien
-		call z,SetaFlagColisao		; se sim esse alien colidou
+		call z,SetaFlagColisaoX		; se sim esse alien colidou
 		inc a
 		cp b
 		jp z,FimHitboxX
@@ -626,12 +626,22 @@ FimHitboxX:
 	pop af
 ret
 
-SetaFlagColisao:
+SetaFlagColisaoY:
 	push af
-		ld a,1
+		ld a,(flgColisaoAlien)
+		set 0,a
     ld (flgColisaoAlien),a
 	pop af
 ret
+
+SetaFlagColisaoX:
+	push af
+		ld a,(flgColisaoAlien)
+	 	set 1,a
+    ld (flgColisaoAlien),a
+	pop af
+ret
+
 ; =============================================================================
 
 ; =============================================================================

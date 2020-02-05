@@ -18,7 +18,28 @@ ChecarColisao:
   call ChecarAlienXY    ; Checar se temos um alien nessa hitbox
   cp 1                  ; se teve colizao
   call z,RemoveTorp28   ; remove o torpedo 28
-ret 
+  ld a,29
+  call ReadSprite       ; le o torpedo 28
+  ld h,d                ; pegomos y do torpedo
+  ld l,e                ; pegamos x do torpedo
+  call ChecarAlienXY    ; Checar se temos um alien nessa hitbox
+  cp 1                  ; se teve colizao
+  call z,RemoveTorp29   ; remove o torpedo 28
+  ld a,30
+  call ReadSprite       ; le o torpedo 28
+  ld h,d                ; pegomos y do torpedo
+  ld l,e                ; pegamos x do torpedo
+  call ChecarAlienXY    ; Checar se temos um alien nessa hitbox
+  cp 1                  ; se teve colizao
+  call z,RemoveTorp30   ; remove o torpedo 28
+  ld a,31
+  call ReadSprite       ; le o torpedo 28
+  ld h,d                ; pegomos y do torpedo
+  ld l,e                ; pegamos x do torpedo
+  call ChecarAlienXY    ; Checar se temos um alien nessa hitbox
+  cp 1                  ; se teve colizao
+  call z,RemoveTorp31   ; remove o torpedo 28
+ret
   ; ===============================================================
   ; Checar se Nave colidiu
   ; ===============================================================
