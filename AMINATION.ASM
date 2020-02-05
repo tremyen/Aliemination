@@ -22,9 +22,6 @@ startCode:
   call Inicializar            ; Inicializar o ambiente do jogo
   call TelaInicial            ; tela de inicio do jogo
 gameLoop:
-	ld a,(NumVidaJogador)				; Pega as vidas do jogador
-	cp 0 												; se nao tem mais vidas
-	jp z,FimDoJogo							; finaliza o jogo
 	ld a,(NumCidades)						; Pega o numero de cidades
 	cp 0 												; se nao tem mais cidades
 	jp z,FimDoJogo							; finaliza o jogo

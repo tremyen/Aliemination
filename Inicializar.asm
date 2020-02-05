@@ -28,13 +28,10 @@ noPalAdjust:
   ld (NumPosXNave),a          ; Carrega a posicao X da nave
   ld a,88                     ; Prepara a posicao inicial da Nave (Y)
   ld (NumPosYNave),a          ; Carrega a posicao Y da nave
-  ld a,5
-  ld (NumVelTorpedo),a        ; Carrega a velocidade dos torpedos
   ld a,4
   ld (NumVelNave),a           ; Carrega a velocidade da nave
   ld (NumCidades),a           ; Carrega o numero de cidades
   ld a,1                      ; Prepara a velocidade dos aliens
-  ld (NumVidaJogador),a       ; Carrega a vida do jogador
   ld (NumVelAlien),a          ; Carrega a velocidade do Alien
   xor a                       ; Zera A
   ld (NumSemana),a            ; zera a pontuacao

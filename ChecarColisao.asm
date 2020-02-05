@@ -19,37 +19,37 @@ ChecarColisao:
   cp 1                  ; se teve colizao
   call z,RemoveTorp28   ; remove o torpedo 28
   ld a,29
-  call ReadSprite       ; le o torpedo 28
+  call ReadSprite       ; le o torpedo
   ld h,d                ; pegomos y do torpedo
   ld l,e                ; pegamos x do torpedo
   call ChecarAlienXY    ; Checar se temos um alien nessa hitbox
   cp 1                  ; se teve colizao
-  call z,RemoveTorp29   ; remove o torpedo 28
+  call z,RemoveTorp29   ; remove o torpedo
   ld a,30
-  call ReadSprite       ; le o torpedo 28
+  call ReadSprite       ; le o torpedo
   ld h,d                ; pegomos y do torpedo
   ld l,e                ; pegamos x do torpedo
   call ChecarAlienXY    ; Checar se temos um alien nessa hitbox
   cp 1                  ; se teve colizao
-  call z,RemoveTorp30   ; remove o torpedo 28
+  call z,RemoveTorp30   ; remove o torpedo
   ld a,31
-  call ReadSprite       ; le o torpedo 28
+  call ReadSprite       ; le o torpedo
   ld h,d                ; pegomos y do torpedo
   ld l,e                ; pegamos x do torpedo
   call ChecarAlienXY    ; Checar se temos um alien nessa hitbox
   cp 1                  ; se teve colizao
-  call z,RemoveTorp31   ; remove o torpedo 28
-ret
+  call z,RemoveTorp31   ; remove o torpedo
   ; ===============================================================
   ; Checar se Nave colidiu
   ; ===============================================================
-  ; ld a,(NumPosYNave)
-  ; ld h,a
-  ; ld a,(NumPosXNave)
-  ; ld l,a
-  ; call ChecarAlienXY
-  ; cp 1
-  ; jp z,RecomecaNivel      ; a nave foi atingida! fim do jogo
+  xor a 
+  ld a,(NumPosYNave)
+  ld h,a
+  ld a,(NumPosXNave)
+  ld l,a
+  call ChecarAlienXY
+  cp 1
+  jp z,FimDoJogo      ; a nave foi atingida! fim do jogo
   ; ===============================================================
   ; Checar se Cidade 1 colidiu
   ; ===============================================================

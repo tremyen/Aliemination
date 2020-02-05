@@ -10,9 +10,7 @@ MoverAliens:
 	ld a,(NumAliens)						; pega o numero de aliens
   cp 0                        ; se nao existem aliens
   jp z,FimMoveAliens          ; nao preciso mover nada
-	ld b,a											; guarda numero de aliens para loop
   add a,9 										; pego ultimo alien
-	ld c,a											; guardo ultimo alien para uso futuro
 LoopMoveAliens:
 	push af
 	push bc
@@ -26,13 +24,9 @@ LoopMoveAliens:
 	pop de
 	pop bc
 	pop af
-  dec b                       ; controla o loop
-  ld a,b                      ; move para comparar
-  cp 0                        ; verifica se movemos todos os aliens
+  dec a                       ; controla o loop
+  cp 9                        ; verifica se movemos todos os aliens
   jr z,FimMoveAliens 		      ; acabou o loop
-	ld a,c 											; se nao acabamos pegamos o alien atual
-  dec a                       ; pega o alien anterior
-	ld c,a											; guarda novo alien atual para uso futuro
   jr LoopMoveAliens	          ; move o proximo
 FimMoveAliens:
 ret

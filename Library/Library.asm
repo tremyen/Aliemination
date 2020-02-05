@@ -42,7 +42,6 @@ LimpaMem:
 		ld (NumPosXNave),a
 		ld (NumPosYNave),a
 		ld (NumSemana),a
-		ld (NumVidaJogador),a
 		ld (NumVelAlien),a
 		ld (NumTorpedos),a
 		ld (NumAliensMortos),a
@@ -57,7 +56,6 @@ LimpaMem:
 		ld (vdpCycle5),a
 		ld (flgColisaoAlien),a
 		ld (NumCidades),a
-		ld (NumVelTorpedo),a
 		ld (flgTorpedos),a
 		ld (flgHouveColisao),a
 	pop af
@@ -555,7 +553,8 @@ ChecarAlienXY:
 	ld b,a                	; carrega o ultimo alien
 loopAlienPosicao:
 	xor a										; zera acumulador
-	ld (flgColisaoAlien),a	; zera o flag de colisao
+	ld (flgColisaoAlien),a	; zera o flag de colisao com alien
+	ld (flgHouveColisao),a  ; zera flag de colisao geral
 	ld a,b 									; pega o alien que vamos testar
 	push bc									; bkp
 	push de									; bkp
@@ -568,7 +567,7 @@ loopAlienPosicao:
 	cp 3										; se bits 0 e 1 estao ligados houve colisao
 	call z,Colidiu					;	COLISAO
 	ld a,b									; pega o controle do loop
-	cp 0                  	; verifica se foram todos os aliens
+	cp 9	                 	; Os aliens terminam na posicao 10 
   jp z,ChecouTodos       	; checamos todos os aliens
   dec a                 	; proximo alien
 	ld b,a									; atualiza o alien que estamos testando
@@ -674,11 +673,6 @@ ret
 ; Nada
 ; =============================================================================
 RecomecaNivel:
-	push af
-  	ld a,(NumVidaJogador)
-  	dec a
-  	ld (NumVidaJogador),a
-	pop af
   jp gameLoop
 ret
 ; ============================================================================
