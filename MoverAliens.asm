@@ -6,6 +6,9 @@
 ; Desce os aliens de acordo com sua velocidade.
 ; Os aliens são todos os sprites maiores ou iguais a 10.
 ; =============================================================================
+; Altera
+; A
+; =============================================================================
 MoverAliens:
 	ld a,(NumAliens)						; pega o numero de aliens
   cp 0                        ; se nao existem aliens
@@ -16,16 +19,20 @@ LoopMoveAliens:
 	push bc
 	push de
 	push hl
-		call CALATR  								; pega o endereco do sprite atual
-		call RDVRM									; pega o conteudo do endereco byte 1(y)
-		inc a                       ; desce uma posicao
-  	call WRTVRM                 ; atualiza
+		ld d,a										; guarda o numero do alien testado
+		call CALATR  							; pega o endereco do sprite atual
+		call RDVRM								; pega o conteudo do endereco byte 1(y)
+		inc a                     ; desce uma posicao
+  	call WRTVRM               ; atualiza
+		cp 184										; verifica se o alien bateu no chao
+		ld a,d										; pega o alien a ser removido
+		call z,RemoverAlien				; remove o alien
 	pop hl
 	pop de
 	pop bc
-	pop af
+	pop af 
   dec a                       ; controla o loop
-  cp 9                        ; verifica se movemos todos os aliens
+  cp 9	                      ; verifica se movemos todos os aliens
   jr z,FimMoveAliens 		      ; acabou o loop
   jr LoopMoveAliens	          ; move o proximo
 FimMoveAliens:

@@ -5,14 +5,10 @@
 ; =============================================================================
 GerarAliens:
   ld a,(NumSemana)        ; pega a semana atual
-  inc a                   ; aumenta em 1
-  ld (NumSemana),a        ; atualiza a semana atual
-  cp 5                    ; se for a 5 semana ja sorteamos o maximo
-  jp z,NaoAdicionaAliens  ; nao podemos adicionar mais aliens
   ld b,4                  ; prepara multipilicador
   call Multiply           ; Multiplica a semana por 4
+  ld (NumAliensMortos),a  ; aliens que precisam ser eliminados 
   ld (NumSorteios),a      ; prepara o contador do numero de sorteios
-NaoAdicionaAliens:
 SorteiaAliens:            ; sorteia um numero de aliens igual a semana*4
   ld a,3                  ; aliens podem estar em 4 posicoes X (0-3)
   call RandomNumber       ; sorteia em A um aleatorio entre 0 e 3
@@ -25,3 +21,4 @@ SorteiaAliens:            ; sorteia um numero de aliens igual a semana*4
 jr SorteiaAliens          ; volta para o sorteio de aliens
 FimSorteiaAliens:
 ret
+; =============================================================================

@@ -27,7 +27,7 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; Inicializar as variaveis
+; Limpar as variaveis
 ; =============================================================================
 ; Nao tem parametros
 ; =============================================================================
@@ -58,6 +58,7 @@ LimpaMem:
 		ld (NumCidades),a
 		ld (flgTorpedos),a
 		ld (flgHouveColisao),a
+		ld (flgNovoNivel),a
 	pop af
 ret
 ; =============================================================================
@@ -381,13 +382,14 @@ RemoverAlien:
 	push af
 		call RemoveSprite				; Remove o alien
 		ld a,(NumAliensMortos)	; pega contador de aliens mortos
-		inc a 									; Incrementa o contador de aliens mortos
+		dec a 									; decrementa o contador de aliens mortos
 		ld (NumAliensMortos),a	; atualiza contador de aliens mortos
 		ld a,(NumAliens) 				; pega contador de aliens
 		dec a 									; decrementa o contador de aliens
 		ld (NumAliens),a 				; atualiza contador de aliens
 	pop af
 ret
+; =============================================================================
 
 ; =============================================================================
 ; Desenhar Alienigena
@@ -468,47 +470,55 @@ ret
 ; flgTorpedos
 ; =============================================================================
 RemoveTorp28:
-	ld a,28
-	call RemoveSprite
-	ld a,(flgTorpedos)
-	res 0,a
-	ld (flgTorpedos),a
-	ld a,(NumTorpedos)
-	dec a
-	ld (NumTorpedos),a
+	push af
+		ld a,28
+		call RemoveSprite
+		ld a,(flgTorpedos)
+		res 0,a
+		ld (flgTorpedos),a
+		ld a,(NumTorpedos)
+		dec a
+		ld (NumTorpedos),a
+	pop af
 ret
 
 RemoveTorp29:
-	ld a,29
-	call RemoveSprite
-	ld a,(flgTorpedos)
-	res 1,a
-	ld (flgTorpedos),a
-	ld a,(NumTorpedos)
-	dec a
-	ld (NumTorpedos),a
+	push af
+		ld a,29
+		call RemoveSprite
+		ld a,(flgTorpedos)
+		res 1,a
+		ld (flgTorpedos),a
+		ld a,(NumTorpedos)
+		dec a
+		ld (NumTorpedos),a
+	pop af
 ret
 
 RemoveTorp30:
-	ld a,30
-	call RemoveSprite
-	ld a,(flgTorpedos)
-	res 2,a
-	ld (flgTorpedos),a
-	ld a,(NumTorpedos)
-	dec a
-	ld (NumTorpedos),a
+	push af
+		ld a,30
+		call RemoveSprite
+		ld a,(flgTorpedos)
+		res 2,a
+		ld (flgTorpedos),a
+		ld a,(NumTorpedos)
+		dec a
+		ld (NumTorpedos),a
+	pop af
 ret
 
 RemoveTorp31:
-	ld a,31
-	call RemoveSprite
-	ld a,(flgTorpedos)
-	res 3,a
-	ld (flgTorpedos),a
-	ld a,(NumTorpedos)
-	dec a
-	ld (NumTorpedos),a
+	push af
+		ld a,31
+		call RemoveSprite
+		ld a,(flgTorpedos)
+		res 3,a
+		ld (flgTorpedos),a
+		ld a,(NumTorpedos)
+		dec a
+		ld (NumTorpedos),a
+	pop af
 ret
 ; =============================================================================
 
@@ -543,15 +553,29 @@ ret
 ; =============================================================================
 ; Altera
 ; A => Se existe um alien nessa posicao, retorna 1, se nao existe retorna 0
+; B
 ; =============================================================================
 ChecarAlienXY:
-	ld a,(NumAliens)      	; pega o numero de Aliens
-	cp 0 										; se nao tem aliens
-	jp z,ChecouTodos				; nao tem colisao
-	ld a,(NumAliens)        ; pego o numero de aliens
-	add a,9                	; somo com 9 pois os aliens estao na posicao 10
-	ld b,a                	; carrega o ultimo alien
+	push bc
+		ld a,(NumAliens)      	; pega o numero de Aliens
+		cp 0 										; se nao tem aliens
+		jp z,ChecouTodos				; nao tem colisao
+		add a,9                	; somo com 9 pois os aliens estao na posicao 10
+		ld b,a                	; carrega o ultimo alien
 loopAlienPosicao:
+		call ChecarPosicaoALien	; Checa todos os pontos da hitbox do alien
+		ld a,b									; pega o controle do loop
+		cp 10	                 	; Os aliens terminam na posicao 10
+  	jp z,ChecouTodos       	; checamos todos os aliens
+  	dec a                 	; proximo alien
+		ld b,a									; atualiza o alien que estamos testando
+		jr loopAlienPosicao
+ChecouTodos:
+	pop bc
+	ld a,(flgHouveColisao)
+ret
+
+ChecarPosicaoALien:
 	xor a										; zera acumulador
 	ld (flgColisaoAlien),a	; zera o flag de colisao com alien
 	ld (flgHouveColisao),a  ; zera flag de colisao geral
@@ -566,14 +590,6 @@ loopAlienPosicao:
 	ld a,(flgColisaoAlien)	; pega o resultado das colisoes
 	cp 3										; se bits 0 e 1 estao ligados houve colisao
 	call z,Colidiu					;	COLISAO
-	ld a,b									; pega o controle do loop
-	cp 9	                 	; Os aliens terminam na posicao 10 
-  jp z,ChecouTodos       	; checamos todos os aliens
-  dec a                 	; proximo alien
-	ld b,a									; atualiza o alien que estamos testando
-jr loopAlienPosicao
-ChecouTodos:
-	ld a,(flgHouveColisao)
 ret
 
 Colidiu:
@@ -589,10 +605,10 @@ AlienPosYOK:
 	push af 										; BKP
 	push bc											; BKP
 		ld a,h										; pega o parametro y
-		add a,6										; soma 6 para o limite da hitbox
+		add a,8										; soma 8 para o limite da hitbox
 		ld b,a										; guarda o limite da hitbox
 		ld a,h										; pega o parametro y
-		sub 5											; diminui 5 para o inicio da hitbox
+		sub 8										  ; diminui 8 para o inicio da hitbox
 loopHitboxY:
 		cp d 											; Compara com a pos y do alien
 		call z,SetaFlagColisaoY		; se sim esse alien colidiu
@@ -609,17 +625,17 @@ AlienPosXOK:
 	push af
 	push bc
 		ld a,l										; pega o parametro x
-		add a,6										; soma 6 para o limite da hitbox
+		add a,8										; soma 8 para o limite da hitbox
 		ld b,a										; guarda o limite da hitbox
 		ld a,l										; pega o parametro x
-		sub 5											; diminui 5 para o inicio da hitbox
+		sub 8											; diminui 8 para o inicio da hitbox
 loopHitboxX:
 		cp e											; compara com a posicao x do alien
 		call z,SetaFlagColisaoX		; se sim esse alien colidou
-		inc a
-		cp b
-		jp z,FimHitboxX
-		jp loopHitboxX
+		inc a											; incrementa a posicao atual
+		cp b											; compara com o limite superior
+		jp z,FimHitboxX						; testamos toda a hitbox
+		jp loopHitboxX						; testamos a proxima posicao
 FimHitboxX:
 	pop bc
 	pop af
@@ -664,20 +680,6 @@ ret
 ; =============================================================================
 
 ; ============================================================================
-; Recomecar o nivel em caso de colisao com a nave
-; ============================================================================
-; Parametros
-; Nenhum
-; =============================================================================
-; Altera
-; Nada
-; =============================================================================
-RecomecaNivel:
-  jp gameLoop
-ret
-; ============================================================================
-
-; ============================================================================
 ; PassarSemana
 ; ============================================================================
 ; Parametros
@@ -688,10 +690,12 @@ ret
 ; =============================================================================
 PassarSemana:
 	push af
-  	ld a,(NumSemana)
-  	inc a
-  	ld (NumSemana),a
+  	ld a,(NumSemana)				; pega o numero da semana
+  	inc a										; aumenta a semana
+		cp 5                    ; se for a 5 semana ja chegamos no maximo
+		jr z,SemanaMaxima				; não podemos passar da quarta semana
+  	ld (NumSemana),a				; carregamos a nova semana
+SemanaMaxima:
 	pop af
-  jp gameLoop
 ret
 ; ============================================================================

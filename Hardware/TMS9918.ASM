@@ -228,21 +228,23 @@ ret
 ; Zera o sprite na tabela de atributos
 ; =============================================================================
 RemoveSprite:
-	push hl
-	push af
-		push de								; salvo o valor de DE pq CALATR o altera
-			call CALATR					; pega o endereco do sprite na TBL de atributos
-		pop de								; retorno DE
-		xor a 								; zero o acumulador
-		call WRTVRM						; zero a posicao Y
-		inc hl								; proximo endereco
-		call WRTVRM						; zero a posicao X
-		inc hl								; proximo endereco
-		call WRTVRM						; zero o numero na tabela de padroes
-		inc hl								; proximo endereco
-		call WRTVRM						; zero Early / Color
-	pop af
-	pop hl
+	push hl								; BKP
+	push af								; BKP
+	push de								; salvo o valor de DE pq CALATR o altera
+		call CALATR					; pega o endereco do sprite na TBL de atributos
+		di 									; desativo as interrupcoes
+			xor a 						; zero o acumulador
+			call WRTVRM				; zero a posicao Y
+			inc hl						; proximo endereco
+			call WRTVRM				; zero a posicao X
+			inc hl						; proximo endereco
+			call WRTVRM				; zero o numero na tabela de padroes
+			inc hl						; proximo endereco
+			call WRTVRM				; zero Early / Color
+		ei 									; reativo as interrupcoes
+	pop de								; retorno DE
+	pop af								; BKP
+	pop hl								; BKP
 ret
 
 ; =============================================================================

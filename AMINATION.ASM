@@ -22,24 +22,30 @@ startCode:
   call Inicializar            ; Inicializar o ambiente do jogo
   call TelaInicial            ; tela de inicio do jogo
 gameLoop:
-	ld a,(NumCidades)						; Pega o numero de cidades
-	cp 0 												; se nao tem mais cidades
-	jp z,FimDoJogo							; finaliza o jogo
+	call PassarSemana						; passa para a proxima semana
 	call GerarAliens						; sorteia os aliens de acordo com a semana
 DesenharQuadro:
+	ld a,(NumCidades)						; pega o numero de cidades
+	cp 0 												; se nao tem mais cidades
+	jp z,FimDoJogo							; finaliza o jogo
+	ld a,(NumAliensMortos)			; pega os aliens para matar
+	cp 0 												; se nao tem mais aliens
+	jp z,gameLoop								; iniciamos um novo nivel
 	call PegarComandos					; pega a entrada de teclado do jogador
 	call MoverTorpedos					; Atualiza coordenadas dos torpedos
 	call MoverAliens						; Atualiza coordenadas dos Aliens
 	call MoverNave							; Atualiza coordenadas da nave
-	call ChecarColisao					; checa as colisoes
+	;call ChecarColisao					; checa as colisoes
 	xor a 											; zero A
 	ld (JIFFY),a								; zero o incremento do VDP
 	ld a,(vdpCycle1)						; carrego 1/10s
-  ld b,a											; carrego 1/10s em b
-  call PauseVDP               ; aguardo 1/10s
+	ld b,a											; carrego 1/10s em b
+	call PauseVDP               ; aguardo 1/10s
 jr DesenharQuadro						  ; loop de desenho do frame
 FimDoJogo:
-	jr startCode								; recomeca o jogo
+	call LimpaMem								; limpa as variaveis
+jp startCode									; recomeca o jogo
+
 ; =============================================================================
 ; FIM PROGRAMA
 ; =============================================================================
