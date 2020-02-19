@@ -23,14 +23,11 @@ LoopMoveAliens:
 		call CALATR  							; pega o endereco do sprite atual
 		call RDVRM								; pega o conteudo do endereco byte 1(y)
 		inc a                     ; desce uma posicao
-  	call WRTVRM               ; atualiza
-		cp 184										; verifica se o alien bateu no chao
-		ld a,d										; pega o alien a ser removido
-		call z,RemoverAlien				; remove o alien
+  	call WRTVRM               ; atualiza		
 	pop hl
 	pop de
 	pop bc
-	pop af 
+	pop af
   dec a                       ; controla o loop
   cp 9	                      ; verifica se movemos todos os aliens
   jr z,FimMoveAliens 		      ; acabou o loop

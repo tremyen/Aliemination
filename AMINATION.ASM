@@ -35,7 +35,7 @@ DesenharQuadro:
 	call MoverTorpedos					; Atualiza coordenadas dos torpedos
 	call MoverAliens						; Atualiza coordenadas dos Aliens
 	call MoverNave							; Atualiza coordenadas da nave
-	;call ChecarColisao					; checa as colisoes
+	call ChecarColisao					; checa as colisoes
 	xor a 											; zero A
 	ld (JIFFY),a								; zero o incremento do VDP
 	ld a,(vdpCycle1)						; carrego 1/10s
