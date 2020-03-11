@@ -43,7 +43,7 @@ noPalAdjust:
   ld (flgColisaoAlien),a      ; zera os flags de colisao
   ld (flgHouveColisao),a      ; zera os flags de colisao
   ld (flgTorpedos),a          ; zera os flags de torpedos
-  ld (flgNovoNivel),a         ; zera os flags de novo nivel   
-  call LimparTela             ; limpar a VRAM
+  ld (flgNovoNivel),a         ; zera os flags de novo nivel
+  call ClearScreen            ; limpar a VRAM
   ; ===========================================================================
 ret

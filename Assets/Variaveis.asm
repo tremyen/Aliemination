@@ -27,4 +27,8 @@ flgColisaoAlien:   equ ramArea+19 ; flag de colisao de alien (000000XY)
 flgTorpedos:       equ ramArea+20 ; flag de torpedos (0000 T4 T3 T2 T1)
 flgHouveColisao:   equ ramArea+21 ; flag que indica que houve uma colisao
 flgNovoNivel:      equ ramArea+22 ; flag que indica que temos de passar o nivel
+SpriteY            equ ramArea+23 ; Armazenamento para copia de sprites
+SpriteX            equ ramArea+24 ; Armazenamento para copia de sprites
+SpriteP            equ ramArea+24 ; Armazenamento para copia de sprites
+SpriteC            equ ramArea+24 ; Armazenamento para copia de sprites 
 ; =============================================================================

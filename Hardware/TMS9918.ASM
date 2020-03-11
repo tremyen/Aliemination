@@ -108,6 +108,55 @@ ADRSPRITETBL:					equ 14336
 ; =============================================================================
 
 ; =============================================================================
+; SetScreen2_16x16
+; =============================================================================
+; Inicializa os registradores #0 e #1 do VDP
+; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; Nada
+; =============================================================================
+SetScreen2_16x16:
+	push af
+	push bc
+		call INIGRP               ; inicia modo grafico 256x192
+		ld a,(RG1SAV)             ; leio o valor do registro 1
+		and 0xE6                  ; também desligo o zoom dos sprites
+		or 2                      ; e ajusto os sprites para 16x16
+		ld b,a										; carrego o novo valor para o registrador
+		ld c,1										; indico o registrador que vou alterar
+		call WRTVDP               ; altero o valor do registrador 1
+	pop bc
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; ClearScreen
+; =============================================================================
+; Limpar a tela
+; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; Nada
+; =============================================================================
+ClearScreen:
+	push af
+	push bc
+	push de
+		xor a
+		call CLS
+	pop de
+	pop bc
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
 ; LoadSpritesTable
 ; =============================================================================
 ; Carrega a Tabela de sprites
@@ -135,7 +184,7 @@ ret
 ; =============================================================================
 ; PutSprite
 ; =============================================================================
-;	Você pode colar até trinta e dois sprites
+;	Você pode colar até trinta e dois sprites (0 a 31)
 ;	só quatro podem estar presentes na mesma linha horizontal
 ;	o processador sempre irá desenhá-los uma linha abaixo de onde
 ;	você realmente mandou
@@ -248,28 +297,52 @@ RemoveSprite:
 ret
 
 ; =============================================================================
-; SetScreen2_16x16
-; =============================================================================
-; Inicializa os registradores #0 e #1 do VDP
+; CopySprite
 ; =============================================================================
 ; Parametros
-; Nenhum
+; A => Posicao do sprite a ser copiado (0 a 31)
+; L => Posicao para copiar
 ; =============================================================================
 ; Altera
-; Nada
+; Copia um alien de uma posicao para outra na tabela de atributos de sprites
 ; =============================================================================
-SetScreen2_16x16:
+CopySprite:
 	push af
-	push bc
-		call INIGRP               ; inicia modo grafico 256x192
-		ld a,(RG1SAV)             ; leio o valor do registro 1
-		and 0xE6                  ; também desligo o zoom dos sprites
-		or 2                      ; e ajusto os sprites para 16x16
-		ld b,a										; carrego o novo valor para o registrador
-		ld c,1										; indico o registrador que vou alterar
-		call WRTVDP               ; altero o valor do registrador 1
-	pop bc
+		call ReadSprite			; leio o sprite
+		ld a,l							; pego a posicao para copiar
+		call PutSprite			; ponho o novo sprite na memoria
 	pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; MoveSprite
+; =============================================================================
+;	Move um sprite alterando suas coordenadas
+; =============================================================================
+; Parametros
+; A => Sprite a ser movido (tabela de atributos)
+; B => Coordenada Y
+; C => Coordenada X
+; =============================================================================
+; ALTERA
+; posicao do sprite na tabela de atributos
+; =============================================================================
+MoveSprite:
+	push hl								; BKP
+	push af								; BKP
+	push de								; BKP
+		call CALATR					; pega o endereco do sprite na TBL de atributos
+		di 									; desativo as interrupcoes
+			ld a,b 						; carrego posicao y
+			call WRTVRM				; gravo a posicao Y
+			inc hl						; proximo endereco
+			ld a,c 						; carrego a posicao X
+			call WRTVRM				; gravo a posicao X
+		ei 									; reativo as interrupcoes
+	pop de								; BKP
+	pop af								; BKP
+	pop hl								; BKP
 ret
 ; =============================================================================
 
@@ -332,4 +405,28 @@ PauseVDP:
   cp b													; compara com o padrao
   ret z                         ; sai da rotina
 jr PauseVDP
+; =============================================================================
+
+; =============================================================================
+; PrintStringGRP
+; =============================================================================
+; Imprime uma string terminada em ENTER(13) na Tela Grafica
+; =============================================================================
+; Parametros
+; HL => endereco da string a ser escrita
+; =============================================================================
+; Altera
+; Nada
+; =============================================================================
+PrintStringGRP:
+	push af
+		ld a,(hl)
+		cp 13
+		jp z,EndStringGRP
+		call GRPPRT
+		inc hl
+		jp PrintStringGRP
+EndStringGRP:
+	pop af
+ret
 ; =============================================================================
