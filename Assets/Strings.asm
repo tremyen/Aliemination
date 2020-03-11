@@ -5,4 +5,7 @@
 ; Strings utilizadas no jogo
 ; =============================================================================
 MsgInicioJogo:
-  db "Digite <ENTER> para jogar.",0
+  db "Digite <ENTER> para jogar.",13
+MsgPontuacao:
+  db "Semana:",13
+  ; =============================================================================

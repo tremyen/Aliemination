@@ -16,7 +16,6 @@ TelaInicial:
     ; =========================================================================
     ; CARREGA AS TABELAS DO VDP
     ; =========================================================================
-    ;call LoadPatternTable       ; Carrega fontes
     call LoadSpritesTable       ; Carrega os sprites
     ; =========================================================================
     ; Desenhar Nave usa 2 sprites (0,1)
@@ -63,6 +62,11 @@ TelaInicial:
     ld a,8                     ; posicao do sprite na tabela de atributos
     call DesenharCidade
     ; =========================================================================
+    ; Escrever a mensagem de inicio de jogo
+    ; =========================================================================
+    ; ld hl,MsgInicioJogo
+    ; call PrintStringGRP
   call ENASCR
+  xor a
   call WaitEnter
 ret

@@ -5,9 +5,9 @@
 ; =============================================================================
 GerarAliens:
   ld a,(NumSemana)        ; pega a semana atual
-  ld b,4                  ; prepara multipilicador
-  call Multiply           ; Multiplica a semana por 4
-  ld (NumAliensMortos),a  ; aliens que precisam ser eliminados 
+  sla a
+  sla a                   ; multiplico por 4 
+  ld (NumAliensMortos),a  ; aliens que precisam ser eliminados
   ld (NumSorteios),a      ; prepara o contador do numero de sorteios
 SorteiaAliens:            ; sorteia um numero de aliens igual a semana*4
   ld a,3                  ; aliens podem estar em 4 posicoes X (0-3)

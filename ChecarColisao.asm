@@ -8,6 +8,7 @@ ChecarColisao:
   call CheckVdpColision ; checar se o vdp detectou uma colisao de sprites
   cp 0                  ; se nao rolou uma batida
   jp z,FimColisoes      ; nao houve colisao, terminar
+  di                    ; desabilita as interrupcoes
   ; ===============================================================
   ; Checar se Torpedos colidiram
   ; ===============================================================
@@ -94,6 +95,7 @@ ChecarColisao:
   ; call z,DestroiCidade4    ; A cidade 4 foi destruida!
   ; ===============================================================
 FimColisoes:
+  ei
 ret
 
 ; ============================================================================

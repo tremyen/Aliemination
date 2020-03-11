@@ -8,7 +8,6 @@ __VERSION:  equ 1
 __RELEASE:  equ 0
 include "Hardware\BIOSMSX.ASM"
 include "Assets\Constantes.asm"
-include "Assets\Variaveis.asm"
 
 org romArea
 	db "AB"                     ; identifica como ROM
@@ -51,7 +50,13 @@ jp startCode									; recomeca o jogo
 ; =============================================================================
 Cenario:
 incbin "Assets\CENARIO.SC2"
+include "Assets\Variaveis.asm"
 include "Assets\Sprites.asm"
+include "Assets\Strings.asm"
+include "Assets\Library.asm"
+include "Hardware\AY38910.ASM"
+include "Hardware\TMS9918.ASM"
+include "Hardware\KEYBOARD.ASM"
 include "Inicializar.asm"
 include "TelaInicial.asm"
 include "GerarAliens.asm"
@@ -60,10 +65,7 @@ include "MoverTorpedos.asm"
 include "MoverAliens.asm"
 include "MoverNave.asm"
 include "ChecarColisao.asm"
-include "Hardware\AY38910.ASM"
-include "Hardware\TMS9918.ASM"
-include "Hardware\KEYBOARD.ASM"
-include "Library\Library.asm"
+
 ; =============================================================================
 ; Padding
 ; =============================================================================

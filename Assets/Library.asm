@@ -52,10 +52,10 @@ LimpaMem:
 		ld (NumContColuna3),a
 		ld (NumContColuna4),a
 		ld (NumSorteios),a
+		ld (NumCidades),a
 		ld (vdpCycle1),a
 		ld (vdpCycle5),a
 		ld (flgColisaoAlien),a
-		ld (NumCidades),a
 		ld (flgTorpedos),a
 		ld (flgHouveColisao),a
 		ld (flgNovoNivel),a
@@ -279,8 +279,10 @@ Coluna0:
   ; Desenhar Alien na coluna 0
   ;===================================
   ld a,(NumContColuna1)       ; pegamos o numero de inimigos na coluna
-  ld b,16                     ; preparamos o multiplicando (comp do sprite)
-  call Multiply               ; Multiplicams por 16
+	sla a
+	sla a
+	sla a
+	sla a												; multiplicamos por 16 (4x shift left)
   ld d,a                      ; posicao y = num na coluna x comp do sprite
   ld e,10                     ; posicao x = fixa
   ld a,(NumAliens)            ; a posicao na tabela de atributos
@@ -305,8 +307,10 @@ Coluna1:
 	; Desenhar Alien na coluna 1
 	;===================================
 	ld a,(NumContColuna2)       ; pegamos o numero de inimigos na coluna
-	ld b,16                     ; preparamos o multiplicando (comp do sprite)
-	call Multiply               ; Multiplicar o contador de inimigos por 16
+	sla a
+	sla a
+	sla a
+	sla a												; multiplicamos por 16 (4x shift left)
 	add a,16                    ; As cidades mais baixas os aliens saem na frente
 	ld d,a                      ; posicao y = num na coluna x comp do sprite
 	ld e,40                     ; posicao x
@@ -332,8 +336,10 @@ Coluna2:
   ; Desenhar Alien na coluna 2
   ;===================================
   ld a,(NumContColuna3)
-  ld b,16
-  call Multiply               ; Multiplicar o contador de inimigos por 16
+	sla a
+	sla a
+	sla a
+	sla a												; multiplicamos por 16 (4x shift left)
   add a,16
   ld d,a                      ; posicao y
   ld e,184                    ; posicao x
@@ -359,8 +365,10 @@ Coluna3:
 	; Desenhar Alien coluna 3
 	;===================================
 	ld a,(NumContColuna4)
-	ld b,16
-	call Multiply               ; Multiplicar o contador de inimigos por 16
+	sla a
+	sla a
+	sla a
+	sla a												; multiplicamos por 16 (4x shift left)
 	ld d,a                      ; posicao y
 	ld e,240                    ; posicao x
 	ld a,(NumAliens)            ; a posicao na tabela de atributos
@@ -428,36 +436,6 @@ WaitEnter:
 		jr z,EndWaitEnter
 		jr WaitEnter
 EndWaitEnter:
-ret
-; =============================================================================
-
-; =============================================================================
-; Multiply
-; =============================================================================
-; Parametros
-; A => Multiplicando
-; B => Multiplicador
-; =============================================================================
-; Altera => A (resultado)
-; =============================================================================
-Multiply:
-	push bc
-	push de
-		ld c,a 							; carrega multiplicando
-		ld d,a							; guarda buffer de soma
-AddAgain:
-		ld a,d							; pega o buffer de soma a cada passada
-		add a,c							; adiciona multiplicando
-		dec b								; controla multiplicador
-		ld d,a							; salva soma ate o momento
-		ld a,b 							; prepara comparacao
-		cp 1								; se b = 1 multiplicamos tudo
-		jr z,EndMultiply		; termina a multiplicacao
-		jr AddAgain					; mais uma soma
-EndMultiply:
-		ld a,d							; pega o buffer de soma
-	pop de
-	pop bc
 ret
 ; =============================================================================
 
@@ -556,6 +534,11 @@ ret
 ; B
 ; =============================================================================
 ChecarAlienXY:
+	; ====================================================
+	; Vamos fazer um loop de tras para fente da posicao
+	; 9+NumAliens até a posicao 10 (inicio dos aliens na
+	; tabela de atributos de sprite)
+	; ====================================================
 	push bc
 		ld a,(NumAliens)      	; pega o numero de Aliens
 		cp 0 										; se nao tem aliens
@@ -564,7 +547,7 @@ ChecarAlienXY:
 		ld b,a                	; carrega o ultimo alien
 loopAlienPosicao:
 		call ChecarPosicaoALien	; Checa todos os pontos da hitbox do alien
-		ld a,b									; pega o controle do loop
+		ld a,b									; Pega o alien sendo testado
 		cp 10	                 	; Os aliens terminam na posicao 10
   	jp z,ChecouTodos       	; checamos todos os aliens
   	dec a                 	; proximo alien
@@ -696,6 +679,28 @@ PassarSemana:
 		jr z,SemanaMaxima				; não podemos passar da quarta semana
   	ld (NumSemana),a				; carregamos a nova semana
 SemanaMaxima:
+	pop af
+ret
+; ============================================================================
+
+; ============================================================================
+; Imprime uma string terminada em ENTER(13) na Tela Grafica
+; ============================================================================
+; Parametros
+; HL => endereco da string a ser escrita
+; =============================================================================
+; Altera
+; Nada
+; =============================================================================
+PrintStringGRP:
+	push af
+		ld a,(hl)
+		cp 13
+		jp z,EndStringGRP
+		call GRPPRT
+		inc hl
+		jp PrintStringGRP
+EndStringGRP:
 	pop af
 ret
 ; ============================================================================
