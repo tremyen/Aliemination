@@ -20,16 +20,16 @@ org romArea
 startCode:
   call Inicializar            ; Inicializar o ambiente do jogo
   call TelaInicial            ; tela de inicio do jogo
-gameLoop:
+GameLoop:
 	call PassarSemana						; passa para a proxima semana
 	call GerarAliens						; sorteia os aliens de acordo com a semana
 DesenharQuadro:
 	ld a,(NumCidades)						; pega o numero de cidades
 	cp 0 												; se nao tem mais cidades
 	jp z,FimDoJogo							; finaliza o jogo
-	ld a,(NumAliensMortos)			; pega os aliens para matar
+	ld a,(NumAliens)						; pega o numero de aliens
 	cp 0 												; se nao tem mais aliens
-	jp z,gameLoop								; iniciamos um novo nivel
+	jp z,GameLoop								; iniciamos um novo nivel
 	call PegarComandos					; pega a entrada de teclado do jogador
 	call MoverTorpedos					; Atualiza coordenadas dos torpedos
 	call MoverAliens						; Atualiza coordenadas dos Aliens

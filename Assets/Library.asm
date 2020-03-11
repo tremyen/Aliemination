@@ -44,7 +44,6 @@ LimpaMem:
 		ld (NumSemana),a
 		ld (NumVelAlien),a
 		ld (NumTorpedos),a
-		ld (NumAliensMortos),a
 		ld (NumAliens),a
 		ld (NumVelNave),a
 		ld (NumContColuna1),a
@@ -389,9 +388,6 @@ ret
 RemoverAlien:
 	push af
 		call RemoveSprite				; Remove o alien
-		ld a,(NumAliensMortos)	; pega contador de aliens mortos
-		dec a 									; decrementa o contador de aliens mortos
-		ld (NumAliensMortos),a	; atualiza contador de aliens mortos
 		ld a,(NumAliens) 				; pega contador de aliens
 		dec a 									; decrementa o contador de aliens
 		ld (NumAliens),a 				; atualiza contador de aliens
@@ -642,26 +638,6 @@ ret
 
 ; =============================================================================
 
-; =============================================================================
-; CheckVdpColision
-; =============================================================================
-; Parametros
-; Nenhum
-; =============================================================================
-; Altera
-; A => Se houve uma colisao 1, senao 0
-; =============================================================================
-CheckVdpColision:
-	call ReadVDPStatus
-	bit 5,a
-	jp z,SemColisao
-	ld a,1
-	ret
-SemColisao:
-	ld a,0
-ret
-; =============================================================================
-
 ; ============================================================================
 ; PassarSemana
 ; ============================================================================
@@ -679,6 +655,16 @@ PassarSemana:
 		jr z,SemanaMaxima				; não podemos passar da quarta semana
   	ld (NumSemana),a				; carregamos a nova semana
 SemanaMaxima:
+		ld a,10									; prepara o loop de limpeza de aliens
+LoopLimpaAliens:
+		call RemoverAlien				; remove o alien atual
+		cp 25 									; os aliens vao ate a posicao 25
+		jp z,LimpeiOsAliens			; se eh zero limpamos todos
+		inc a
+		jp LoopLimpaAliens
+LimpeiOsAliens:
+		xor a
+		ld (NumAliens),a
 	pop af
 ret
 ; ============================================================================

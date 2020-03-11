@@ -6,8 +6,7 @@
 GerarAliens:
   ld a,(NumSemana)        ; pega a semana atual
   sla a
-  sla a                   ; multiplico por 4 
-  ld (NumAliensMortos),a  ; aliens que precisam ser eliminados
+  sla a                   ; multiplico por 4
   ld (NumSorteios),a      ; prepara o contador do numero de sorteios
 SorteiaAliens:            ; sorteia um numero de aliens igual a semana*4
   ld a,3                  ; aliens podem estar em 4 posicoes X (0-3)
@@ -18,7 +17,7 @@ SorteiaAliens:            ; sorteia um numero de aliens igual a semana*4
   ld (NumSorteios),a      ; atualiza o numero de sorteios
   cp 0                    ; sorteou todos
   jr z,FimSorteiaAliens   ; volta para loop do jogo
-jr SorteiaAliens          ; volta para o sorteio de aliens
+  jr SorteiaAliens        ; volta para o sorteio de aliens
 FimSorteiaAliens:
 ret
 ; =============================================================================

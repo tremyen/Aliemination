@@ -5,10 +5,10 @@
 ; Testa as colisoes dos sprites na tela
 ; =============================================================================
 ChecarColisao:
+di                      ; desabilita as interrupcoes
   call CheckVdpColision ; checar se o vdp detectou uma colisao de sprites
   cp 0                  ; se nao rolou uma batida
   jp z,FimColisoes      ; nao houve colisao, terminar
-  di                    ; desabilita as interrupcoes
   ; ===============================================================
   ; Checar se Torpedos colidiram
   ; ===============================================================
