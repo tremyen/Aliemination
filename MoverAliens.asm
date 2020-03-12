@@ -19,11 +19,13 @@ LoopMoveAliens:
 	push bc
 	push de
 	push hl
-		ld d,a										; guarda o numero do alien testado
-		call CALATR  							; pega o endereco do sprite atual
-		call RDVRM								; pega o conteudo do endereco byte 1(y)
-		inc a                     ; desce uma posicao
-  	call WRTVRM               ; atualiza		
+		di
+			ld d,a									; guarda o numero do alien testado
+			call CALATR  						; pega o endereco do sprite atual
+			call RDVRM							; pega o conteudo do endereco byte 1(y)
+			inc a                   ; desce uma posicao
+			call WRTVRM             ; atualiza
+		ei
 	pop hl
 	pop de
 	pop bc
