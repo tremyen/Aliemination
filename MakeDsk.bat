@@ -1,0 +1,2 @@
+@echo off
+pasmo AMINATION.ASM DSK\AMINATION.ROM
