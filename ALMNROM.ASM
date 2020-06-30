@@ -18,8 +18,8 @@ org romArea
 ; INICIO PROGRAMA
 ; =============================================================================
 startCode:
-  call Inicializar          	; Inicializar o ambiente do jogo
-  call TelaInicial          	; tela de inicio do jogo
+  	call Inicializar          	; Inicializar o ambiente do jogo
+  	call TelaInicial          	; tela de inicio do jogo
 GameLoop:
 	call PassarSemana			; passa para a proxima semana
 	call GerarAliens			; sorteia os aliens de acordo com a semana
@@ -45,18 +45,6 @@ FimDoJogo:
 	call LimpaMem				; limpa as variaveis
 jp startCode					; recomeca o jogo
 
-; =============================================================================
-; FIM PROGRAMA
-; =============================================================================
-Cenario:
-incbin "Assets\CENARIO.SC2"
-include "Assets\Variaveis.asm"
-include "Assets\Sprites.asm"
-include "Assets\Strings.asm"
-include "Assets\Library.asm"
-include "Hardware\AY38910.ASM"
-include "Hardware\TMS9918.ASM"
-include "Hardware\KEYBOARD.ASM"
 include "Inicializar.asm"
 include "TelaInicial.asm"
 include "GerarAliens.asm"
@@ -65,6 +53,18 @@ include "MoverTorpedos.asm"
 include "MoverAliens.asm"
 include "MoverNave.asm"
 include "ChecarColisao.asm"
+; =============================================================================
+; FIM PROGRAMA
+; =============================================================================
+include "Assets\Variaveis.asm"
+include "Assets\Sprites.asm"
+include "Assets\Strings.asm"
+include "Assets\Library.asm"
+include "Hardware\AY38910.ASM"
+include "Hardware\TMS9918.ASM"
+include "Hardware\KEYBOARD.ASM"
+Cenario:
+incbin "Assets\CENARIO.SC2"
 
 ; =============================================================================
 ; Padding
