@@ -29,7 +29,7 @@ DesenharQuadro:
 	jp z,FimDoJogo				; finaliza o jogo
 	ld a,(NumAliens)			; pega o numero de aliens
 	cp 0 						; se nao tem mais aliens
-	jp z,GameLoop				; iniciamos um novo nivel
+	jp z,FimDoJogo				; iniciamos um novo nivel
 	call PegarComandos			; pega a entrada de teclado do jogador
 	call MoverTorpedos			; Atualiza coordenadas dos torpedos
 	call MoverAliens			; Atualiza coordenadas dos Aliens
@@ -42,8 +42,7 @@ DesenharQuadro:
 	call PauseVDP               ; aguardo 1/10s
 jr DesenharQuadro				; loop de desenho do frame
 FimDoJogo:
-	call LimpaMem				; limpa as variaveis
-jp startCode					; recomeca o jogo
+	jp startCode				; recomeca o jogo
 
 include "Inicializar.asm"
 include "TelaInicial.asm"
@@ -63,9 +62,6 @@ include "Assets\Library.asm"
 include "Hardware\AY38910.ASM"
 include "Hardware\TMS9918.ASM"
 include "Hardware\KEYBOARD.ASM"
-Cenario:
-incbin "Assets\CENARIO.SC2"
-
 ; =============================================================================
 ; Padding
 ; =============================================================================

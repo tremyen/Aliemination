@@ -4,15 +4,16 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
 TelaInicial:
+  call ClearScreen
   call DISSCR
     call SetScreen2_16x16       ; Seta a tela para screen 2 com sprites 16 x 16
     ; =========================================================================
     ; DESENHAR O CENARIO
     ; =========================================================================
-    ld de,0                     ; Base da memoria da VRAM
-    ld hl,Cenario+7             ; os primeiros 7 bytes sao cabecalho
-    ld bc,15360                 ; tamanho da BMP
-    call LDIRVM                 ; copio para a VRAM
+    ;ld de,0                     ; Base da memoria da VRAM
+    ;ld hl,Cenario+7             ; os primeiros 7 bytes sao cabecalho
+    ;ld bc,15360                 ; tamanho da BMP
+    ;call LDIRVM                 ; copio para a VRAM
     ; =========================================================================
     ; CARREGA AS TABELAS DO VDP
     ; =========================================================================
@@ -64,8 +65,8 @@ TelaInicial:
     ; =========================================================================
     ; Escrever a mensagem de inicio de jogo
     ; =========================================================================
-    ; ld hl,MsgInicioJogo
-    ; call PrintStringGRP
+    ld hl,MsgInicioJogo
+    call PrintStringGRP
   call ENASCR
   xor a
   call WaitEnter
