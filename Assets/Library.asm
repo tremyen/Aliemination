@@ -116,8 +116,6 @@ Remove1:
 	push af
 		ld a,2
 		call RemoveSprite
-		ld a,3
-		call RemoveSprite
 		ld a,(NumCidades)
 		dec a
 		ld (NumCidades),a
@@ -126,9 +124,7 @@ ret
 
 Remove2:
 	push af
-		ld a,4
-		call RemoveSprite
-		ld a,5
+		ld a,3
 		call RemoveSprite
 		ld a,(NumCidades)
 		dec a
@@ -138,9 +134,7 @@ ret
 
 Remove3:
 	push af
-		ld a,6
-		call RemoveSprite
-		ld a,7
+		ld a,4
 		call RemoveSprite
 		ld a,(NumCidades)
 		dec a
@@ -150,9 +144,7 @@ ret
 
 Remove4:
 	push af
-		ld a,8
-		call RemoveSprite
-		ld a,9
+		ld a,5
 		call RemoveSprite
 		ld a,(NumCidades)
 		dec a
@@ -597,7 +589,7 @@ ret
 ; =============================================================================
 
 ; =============================================================================
-; Print String
+; Print String (Tela Grafica)
 ; =============================================================================
 ; Parametros
 ; HL => Endereço da string
