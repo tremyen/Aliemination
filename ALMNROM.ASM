@@ -17,7 +17,7 @@ org romArea
 ; =============================================================================
 ; INICIO PROGRAMA
 ; =============================================================================
-startCode:
+startCode:  
   	call Inicializar          	; Inicializar o ambiente do jogo
   	call TelaInicial          	; tela de inicio do jogo
 GameLoop:
