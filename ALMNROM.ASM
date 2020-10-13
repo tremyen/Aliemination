@@ -41,7 +41,7 @@ DesenharQuadro:
 	ld a,(vdpCycle1)			; carrego 1/10s
 	ld b,a						; carrego 1/10s em b
 	call PauseVDP               ; aguardo 1/10s
-jp DesenharQuadro				; loop de desenho do frame
+	jp DesenharQuadro			; loop de desenho do frame
 FimDoJogo:
 	jp startCode				; recomeca o jogo
 
