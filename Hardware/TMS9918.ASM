@@ -421,12 +421,18 @@ ret
 ; =============================================================================
 ; Parametros
 ; HL => endereco da string a ser escrita
+; D  => Coordenada X da Mensagem
+; E	 => Coordenada y da Mensagem
 ; =============================================================================
 ; Altera
 ; Nada
 ; =============================================================================
 PrintStringGRP:
 	push af
+		ld a,d
+		ld (GRPACX),a
+		ld a,e		 
+		ld (GRPACY),a
 NextChar:	
 		ld a,(hl)
 		cp 13

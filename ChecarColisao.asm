@@ -43,13 +43,13 @@ di                          ; desabilita as interrupcoes
   ; ===============================================================
   ; Checar se Nave colidiu
   ; ===============================================================
-  ;ld a,(NumPosYNave)
-  ;ld h,a
-  ;ld a,(NumPosXNave)
-  ;ld l,a
-  ;call ChecarAlienXY
-  ;cp 1
-  ;jp z,FimDoJogo        ; a nave foi atingida! fim do jogo
+  ld a,(NumPosYNave)
+  ld h,a
+  ld a,(NumPosXNave)
+  ld l,a
+  call ChecarAlienXY
+  cp 1
+  jp z,FimDoJogo            ; a nave foi atingida! fim do jogo
   ; ===============================================================
   ; Checar se Cidade 1 colidiu
   ; ===============================================================

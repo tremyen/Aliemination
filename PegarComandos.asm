@@ -135,7 +135,7 @@ Descer:
     ld d,a                    ; no registrador d
     ld hl,NumPosYNave         ; pega posicao y da nave
     ld a,(hl)                 ; prepara o acumulador para a conta
-    cp 101                    ; A nave nao pode sair da tela
+    cp 165                    ; A nave nao pode sair da tela
     jp nc,PosMaximaDes        ; na posicao maxima, nao se move mais
     add a,d                   ; tira a velocidade da coordenada y
     ld (hl),a                 ; guarda a posicao da nave

@@ -4,7 +4,6 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; =============================================================================
 Inicializar:
-  call LimpaMem           ; limpar a memoria
   ; ===========================================================================
   ; Verifico se o MSX eh PAL ou NTSC
   ; ===========================================================================
@@ -34,7 +33,7 @@ noPalAdjust:
   ld a,1                      ; Prepara a velocidade dos aliens
   ld (NumVelAlien),a          ; Carrega a velocidade do Alien
   xor a                       ; Zera A
-  ld (NumSemana),a            ; zera a pontuacao
+  ld (NumNivel),a             ; zera o nivel do jogo
   ld (NumAliens),a            ; zera o nuemro de aliens
   ld (NumContColuna1),a       ; zera os inimigos na coluna 1
   ld (NumContColuna2),a       ; zera os inimigos na coluna 2

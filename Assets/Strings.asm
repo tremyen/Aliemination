@@ -6,8 +6,8 @@
 ; =============================================================================
 MsgInicioJogo:
   db "Digite <ENTER> para jogar.",13
-MsgPontuacao:
-  db "Semana:",13
+MsgNivel:
+  db "Nivel:",13
 MsgInimigos:
   db "Inimigos:",13
 ; =============================================================================
