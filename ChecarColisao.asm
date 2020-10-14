@@ -5,41 +5,9 @@
 ; Testa as colisoes dos sprites na tela
 ; =============================================================================
 ChecarColisao:
-di                          ; desabilita as interrupcoes
-    call CheckVdpColision   ; checar se o vdp detectou uma colisao de sprites
-    cp 0                    ; se nao rolou uma batida
-    jp z,FimColisoes        ; nao houve colisao, terminar
-    ; ===============================================================
-    ; Checar se Torpedos colidiram
-    ; ===============================================================
-    ld a,28
-    call ReadSprite         ; le o torpedo 28
-    ld h,d                  ; pegomos y do torpedo
-    ld l,e                  ; pegamos x do torpedo
-    call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
-    cp 1                    ; se teve colizao
-    call z,RemoveTorp28     ; remove o torpedo 28
-    ld a,29
-    call ReadSprite         ; le o torpedo
-    ld h,d                  ; pegomos y do torpedo
-    ld l,e                  ; pegamos x do torpedo
-    call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
-    cp 1                    ; se teve colizao
-    call z,RemoveTorp29     ; remove o torpedo
-    ld a,30
-    call ReadSprite         ; le o torpedo
-    ld h,d                  ; pegomos y do torpedo
-    ld l,e                  ; pegamos x do torpedo
-    call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
-    cp 1                    ; se teve colizao
-    call z,RemoveTorp30     ; remove o torpedo
-    ld a,31
-    call ReadSprite         ; le o torpedo
-    ld h,d                  ; pegomos y do torpedo
-    ld l,e                  ; pegamos x do torpedo
-    call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
-    cp 1                    ; se teve colizao
-    call z,RemoveTorp31     ; remove o torpedo
+  call CheckVdpColision   ; checar se o vdp detectou uma colisao de sprites
+  cp 0                    ; se nao rolou uma batida
+  jp z,FimColisoes        ; nao houve colisao, terminar
   ; ===============================================================
   ; Checar se Nave colidiu
   ; ===============================================================
@@ -50,6 +18,40 @@ di                          ; desabilita as interrupcoes
   call ChecarAlienXY
   cp 1
   jp z,FimDoJogo            ; a nave foi atingida! fim do jogo
+  ; ===============================================================
+  ; Checar se Torpedos colidiram
+  ; ===============================================================
+  ld a,28
+  call ReadSprite         ; le o torpedo 28
+  ld h,d                  ; pegamos y do torpedo
+  ld l,e                  ; pegamos x do torpedo
+  call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
+  cp 1                    ; se teve colizao
+  call z,RemoveTorp28     ; remove o torpedo 28
+  ; ===============================================================
+  ld a,29
+  call ReadSprite         ; le o torpedo
+  ld h,d                  ; pegomos y do torpedo
+  ld l,e                  ; pegamos x do torpedo
+  call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
+  cp 1                    ; se teve colizao
+  call z,RemoveTorp29     ; remove o torpedo
+  ; ===============================================================
+  ld a,30
+  call ReadSprite         ; le o torpedo
+  ld h,d                  ; pegomos y do torpedo
+  ld l,e                  ; pegamos x do torpedo
+  call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
+  cp 1                    ; se teve colizao
+  call z,RemoveTorp30     ; remove o torpedo
+  ; ===============================================================
+  ld a,31
+  call ReadSprite         ; le o torpedo
+  ld h,d                  ; pegomos y do torpedo
+  ld l,e                  ; pegamos x do torpedo
+  call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
+  cp 1                    ; se teve colizao
+  call z,RemoveTorp31     ; remove o torpedo
   ; ===============================================================
   ; Checar se Cidade 1 colidiu
   ; ===============================================================
@@ -92,7 +94,6 @@ di                          ; desabilita as interrupcoes
   call z,DestroiCidade4    ; A cidade 4 foi destruida!
   ; ===============================================================
 FimColisoes:
-ei
 ret
 
 ; ============================================================================

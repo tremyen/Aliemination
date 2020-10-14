@@ -455,8 +455,7 @@ ret
 ; d => Coordenada Y
 ; e => Coordenada X
 ; =============================================================================
-; Altera
-;	Adiciona o sprite do torpedo na fila de atributos
+; Altera =>	Adiciona o sprite do torpedo na fila de atributos
 ; =============================================================================
 DesenharTorpedo:
 	push bc
@@ -474,17 +473,16 @@ ret
 ; ChecarAlienXY
 ; =============================================================================
 ; Parametros
-; h => Coordenada Y
-; l => Coordenada X
+; H => Coordenada Y
+; L => Coordenada X
 ; =============================================================================
 ; Altera
 ; A => Se existe um alien nessa posicao, retorna 1, se nao existe retorna 0
 ; =============================================================================
 ChecarAlienXY:
 	; ====================================================
-	; Vamos fazer um loop de tras para fente da posicao
-	; 9+NumAliens até a posicao 10 (inicio dos aliens na
-	; tabela de atributos de sprite)
+	; Vamos fazer um loop por todos os aliens e verificar 
+	; se os parametros estao nos aliens checados
 	; ====================================================
 	push bc
 		ld a,(NumAliens)      	; pega o numero de Aliens
@@ -492,84 +490,19 @@ ChecarAlienXY:
 		jp z,ChecouTodos		; nao tem colisao
 		add a,9                	; somo com 9 pois os aliens estao na posicao 10
 		ld b,a                	; carrega o ultimo alien
+		ld a,10					; carrega o alien inicial 
 loopAlienPosicao:
-		call ChecarPosicaoAlien	; Checa todos os pontos da hitbox do alien
-		ld a,b					; Pega o alien sendo testado
-		cp 10	                ; Os aliens terminam na posicao 10
+		call SpriteXY			; pega as coordenadas do alien
+		call ChecarHitbox 		; compara posicao do alien com a hitbox 
+		cp b	                ; compara o alien em teste com o ultimo alien
   		jp z,ChecouTodos       	; checamos todos os aliens
-  		dec a                 	; proximo alien
-		ld b,a					; atualiza o alien que estamos testando
+  		inc a                 	; proximo alien
 		jr loopAlienPosicao
 ChecouTodos:
 	pop bc
 	ld a,(flgHouveColisao)
 ret
-
-ChecarPosicaoAlien:
-	xor a						; zera acumulador
-	ld (flgColisaoAlien),a		; zera o flag de colisao com alien
-	ld (flgHouveColisao),a  	; zera flag de colisao geral
-	ld a,b 						; pega o alien que vamos testar
-	push bc						; bkp
-	push de						; bkp
-		call ReadSprite   		; le o sprite do alien (D=Y, E=X)
-		call AlienPosYOK  		; seta o flag de colisao y (bit 0 flgColisaoAlien)
-		call AlienPosXOK 		; seta o flag de colisao X (bit 1 flgColisaoAlien)
-	pop de						; volta bkp
-	pop bc						; volta bkp
-	ld a,(flgColisaoAlien)		; pega o resultado das colisoes
-	cp 3						; se bits 0 e 1 estao ligados houve colisao
-	call z,Colidiu				; COLISAO
-ret
-
-Colidiu:
-	push af
-		ld a,b					; pega o numero do alien que estamos testando
-		call RemoverAlien		; remove o alien
-		ld a,1 					; carrega acumulador
-		ld (flgHouveColisao),a 	; seta o indicador de colisao
-	pop af
-ret
-
-AlienPosYOK:
-	push af 					; BKP
-	push bc						; BKP
-		ld a,h					; pega o parametro y
-		add a,8					; soma 8 para o limite da hitbox
-		ld b,a					; guarda o limite da hitbox
-		ld a,h					; pega o parametro y
-		sub 8					; diminui 8 para o inicio da hitbox
-loopHitboxY:
-		cp d					; Compara com a pos y do alien
-		call z,SetaFlagColisaoY	; se sim esse alien colidiu
-		inc a					; pegamos proxima coordenada do hitbox
-		cp b					; comparamos com o limite da hitbox
-		jp z,FimHitboxX			; verificamos todos os pontos da hitbox
-	jp loopHitboxY				; senao pegamos o proximo
-FimHitboxY:
-	pop bc						; volta bkp
-	pop af						; volta bkp
-ret
-
-AlienPosXOK:
-	push af
-	push bc
-		ld a,l					; pega o parametro x
-		add a,8					; soma 8 para o limite da hitbox
-		ld b,a					; guarda o limite da hitbox
-		ld a,l					; pega o parametro x
-		sub 8					; diminui 8 para o inicio da hitbox
-loopHitboxX:
-		cp e					; compara com a posicao x do alien
-		call z,SetaFlagColisaoX	; se sim esse alien colidou
-		inc a					; incrementa a posicao atual
-		cp b					; compara com o limite superior
-		jp z,FimHitboxX			; testamos toda a hitbox
-		jp loopHitboxX			; testamos a proxima posicao
-FimHitboxX:
-	pop bc
-	pop af
-ret
+; =============================================================================
 
 SetaFlagColisaoY:
 	push af
@@ -600,8 +533,110 @@ ret
 ; Escreve a mensagem em HL na tela nas coordenadas DE
 ; =============================================================================
 PrintString:
+	call PrintStringGRP
+ret
+; =============================================================================
+
+; =============================================================================
+; Recuperar posicao X/Y de um sprite 
+; =============================================================================
+; Parametros
+; A => Nuemro do sprite 
+; =============================================================================
+; Altera
+; E => Coordenada X do sprite 
+; D => Coordenada Y do sprite 
+; =============================================================================
+SpriteXY:
+	push af 
+	push bc
+	push hl
+		call ReadSprite
+	pop hl
+	pop bc
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; Colisao de Sprites 
+; =============================================================================
+; Parametros
+; A => Nuemro do sprite 
+; =============================================================================
+; Altera => Nada
+; =============================================================================
+Colidiu:
 	push af
-		call PrintStringGRP
+		call RemoverAlien		; remove o alien
+		ld a,1 					; carrega acumulador
+		ld (flgHouveColisao),a 	; seta o indicador de colisao
+	pop af
+ret
+; =============================================================================
+
+; =============================================================================
+; Checar Hitbox 
+; =============================================================================
+; Parametros
+; A => Numero do sprite
+; H => Posicao a ser checada Y
+; L => Posicao a ser checada X
+; D => Posicao Y do alien 
+; E => Posicao X do alien 
+; =============================================================================
+; Altera => Flag de colisao
+; =============================================================================
+ChecarHitbox:
+	push bc						; bkp
+	push de						; bkp
+		call AlienPosYOK  		; flag de colisao y (bit 0 flgColisaoAlien)
+		call AlienPosXOK 		; flag de colisao X (bit 1 flgColisaoAlien)
+	pop de						; volta bkp
+	pop bc						; volta bkp
+	ld a,(flgColisaoAlien)		; pega o resultado das colisoes
+	cp 3						; se bits 0 e 1 estao ligados houve colisao
+	call z,Colidiu				; COLISAO
+ret
+; =============================================================================
+
+AlienPosYOK:
+	push af 					; BKP
+	push bc						; BKP
+		ld a,h					; pega o parametro y
+		add a,8					; soma 8 para o limite da hitbox
+		ld b,a					; guarda o limite da hitbox
+		ld a,h					; pega o parametro y
+		sub 8					; diminui 8 para o inicio da hitbox
+loopHitboxY:
+		cp d					; Compara com a pos y do alien
+		call z,SetaFlagColisaoY	; se sim esse alien colidiu
+		inc a					; pegamos proxima coordenada do hitbox
+		cp b					; comparamos com o limite da hitbox
+		jp z,FimHitboxX			; verificamos todos os pontos da hitbox
+	jp loopHitboxY				; senao pegamos o proximo
+FimHitboxY:
+	pop bc						; volta bkp
+	pop af						; volta bkp
+ret
+; =============================================================================
+AlienPosXOK:
+	push af
+	push bc
+		ld a,l					; pega o parametro x
+		add a,8					; soma 8 para o limite da hitbox
+		ld b,a					; guarda o limite da hitbox
+		ld a,l					; pega o parametro x
+		sub 8					; diminui 8 para o inicio da hitbox
+loopHitboxX:
+		cp e					; compara com a posicao x do alien
+		call z,SetaFlagColisaoX	; se sim esse alien colidou
+		inc a					; incrementa a posicao atual
+		cp b					; compara com o limite superior
+		jp z,FimHitboxX			; testamos toda a hitbox
+		jp loopHitboxX			; testamos a proxima posicao
+FimHitboxX:
+	pop bc
 	pop af
 ret
 ; =============================================================================

@@ -359,7 +359,7 @@ ret
 ; 5				C		Flag de colisao
 ; 4 to 0		5SN		Number of the 5th sprite (SCREEN 1 and 2)
 ;
-; * 5,6 e 7 sao resetados quando o registrador e lido ou o VDP Resetado
+; * 5,6 e 7 sao resetados quando o registrador eh lido ou o VDP Resetado
 ; * O registrador deve ser lido apenas quando o VDP interrupt esta pendente
 ; =============================================================================
 ; Parametros
