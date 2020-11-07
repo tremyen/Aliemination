@@ -4,20 +4,45 @@
 ; (C) 2019 Manoel Neto - tremyen@gmail.com
 ; Testa as colisoes dos sprites na tela
 ; =============================================================================
+; Para que haja uma colisao, devemos checar se um dos aliens da fila de aliens 
+; esta dentro da hitbox dos objetos destruiveis (Nave, cidades ou torpedos).
+; devemos checar a posicao X/Y do alien contra todas as posicoes da hitbox do
+; objeto, e entao preencher o flag de colisao.
+;
+; Flag de colisao =>  0 0 0 0 0 N X Y
+; como so existe colisao se tanto X quanto Y estiverem na hitbox, uma colisao 
+; sera igual a 00000011 = 3. 
+;
+; Caso a nave sofra uma colisao, o jogo termina. Bit 3 do flag é setado
+; Caso o alien colida na cidade, a cidade e destruida.
+; Caso o contador de cidades cheque a zero, o jogo termina.
+; Caso um torpedo colida com um alien, o torpedo e o alien são removidos 
+; =============================================================================
 ChecarColisao:
-  call CheckVdpColision   ; checar se o vdp detectou uma colisao de sprites
-  cp 0                    ; se nao rolou uma batida
-  jp z,FimColisoes        ; nao houve colisao, terminar
-  ; ===============================================================
-  ; Checar se Nave colidiu
-  ; ===============================================================
+  call CheckVdpColision         ; checar se o vdp detectou uma colisao de sprites
+  cp 0                          ; se nao rolou uma batida
+  jp z,FimColisoes              ; nao houve colisao, terminar
+  call ChecarColisaoNave        ; verifica se a nave colidiu
+  cp 3                          ; se temos colisao em x e Y
+  ret z                         ; retornamos, o jogo acabou
+  ;call ChecarColisaoCidades    ; limpa as cidades e os aliens que colidiram
+  ;call ChecarColisaoTorpedos   ; limpa os torpedos e alien que colidiram
+FimColisoes:
+ret
+
+ ; ===============================================================
+ ; Checar se Nave colidiu
+ ; ===============================================================
+ChecarColisaoNave: 
   ld a,(NumPosYNave)
   ld h,a
   ld a,(NumPosXNave)
   ld l,a
   call ChecarAlienXY
-  cp 1
-  jp z,FimDoJogo            ; a nave foi atingida! fim do jogo
+  ld a,(flgColisaoAlien)
+ret 
+
+ChecarColisaoTorpedos:
   ; ===============================================================
   ; Checar se Torpedos colidiram
   ; ===============================================================
@@ -52,6 +77,9 @@ ChecarColisao:
   call ChecarAlienXY      ; Checar se temos um alien nessa hitbox
   cp 1                    ; se teve colizao
   call z,RemoveTorp31     ; remove o torpedo
+ret 
+
+ChecarColisaoCidades:
   ; ===============================================================
   ; Checar se Cidade 1 colidiu
   ; ===============================================================
@@ -93,26 +121,4 @@ ChecarColisao:
   cp 1
   call z,DestroiCidade4    ; A cidade 4 foi destruida!
   ; ===============================================================
-FimColisoes:
 ret
-
-; ============================================================================
-; Destruir Cidade
-; ============================================================================
-DestroiCidade1:
-  ld a,1
-  call RemoverCidade
-ret
-DestroiCidade2:
-  ld a,2
-  call RemoverCidade
-ret
-DestroiCidade3:
-  ld a,3
-  call RemoverCidade
-ret
-DestroiCidade4:
-  ld a,4
-  call RemoverCidade
-ret
-; ============================================================================

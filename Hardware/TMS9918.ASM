@@ -134,6 +134,31 @@ ret
 ; =============================================================================
 
 ; =============================================================================
+; ReadVDPStatus
+; =============================================================================
+; Pegar o contedo do registrador de STATUS do VDP
+; =============================================================================
+; Status Register #0
+; 7				F		Vertical scan interrupt flag
+; 6				5S		Flag do quinto sprite (SCREEN 1 and 2)
+; 5				C		Flag de colisao
+; 4 to 0		5SN		Number of the 5th sprite (SCREEN 1 and 2)
+;
+; * 5,6 e 7 sao resetados quando o registrador eh lido ou o VDP Resetado
+; * O registrador deve ser lido apenas quando o VDP interrupt esta pendente
+; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; A => Status do VDP
+; =============================================================================
+ReadVDPStatus:
+	ld a,(STATFL)         ; le os flags de status do VDP
+ret
+; =============================================================================
+
+; =============================================================================
 ; ClearScreen
 ; =============================================================================
 ; Limpar a tela
@@ -201,8 +226,7 @@ ret
 ; B => Numero do sprite na tabela de sprites
 ; C => Early / Cor
 ; =============================================================================
-; ALTERA
-; Nada
+; ALTERA => Nada
 ; =============================================================================
 PutSprite:
 	push hl
@@ -257,6 +281,27 @@ ReadSprite:
 		ld c,a			; salva em C
 	pop af
 	pop hl
+ret
+; =============================================================================
+
+; =============================================================================
+; Recuperar posicao X/Y de um sprite 
+; =============================================================================
+; Parametros
+; A => Nuemro do sprite 
+; =============================================================================
+; Altera
+; E => Coordenada X do sprite 
+; D => Coordenada Y do sprite 
+; =============================================================================
+SpriteXY:
+	push af 
+	push bc
+	push hl
+		call ReadSprite
+	pop hl
+	pop bc
+	pop af
 ret
 ; =============================================================================
 
@@ -348,30 +393,6 @@ MoveSprite:
 ret
 ; =============================================================================
 
-; =============================================================================
-; ReadVDPStatus
-; =============================================================================
-; Pegar o contedo do registrador de STATUS do VDP
-; =============================================================================
-; Status Register #0
-; 7				F		Vertical scan interrupt flag
-; 6				5S		Flag do quinto sprite (SCREEN 1 and 2)
-; 5				C		Flag de colisao
-; 4 to 0		5SN		Number of the 5th sprite (SCREEN 1 and 2)
-;
-; * 5,6 e 7 sao resetados quando o registrador eh lido ou o VDP Resetado
-; * O registrador deve ser lido apenas quando o VDP interrupt esta pendente
-; =============================================================================
-; Parametros
-; Nenhum
-; =============================================================================
-; Altera
-; A => Status do VDP
-; =============================================================================
-ReadVDPStatus:
-	ld a,(STATFL)         ; le os flags de status do VDP
-ret
-; =============================================================================
 
 ; =============================================================================
 ; CheckVdpColision
@@ -424,8 +445,7 @@ ret
 ; D  => Coordenada X da Mensagem
 ; E	 => Coordenada y da Mensagem
 ; =============================================================================
-; Altera
-; Nada
+; Altera => Nada
 ; =============================================================================
 PrintStringGRP:
 	push af

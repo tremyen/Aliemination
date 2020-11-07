@@ -6,6 +6,21 @@
 ; =============================================================================
 
 ; =============================================================================
+; Print String (Tela Grafica)
+; =============================================================================
+; Parametros
+; HL => Endereço da string
+; D  => posicao x
+; E  => posicao y
+; =============================================================================
+; Altera => Escreve a mensagem em HL na tela nas coordenadas DE
+; =============================================================================
+PrintString:
+	call PrintStringGRP
+ret
+; =============================================================================
+
+; =============================================================================
 ; Sortear Numero randomico
 ; =============================================================================
 ; A => Numero maximo do sorteio
@@ -98,8 +113,7 @@ ret
 ; Parametros
 ; A => Numero da cidade a ser destruida (1 a 4)
 ; =============================================================================
-; Altera
-; Nada
+; Altera => Nada
 ; =============================================================================
 RemoverCidade:
 	cp 1
@@ -379,10 +393,10 @@ ret
 ; Altera => A
 ; =============================================================================
 WaitEnter:
-		call CHGET
-		cp 13
-		jr z,EndWaitEnter
-		jr WaitEnter
+	call CHGET
+	cp 13
+	jr z,EndWaitEnter
+	jr WaitEnter
 EndWaitEnter:
 ret
 ; =============================================================================
@@ -502,8 +516,17 @@ ChecouTodos:
 	pop bc
 	ld a,(flgHouveColisao)
 ret
-; =============================================================================
 
+; =============================================================================
+; Setar Flag colisao (posicao Y)
+; =============================================================================
+; Parametros
+; Nenhum
+; =============================================================================
+; Altera
+; flgColisaoAlien => 	Se existe um alien nessa posicao y seta bit 0 do  
+;						flag de colisao
+; =============================================================================
 SetaFlagColisaoY:
 	push af
 		ld a,(flgColisaoAlien)
@@ -511,66 +534,22 @@ SetaFlagColisaoY:
     ld (flgColisaoAlien),a
 	pop af
 ret
+; =============================================================================
 
+; =============================================================================
+; Setar Flag colisao (posicao X)
+; =============================================================================
+; Parametros => Nenhum
+; =============================================================================
+; Altera
+; flgColisaoAlien => 	Se existe um alien nessa posicao X seta bit 1 do  
+;						flag de colisao
+; =============================================================================
 SetaFlagColisaoX:
 	push af
 		ld a,(flgColisaoAlien)
 	 	set 1,a
-    ld (flgColisaoAlien),a
-	pop af
-ret
-; =============================================================================
-
-; =============================================================================
-; Print String (Tela Grafica)
-; =============================================================================
-; Parametros
-; HL => Endereço da string
-; D  => posicao x
-; E  => posicao y
-; =============================================================================
-; Altera
-; Escreve a mensagem em HL na tela nas coordenadas DE
-; =============================================================================
-PrintString:
-	call PrintStringGRP
-ret
-; =============================================================================
-
-; =============================================================================
-; Recuperar posicao X/Y de um sprite 
-; =============================================================================
-; Parametros
-; A => Nuemro do sprite 
-; =============================================================================
-; Altera
-; E => Coordenada X do sprite 
-; D => Coordenada Y do sprite 
-; =============================================================================
-SpriteXY:
-	push af 
-	push bc
-	push hl
-		call ReadSprite
-	pop hl
-	pop bc
-	pop af
-ret
-; =============================================================================
-
-; =============================================================================
-; Colisao de Sprites 
-; =============================================================================
-; Parametros
-; A => Nuemro do sprite 
-; =============================================================================
-; Altera => Nada
-; =============================================================================
-Colidiu:
-	push af
-		call RemoverAlien		; remove o alien
-		ld a,1 					; carrega acumulador
-		ld (flgHouveColisao),a 	; seta o indicador de colisao
+    	ld (flgColisaoAlien),a
 	pop af
 ret
 ; =============================================================================
@@ -595,10 +574,7 @@ ChecarHitbox:
 	pop de						; volta bkp
 	pop bc						; volta bkp
 	ld a,(flgColisaoAlien)		; pega o resultado das colisoes
-	cp 3						; se bits 0 e 1 estao ligados houve colisao
-	call z,Colidiu				; COLISAO
 ret
-; =============================================================================
 
 AlienPosYOK:
 	push af 					; BKP
@@ -619,7 +595,7 @@ FimHitboxY:
 	pop bc						; volta bkp
 	pop af						; volta bkp
 ret
-; =============================================================================
+
 AlienPosXOK:
 	push af
 	push bc
@@ -746,3 +722,24 @@ QuinzeF:
 	ld a,'F'
 ret
 ; =============================================================================
+
+; ============================================================================
+; Destruir Cidades
+; ============================================================================
+DestroiCidade1:
+  ld a,1
+  call RemoverCidade
+ret
+DestroiCidade2:
+  ld a,2
+  call RemoverCidade
+ret
+DestroiCidade3:
+  ld a,3
+  call RemoverCidade
+ret
+DestroiCidade4:
+  ld a,4
+  call RemoverCidade
+ret
+; ============================================================================

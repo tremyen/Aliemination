@@ -35,6 +35,9 @@ DesenharQuadro:
 	call MoverAliens			; Atualiza coordenadas dos Aliens
 	call MoverNave				; Atualiza coordenadas da nave
 	call ChecarColisao			; checa as colisoes
+	ld a,(flgColisaoAlien)		; pega o resultado das colisoes
+	cp 3						; se é igual a 3 a nave colidiu 
+	jp z,FimDoJogo				; termina o jogo
 	call AtualizarHud			; Atualiza o HUD do jogo
 	xor a 						; zero A
 	ld (JIFFY),a				; zero o incremento do VDP
